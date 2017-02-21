@@ -291,7 +291,7 @@ end
 parfor_progress(0);
 
 try
-    matlabpool('close');
+    delete(gcp('nocreate'))
 catch
     try
         delete(gcp);
