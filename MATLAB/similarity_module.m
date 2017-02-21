@@ -97,9 +97,9 @@ set(handles.pushbutton2,'BackgroundColor','yellow');
 set(handles.text6,'String','Cutting .WAV files. Button turns green when done.');
 pause(.0000001)
 setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-system(['R --slave --args' ' ' handles.pathu ' ' handles.fileu ' ' ' < importFeatureBatch.r']);
+system(['R --slave --args' ' ' handles.pathu ' ' handles.fileu ' ' ' < ./R/importFeatureBatch.r']);
 setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-system(['R --slave --args' ' ' strcat(handles.pathu,'acoustic_data.csv') ' ' handles.pathu ' ' ' < getSyllableWavs2.r']);
+system(['R --slave --args' ' ' strcat(handles.pathu,'acoustic_data.csv') ' ' handles.pathu ' ' ' < ./R/getSyllableWavs2.r']);
 pause(.0000001)
 set(handles.pushbutton2,'BackgroundColor','green');
 set(handles.text6,'String','WAV files cut. Similarity batch ready to run.');
@@ -228,7 +228,7 @@ setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 set(handles.pushbutton4,'BackgroundColor','yellow');
 set(handles.text6,'String','Syllables being clustered...a status bar will spawn.');
 pause(0.000001)
-system(['R --slave --args' ' ' handles.pathu ' ' '< clusterSyllables.r']);
+system(['R --slave --args' ' ' handles.pathu ' ' '< ./R/clusterSyllables.r']);
 pause(0.000001)
 set(handles.pushbutton4,'BackgroundColor','green');
 set(handles.text6,'String','Clustering and iterative trimming complete.');
@@ -239,5 +239,5 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-system(['R --slave --args' ' ' handles.pathu ' ' '< determineClusters1.r']);
+system(['R --slave --args' ' ' handles.pathu ' ' '< ./R/determineClusters1.r']);
 determine_merging_threshold({handles.path},{handles.pathu});

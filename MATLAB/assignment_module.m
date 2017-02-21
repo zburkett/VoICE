@@ -119,13 +119,13 @@ setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 
 if ~exist(strcat(handles.assignPath,'cut_syllables/'))
     %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-    system(['R --slave --args' ' ' handles.assignPathu ' ' handles.assignFileu ' ' ' < importFeatureBatch.r']);
+    system(['R --slave --args' ' ' handles.assignPathu ' ' handles.assignFileu ' ' ' < ./R/importFeatureBatch.r']);
     %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-    system(['R --slave --args' ' ' strcat(handles.assignPathu,'acoustic_data.csv') ' ' handles.assignPathu ' ' ' < getSyllableWavs2.r']);
+    system(['R --slave --args' ' ' strcat(handles.assignPathu,'acoustic_data.csv') ' ' handles.assignPathu ' ' ' < ./R/getSyllableWavs2.r']);
 end
 
 handles.refDiru = strrep(handles.refDir, ' ', '\ ');
-system(['R --slave --args ' strcat(handles.refDiru,'/') ' ' handles.pct, ' < sortClusterReps2.r']);
+system(['R --slave --args ' strcat(handles.refDiru,'/') ' ' handles.pct, ' < ./R/sortClusterReps2.r']);
 pause(.0000001)
 if exist(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat'),'file')
     determineRun(handles.assignPath)
@@ -135,7 +135,7 @@ pause(.0000001)
 set(handles.runBatch,'BackgroundColor','green');
 setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < assignSyllables.r']);
+system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
 pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
 handles.totalSyllables = length(dir(pattern));
 if exist(strcat(handles.assignPath,'NDs.csv'))==2;
@@ -227,7 +227,7 @@ if isfield(handles,'validFB') & isfield(handles,'validRD')
                 set(handles.runBatch,'BackgroundColor','green');
                 setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
                 setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-                system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < assignSyllables.r']);
+                system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
                 pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
                 handles.totalSyllables = length(dir(pattern));
                 if exist(strcat(handles.assignPath,'NDs.csv'))==2;
@@ -277,22 +277,22 @@ set(handles.text33,'String','Preparing assignment pipeline. The interface will l
 pause(.0000001);
 
 %perform assignments per user dictated gs floor
-system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < assignSyllables.r']);
+system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
 
 %figure out which pathway to take for analysis:
 %All syllables have been assigned a cluster with no ties or novel syllables; proceed to reassignment
 if str2num(get(handles.n_assigned,'String')) == handles.totalSyllables & str2num(get(handles.n_tied,'String')) == 0 & str2num(get(handles.n_novel,'String')) == 0
     %insert code to launch reassignment module, then finalize things
-    system(['R --slave --args ' handles.refDiru ' < getClusterIDs.r']); %get cluster names for ref directory
-    system(['R --slave --args ' handles.assignPathu ' < getClusterIDs.r']);
-    system(['R --slave --args ' handles.assignPathu ' ' handles.refDiru ' < finalizeClustersAssignedNDs.r']); %prep for reassignment
+    system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']); %get cluster names for ref directory
+    system(['R --slave --args ' handles.assignPathu ' < ./R/getClusterIDs.r']);
+    system(['R --slave --args ' handles.assignPathu ' ' handles.refDiru ' < ./R/finalizeClustersAssignedNDs.r']); %prep for reassignment
     close
     reassign_syllables({handles.assignPath},{handles.refDir},{1});
 elseif str2num(get(handles.n_assigned,'String')) + str2num(get(handles.n_tied,'String')) == handles.totalSyllables & str2num(get(handles.n_assigned,'String')) ~= 0 & str2num(get(handles.n_tied,'String')) ~= 0
     %...or all syllables have been assigned to a cluster or need a tiebreak
     %insert code to launch tiebreak module; make tiebreak module launch
     %reassignment to finalize
-    system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < getTieSpectrogramsContext2.r']);
+    system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < ./R/getTieSpectrogramsContext2.r']);
     tiebreaking_module({handles.assignPath},{handles.refDir},{get(handles.n_novel,'String')},{1});
     %think about if NAs arise during tiebreaking...
 elseif str2num(get(handles.n_assigned,'String')) + str2num(get(handles.n_novel,'String')) == handles.totalSyllables & str2num(get(handles.n_novel,'String')) ~= 0
@@ -303,14 +303,14 @@ elseif str2num(get(handles.n_assigned,'String')) + str2num(get(handles.n_novel,'
 else
     %...or there are all of the above
     %insert code to tiebreak, then novelty, then reassign, then finalize
-    system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < getTieSpectrogramsContext2.r']);
+    system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < ./R/getTieSpectrogramsContext2.r']);
     tiebreaking_module({handles.assignPath},{handles.refDir},{get(handles.n_novel,'String')},{1});
 end
 
 %if there are tiebreaks to perform
 % if exist(strcat(handles.assignPath,'NDs.csv'))==2;
 %     %generate spectrograms using sox and imagemagick
-%     system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < getTieSpectrogramsContext2.r']);
+%     system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < ./R/getTieSpectrogramsContext2.r']);
 %
 %     %then launch module for tiebreaking; novel derivation starts after, if
 %     %applicable
@@ -336,7 +336,7 @@ if str2num(handles.gsfloor) > 99 | str2num(handles.gsfloor) < 1
 end
 setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < assignSyllables.r']);
+system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
 pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
 handles.totalSyllables = length(dir(pattern));
 

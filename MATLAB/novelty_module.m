@@ -112,7 +112,7 @@ else
     pause(0.00001);
     set(handles.statusdlg,'String','Generating clusters.');
     set(handles.pushbutton1,'BackgroundColor','Yellow');
-    system(['R --slave --args ', handles.threshold ' ' handles.assignPathu ' ' handles.refDiru ' < determineClustersAssign2.r']);
+    system(['R --slave --args ', handles.threshold ' ' handles.assignPathu ' ' handles.refDiru ' < ./R/determineClustersAssign2.r']);
     pause(0.00001);
     set(handles.pushbutton1,'BackgroundColor','Green');
     set(handles.statusdlg,'String','Clusters generated. Click "Reassign Syllables" to view/edit. BEWARE: Hitting "Generate Clusters" again will wipe all reassignments!');
@@ -208,10 +208,10 @@ elseif length(x)>1 %if more than one novel syllable, cluster them
     similarity_batch_parallel_headless_unassigned_pub(strcat(handles.assignPath,'unassigned_for_cluster'));
 
     %iterate through tree trimming
-    system(['R --slave --args ' handles.assignPathu ' ' '4 0 1 0.01 ' '< clusterSyllablesAssign_pub.r']);
+    system(['R --slave --args ' handles.assignPathu ' ' '4 0 1 0.01 ' '< ./R/clusterSyllablesAssign_pub.r']);
 
     %prep for GUI
-    system(['R --slave --args ' handles.assignPathu ' < determineClustersAssign1.r']);
+    system(['R --slave --args ' handles.assignPathu ' < ./R/determineClustersAssign1.r']);
 
     %update GUI
     dat = csvread(strcat(handles.assignPath,'igsdata_novel.csv'));

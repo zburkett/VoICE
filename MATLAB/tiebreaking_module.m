@@ -71,7 +71,7 @@ set(handles.currentsyl,'String',handles.count);
 set(handles.totalsyl,'String',length(handles.imgs));
 
 %populate dropdown menu with possible cluster assignments
-system(['R --slave --args ' handles.refDiru ' < getClusterIDs.r']);
+system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']);
 
 fid = fopen(strcat(handles.refDir,'/usedClusters.txt'));
 s = textscan(fid,'%s','Delimiter','\n');
@@ -136,7 +136,7 @@ for col = 1:length(assignments)
     fprintf(fid,'%s\n',char(assignments{col}));
 end
 fclose(fid);
-system(['R --slave --args ' handles.assignPathu ' < assignTiebreaks.r']);
+system(['R --slave --args ' handles.assignPathu ' < ./R/assignTiebreaks.r']);
 
 %NAs.csv is updated if NAs were dictated in reassignment
 
