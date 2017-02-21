@@ -52,6 +52,6 @@ if(!file.exists('./R/.pkgSuccess'))
 		print('All packages found. Proceeding.')
 	}
 	
-	if(!exists("errs")){system(paste("touch","./R/.pkgSuccess"))}
+	if(!exists("errs")){system(paste("touch","./R/.pkgSuccess","& attrib +h ./R/.pkgSuccess"))}
 }
 

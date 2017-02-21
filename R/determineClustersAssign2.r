@@ -1,3 +1,4 @@
+if(.Platform$OS.type=="windows" & file.exists("./.libraries")){.libPaths("./.libraries")}
 if(.Platform$OS.type=="unix")
 {
 

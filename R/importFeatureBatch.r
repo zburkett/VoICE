@@ -1,3 +1,4 @@
+if(.Platform$OS.type=="windows" & file.exists("./.libraries")){.libPaths("./.libraries")}
 comArgs <- commandArgs(T)
 options(stringsAsFactors=FALSE)
 suppressMessages(library(gdata))

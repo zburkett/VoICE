@@ -1,3 +1,4 @@
+if(.Platform$OS.type=="windows" & file.exists("./.libraries")){.libPaths("./.libraries")}
 comArgs <- commandArgs(TRUE)
 tutDir <- comArgs[1]
 if(file.exists(paste(comArgs[1],"/workspace.Rdata",sep="")))
