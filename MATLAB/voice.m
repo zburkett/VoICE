@@ -53,14 +53,81 @@ function voice_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to voice (see VARARGIN)
 
 installdir = which('voice.m');
+
 if isunix
     f = findstr('/',installdir);
+    f= f(1:(length(f)-1));
+    installdir = installdir(1:max(f));
+    cd(installdir);
 elseif ispc
     f = findstr('\',installdir);
+    f= f(1:(length(f)-1));
+    installdir = installdir(1:max(f));
+    cd(installdir);
+    
+    %check for R installation
+    [status,result] = system('where Rscript');
+    if ~exist(strcat(result))
+        error('No R installation detected. Please install R and try again.')
+    end
+    
+    %check for SoX installation
+    [status0,result0] = system('where sox');
+    if ~status0 == 0
+        if exist('.soxFound')
+            pathstr = char(textread('.soxFound','%q'));
+            setenv('PATH',[getenv('PATH') strcat(';',pathstr)]);
+        elseif ~status0 == 0 & ~exist('.soxFound')
+            disp('SoX not found in system path, checking for installation...')
+            [status,result] = system('cd \"Program Files" & dir /b/s sox.exe');
+            if ~exist(strcat(result))
+                error('No SoX installation detected in Program Files. Install SoX and try again.')
+            elseif exist(strcat(result))
+                disp('Found SoX install, adding to PATH...')
+                [pathstr,name,ext] = fileparts(result);
+                setenv('PATH',[getenv('PATH') strcat(';',pathstr)]);
+                [status3,result3] = system('where sox');
+                if ~status3 == 0
+                    disp('Unable to add SoX to PATH. Please remedy this yourself.')
+                else
+                    disp('Added SoX to PATH. Proceeding.')
+                    fid = fopen('.soxFound','wt');
+                    out = strrep(pathstr,'\','\\');
+                    fprintf(fid,[char(34) out char(34)]);
+                    fclose(fid);
+                    system('attrib +h .soxFound');
+                end
+            end
+        end
+    end
+    
+    %check for imagemagick installation
+    [status0,result0] = system('where magick');
+    if ~status0 == 0
+        if exist('.magickFound')
+            pathstr = char(textread('.magickFound','%q'));
+            setenv('PATH',[getenv('PATH') strcat(';',pathstr)]);
+        elseif ~exist('.magickFound')
+            disp('ImageMagick not found in system path, checking for installation...')
+            [status,result] = system('cd \"Program Files" & dir /b/s magick.exe');
+            if ~exist(strcat(result))
+                error('No ImageMagick installation detected in Program Files. Install SoX and try again.')
+            elseif exist(strcat(result))
+                disp('Found ImageMagick install, adding to PATH...')
+                [pathstr,name,ext] = fileparts(result);
+                setenv('PATH',[getenv('PATH') strcat(';',pathstr)]);
+                [status3,result3] = system('where magick.exe');
+                if ~status3 == 0
+                    disp('Unable to add ImageMagick to PATH. Please remedy this yourself.')
+                else
+                    disp('Added ImageMagick to PATH. Proceeding.')
+                    system('attrib +h .magickFound');
+                end
+            end
+        end
+    end
 end
-f= f(1:(length(f)-1));
-installdir = installdir(1:max(f));
-cd(installdir);
+system(['RScript ./R/packageCheck.r']);
 
 % Choose default command line output for voice
 handles.output = hObject;
