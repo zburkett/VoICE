@@ -18,6 +18,7 @@ if(.Platform$OS.type=="unix")
 	options(warn=-1)
 	sink()
 	unlink(paste(comArgs[1],"sink.txt",sep=""))
+	if(!exists("flashClust")){flashClust <- hclust}
 }
 
 
