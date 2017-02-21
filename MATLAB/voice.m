@@ -59,6 +59,28 @@ if isunix
     f= f(1:(length(f)-1));
     installdir = installdir(1:max(f));
     cd(installdir);
+    
+    PATH = getenv('PATH');
+	setenv('PATH',[PATH ':/usr/local/bin']);
+    
+    %check for R installation
+    [status,result] = system('which Rscript');
+    if ~exist(strcat(result))
+        error('No R installation detected.')
+    end
+    
+    %check for SoX installation
+    [status,result] = system('which sox');
+    if ~exist(strcat(result))
+        error('No SoX installation detected.')
+    end
+    
+    %check for ImageMagick installation
+    [status,result] = system('which convert');
+    if ~exist(strcat(result))
+        error('No ImageMagick installation detected.')
+    end
+    
 elseif ispc
     f = findstr('\',installdir);
     f= f(1:(length(f)-1));
