@@ -54,6 +54,7 @@ function voice_OpeningFcn(hObject, eventdata, handles, varargin)
 
 installdir = which('clustR_bird');
 f = findstr('/',installdir);
+f= f(1:(length(f)-1));
 installdir = installdir(1:max(f));
 cd(installdir);
 
