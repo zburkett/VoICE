@@ -53,7 +53,11 @@ function voice_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to voice (see VARARGIN)
 
 installdir = which('voice.m');
-f = findstr('/',installdir);
+if isunix
+    f = findstr('/',installdir);
+elseif ispc
+    f = findstr('\',installdir);
+end
 f= f(1:(length(f)-1));
 installdir = installdir(1:max(f));
 cd(installdir);
