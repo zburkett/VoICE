@@ -13,7 +13,7 @@ if(file.exists(paste(comArgs[1],'workspace.Rdata',sep='')))
 }else if (file.exists(paste(comArgs[1],'assigned_complete_workspace.Rdata',sep='')))
 {
 	load(paste(comArgs[1],'assigned_complete_workspace.Rdata',sep=''))
-	}
+}
 
 
 changeList <- list()

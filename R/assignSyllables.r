@@ -163,7 +163,6 @@ if(sum(out.assign=="ND",na.rm=TRUE)>0)
 {
 	ndout <- subset(names(out.assign),out.assign=="ND")
 	write.table(as.numeric(ndout),file=(paste(pupil.dir,"NDs.csv",sep="")),row.names=FALSE,col.names=FALSE)
-
 }
 
 if(sum(is.na(out.assign))>0)
@@ -178,8 +177,18 @@ if(sum(is.na(out.assign))>0)
 	
 	for(name in subset(names(out.assign),is.na(out.assign)))
 	{
-		name.assign <- paste("%0",nchar(max(as.numeric(rownames(data)))),"s",sep="")
-		name.out <- sprintf(name.assign,name)
+		if(.Platform$OS.type=='windows')
+		{
+			name.assign <- paste("%0",nchar(max(as.numeric(rownames(data)))),"s",sep="")
+			name.out <- sprintf(name.assign,name)
+			name.out <- gsub(" ","0",name.out)
+		}else if(.Platform$OS.type=="unix")
+		{
+			name.assign <- paste("%0",nchar(max(as.numeric(rownames(data)))),"s",sep="")
+			name.out <- sprintf(name.assign,name)
+		}else{
+			stop(paste('Unable to determine OS.'))
+		}
 		file.copy(from=paste(pupil.dir,"cut_syllables/",name.out,".wav",sep=""),to=paste(pupil.dir,"unassigned_for_cluster/",name.out,".wav",sep=""))
 	}
 }

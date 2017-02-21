@@ -1,12 +1,24 @@
 comArgs <- commandArgs(T)
 options(stringsAsFactors=FALSE)
 
-sink("/dev/null")
-suppressMessages(library(WGCNA,warn.conflicts=FALSE,verbose=0))
-suppressMessages(library(tcltk))
-options(warn=-1)
-sink()
-if(!exists("flashClust")){flashClust <- hclust}
+if(.Platform$OS.type=="unix")
+{
+	sink("/dev/null")
+	suppressMessages(library(WGCNA,warn.conflicts=FALSE,verbose=0))
+	suppressMessages(library(tcltk))
+	options(warn=-1)
+	sink()
+	if(!exists("flashClust")){flashClust <- hclust}
+}else if (.Platform$OS.type=="windows")
+{
+	sink(file=paste(comArgs[1],"sink.txt",sep=""))
+	suppressMessages(library(WGCNA,warn.conflicts=FALSE,verbose=0))
+	suppressMessages(library(tcltk))
+	options(warn=-1)
+	sink()
+	unlink(paste(comArgs[1],"sink.txt",sep=""))
+}
+
 
 Filedir = comArgs[1]
 
