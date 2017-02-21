@@ -14,6 +14,7 @@ if(.Platform$OS.type=="unix")
 	sink(paste(comArgs[1],"sink.txt",sep=""))
 	data.path <- paste(comArgs[1],comArgs[2],sep="")
 	sink()
+    unlink(paste(comArgs[1],"sink.txt",sep=""))
 }
 
 data.out <- read.xls(data.path,header=FALSE)
