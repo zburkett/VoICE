@@ -50,64 +50,121 @@ function reassign_syllables_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to reassign_syllables (see VARARGIN)
+if isunix
+	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 
-setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	set(handles.uipanel8,'Visible','off');
 
-set(handles.uipanel8,'Visible','off');
+	handles.path = varargin{1}{1};
+	sz = size(handles.path);
+	if(handles.path(sz(2)) ~= '/')
+	    handles.path = strcat(handles.path,'/');
+	end
+	handles.pathu = strrep(handles.path,' ','\ ');
+	handles.clusterOut = 'Select a cluster...';
+	handles.newCluster = 'Create a cluster...';
 
-handles.path = varargin{1}{1};
-sz = size(handles.path);
-if(handles.path(sz(2)) ~= '/')
-    handles.path = strcat(handles.path,'/');
-end
-handles.pathu = strrep(handles.path,' ','\ ');
-handles.clusterOut = 'Select a cluster...';
-handles.newCluster = 'Create a cluster...';
+	handles.assignRun = varargin{3}{1};
 
-handles.assignRun = varargin{3}{1};
+	handles.refDir = varargin{2}{1};
+	handles.refDiru = strrep(handles.refDir,' ','\ ');
 
-handles.refDir = varargin{2}{1};
-handles.refDiru = strrep(handles.refDir,' ','\ ');
+	if exist(strcat(handles.path,'sorted_syllables_assigned/'))
+	    set(handles.uipanel7,'Visible','Off');
+	elseif exist(strcat(handles.path,'/sorted_syllables_assigned'))
+	    set(handles.uipanel7,'Visible','Off');
+	end
 
-if exist(strcat(handles.path,'sorted_syllables_assigned/'))
-    set(handles.uipanel7,'Visible','Off');
-elseif exist(strcat(handles.path,'/sorted_syllables_assigned'))
-    set(handles.uipanel7,'Visible','Off');
-end
-
-if handles.assignRun == 1
-    system(['R --slave --args ' handles.pathu ' < getClusterIDs.r']);
-    fidPupil = fopen(strcat(handles.path,'usedClusters.txt'));
-    if(fidPupil == -1)
-        fidPupil = fopen(strcat(handles.path,'/usedClusters.txt'));
-    end
-    s = textscan(fidPupil,'%s','Delimiter','\n');
-    sPupil = strrep(s{1}(:,1),'"','');
-    system(['R --slave --args ' handles.refDiru ' < getClusterIDs.r']);
-    fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
-    if(fidTutor == -1)
-        fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
-    end
-    s = textscan(fidTutor,'%s','Delimiter','\n');
-    sTutor = strrep(s{1}(:,1),'"','');
-    [I, J] = setdiff(sTutor,sPupil);
+	if handles.assignRun == 1
+	    system(['R --slave --args ' handles.pathu ' < ./R/getClusterIDs.r']);
+	    fidPupil = fopen(strcat(handles.path,'usedClusters.txt'));
+	    if(fidPupil == -1)
+	        fidPupil = fopen(strcat(handles.path,'/usedClusters.txt'));
+	    end
+	    s = textscan(fidPupil,'%s','Delimiter','\n');
+	    sPupil = strrep(s{1}(:,1),'"','');
+	    system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']);
+	    fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	    if(fidTutor == -1)
+	        fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	    end
+	    s = textscan(fidTutor,'%s','Delimiter','\n');
+	    sTutor = strrep(s{1}(:,1),'"','');
+	    [I, J] = setdiff(sTutor,sPupil);
     
-    if ~isempty(I)
-        set(handles.uipanel8,'Visible','On');
-        set(handles.uipanel7,'Visible','Off');
-        set(handles.popupmenu8,'String',{'Choose a cluster...',I{:}});
-    end
+	    if ~isempty(I)
+	        set(handles.uipanel8,'Visible','On');
+	        set(handles.uipanel7,'Visible','Off');
+	        set(handles.popupmenu8,'String',{'Choose a cluster...',I{:}});
+	    end
     
-    %update unusedColors.txt
-    system(['R --slave --args ' handles.refDiru ' ' handles.pathu ' < updateColors.r']);
-    system(['R --slave --args ' handles.pathu ' < recreateClusters2.r']);
-end
+	    %update unusedColors.txt
+	    system(['R --slave --args ' handles.refDiru ' ' handles.pathu ' < ./R/updateColors.r']);
+	    system(['R --slave --args ' handles.pathu ' < ./R/recreateClusters2.r']);
+	end
 
-fid = fopen(strcat(handles.path,'/unusedColors.txt'));
-s = textscan(fid,'%s','Delimiter','\n');
-s = strrep(s{1}(:,1),'"','');
-set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});
+	fid = fopen(strcat(handles.path,'/unusedColors.txt'));
+	s = textscan(fid,'%s','Delimiter','\n');
+	s = strrep(s{1}(:,1),'"','');
+	set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});
+elseif ispc
+	set(handles.uipanel8,'Visible','off');
+
+	handles.path = varargin{1}{1};
+	handles.path = strrep(handles.path,'\','/');
+	sz = size(handles.path);
+	if(handles.path(sz(2)) ~= '/')
+	    handles.path = strcat(handles.path,'/');
+	end
+	%handles.pathu = strrep(handles.path,' ','\ ');
+	handles.clusterOut = 'Select a cluster...';
+	handles.newCluster = 'Create a cluster...';
+
+	handles.assignRun = varargin{3}{1};
+
+	handles.refDir = varargin{2}{1};
+	handles.refDiru = strrep(handles.refDir,'\','/');
+
+	if exist(strcat(handles.path,'sorted_syllables_assigned/'))
+	    set(handles.uipanel7,'Visible','Off');
+	elseif exist(strcat(handles.path,'/sorted_syllables_assigned'))
+	    set(handles.uipanel7,'Visible','Off');
+	end
+
+	if handles.assignRun == 1
+	    system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/getClusterIDs.r']);
+	    fidPupil = fopen(strcat(handles.path,'usedClusters.txt'));
+	    if(fidPupil == -1)
+	        fidPupil = fopen(strcat(handles.path,'usedClusters.txt'));
+	    end
+	    s = textscan(fidPupil,'%s','Delimiter','\n');
+	    sPupil = strrep(s{1}(:,1),'"','');
+	    system(['R --slave --args ' char(34) handles.refDir char(34) ' < ./R/getClusterIDs.r']);
+	    fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	    if(fidTutor == -1)
+	        fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	    end
+	    s = textscan(fidTutor,'%s','Delimiter','\n');
+	    sTutor = strrep(s{1}(:,1),'"','');
+	    [I, J] = setdiff(sTutor,sPupil);
+    
+	    if ~isempty(I)
+	        set(handles.uipanel8,'Visible','On');
+	        set(handles.uipanel7,'Visible','Off');
+	        set(handles.popupmenu8,'String',{'Choose a cluster...',I{:}});
+	    end
+    
+	    %update unusedColors.txt
+	    system(['R --slave --args ' char(34) handles.refDir char(34) ' ' char(34) handles.path char(34) ' < ./R/updateColors.r']);
+	    system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/recreateClusters2.r']);
+	end
+
+	fid = fopen(strcat(handles.path,'unusedColors.txt'));
+	s = textscan(fid,'%s','Delimiter','\n');
+	s = strrep(s{1}(:,1),'"','');
+	set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});
+end
 
 %read in duration information for syllables, calculate start/stop for each
 %syllable in each cluster
@@ -186,79 +243,154 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 %reassign syllables that are highlighted
 
 %determine which syllables are highlighted
+if isunix
+	set(handles.pushbutton1,'BackgroundColor','Yellow');
+	set(handles.text6,'String','Reassigning syllables. Please wait...');
+	pause(.000001);
 
-set(handles.pushbutton1,'BackgroundColor','Yellow');
-set(handles.text6,'String','Reassigning syllables. Please wait...');
-pause(.000001);
+	reassign = struct;
+	for i = 1:length(handles.clusterNames)
+	    reassign.(handles.clusterNames(i).name) = handles.clusterNames(i).drawn>0;
+	end
 
-reassign = struct;
-for i = 1:length(handles.clusterNames)
-    reassign.(handles.clusterNames(i).name) = handles.clusterNames(i).drawn>0;
-end
+	if exist(strcat(handles.path,'reassign/'))
+	    rmdir(strcat(handles.path,'reassign/'),'s');
+	end
 
-if exist(strcat(handles.path,'reassign/'))
-    rmdir(strcat(handles.path,'reassign/'),'s');
-end
-
-for i = 1:length(fieldnames(reassign(1)))
-    fns = fieldnames(reassign(1));
-    fn = fns(i);
-    if i == 1
-        mkdir(strcat(handles.path,'reassign/'));
-    end
+	for i = 1:length(fieldnames(reassign(1)))
+	    fns = fieldnames(reassign(1));
+	    fn = fns(i);
+	    if i == 1
+	        mkdir(strcat(handles.path,'reassign/'));
+	    end
     
-    dlmwrite(strcat(handles.path,'reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');
-end
+	    dlmwrite(strcat(handles.path,'reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');
+	end
 
-%if dropdown is unselected AND manual cluster assignment is at default OR
-%empty, throw an error
-if strcmp(handles.clusterOut, 'Select a cluster...') & (strcmp(handles.newCluster,'Create a cluster...') || isempty(handles.newCluster))
-    h = errordlg('No destination cluster selected or input. Try again.');
+	%if dropdown is unselected AND manual cluster assignment is at default OR
+	%empty, throw an error
+	if strcmp(handles.clusterOut, 'Select a cluster...') & (strcmp(handles.newCluster,'Create a cluster...') || isempty(handles.newCluster))
+	    h = errordlg('No destination cluster selected or input. Try again.');
     
-    %if dropdown is selected AND manual cluster is not default or blank, throw an
-    %error
-elseif ~strcmp(handles.clusterOut, 'Select a cluster...') & (~strcmp(handles.newCluster,'Create a cluster...') & ~isempty(handles.newCluster))
-    h = errordlg('Both an existing cluster and a novel cluster are selected. Choose one or the other.');
+	    %if dropdown is selected AND manual cluster is not default or blank, throw an
+	    %error
+	elseif ~strcmp(handles.clusterOut, 'Select a cluster...') & (~strcmp(handles.newCluster,'Create a cluster...') & ~isempty(handles.newCluster))
+	    h = errordlg('Both an existing cluster and a novel cluster are selected. Choose one or the other.');
     
-    %if dropdown is not empty AND manual cluster is default OR empty,
-    %classify as dropdown
-elseif ~strcmp(handles.clusterOut, 'Select a cluster...') & (strcmp(handles.newCluster,'Create a cluster...') || isempty(handles.newCluster))
-    %call R code to edit workspace to reflect reassignments
-    setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-    pathu = strrep(handles.path,' ','\ ');
-    system(['R --slave --args ' pathu ' ' handles.clusterOut ' ' '< changeClusterAssignmentGUI.r']);
+	    %if dropdown is not empty AND manual cluster is default OR empty,
+	    %classify as dropdown
+	elseif ~strcmp(handles.clusterOut, 'Select a cluster...') & (strcmp(handles.newCluster,'Create a cluster...') || isempty(handles.newCluster))
+	    %call R code to edit workspace to reflect reassignments
+	    setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	    pathu = strrep(handles.path,' ','\ ');
+	    system(['R --slave --args ' pathu ' ' handles.clusterOut ' ' '< ./R/changeClusterAssignmentGUI.r']);
 
-    %recreate wav files following reassignment
-    setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-    if handles.assignRun == 0
-        system(['R --slave --args ' pathu ' < recreateClusters.r']);
-    elseif handles.assignRun == 1
-        system(['R --slave --args ' pathu ' < recreateClusters2.r']);
-    end
+	    %recreate wav files following reassignment
+	    setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	    if handles.assignRun == 0
+	        system(['R --slave --args ' pathu ' < ./R/recreateClusters.r']);
+	    elseif handles.assignRun == 1
+	        system(['R --slave --args ' pathu ' < ./R/recreateClusters2.r']);
+	    end
 
-    %close gui window; relaunch new one 
-    close
-    reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
+	    %close gui window; relaunch new one 
+	    close
+	    reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
     
-    %if dropdown is default AND manual cluster is not default and not
-    %empty, classify as manual
-elseif strcmp(handles.clusterOut, 'Select a cluster...') & (~strcmp(handles.newCluster,'Default') & ~isempty(handles.newCluster))
-    %call R code to edit workspace to reflect reassignments
-    setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-    pathu = strrep(handles.path,' ','\ ');
-    system(['R --slave --args ' pathu ' ' handles.newCluster ' ' '< changeClusterAssignmentGUI.r']);
+	    %if dropdown is default AND manual cluster is not default and not
+	    %empty, classify as manual
+	elseif strcmp(handles.clusterOut, 'Select a cluster...') & (~strcmp(handles.newCluster,'Default') & ~isempty(handles.newCluster))
+	    %call R code to edit workspace to reflect reassignments
+	    setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	    pathu = strrep(handles.path,' ','\ ');
+	    system(['R --slave --args ' pathu ' ' handles.newCluster ' ' '< ./R/changeClusterAssignmentGUI.r']);
 
-    %recreate wav files following reassignment
-    setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-    if handles.assignRun == 0
-        system(['R --slave --args ' pathu ' < recreateClusters.r']);
-    elseif handles.assignRun == 1
-        system(['R --slave --args ' pathu ' < recreateClusters2.r']);
-    end
+	    %recreate wav files following reassignment
+	    setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	    if handles.assignRun == 0
+	        system(['R --slave --args ' pathu ' < ./R/recreateClusters.r']);
+	    elseif handles.assignRun == 1
+	        system(['R --slave --args ' pathu ' < ./R/recreateClusters2.r']);
+	    end
 
-    %close gui window; relaunch new one 
-    close
-    reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
+	    %close gui window; relaunch new one 
+	    close
+	    reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
+	end
+elseif ispc
+	set(handles.pushbutton1,'BackgroundColor','Yellow');
+	set(handles.text6,'String','Reassigning syllables. Please wait...');
+	pause(.000001);
+
+	reassign = struct;
+	for i = 1:length(handles.clusterNames)
+	    reassign.(handles.clusterNames(i).name) = handles.clusterNames(i).drawn>0;
+	end
+
+	if exist(strcat(handles.path,'reassign/'))
+	    rmdir(strcat(handles.path,'reassign/'),'s');
+	end
+
+	for i = 1:length(fieldnames(reassign(1)))
+	    fns = fieldnames(reassign(1));
+	    fn = fns(i);
+	    if i == 1
+	        mkdir(strcat(handles.path,'reassign/'));
+	    end
+    
+	    dlmwrite(strcat(handles.path,'reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');
+	end
+
+	%if dropdown is unselected AND manual cluster assignment is at default OR
+	%empty, throw an error
+	if strcmp(handles.clusterOut, 'Select a cluster...') & (strcmp(handles.newCluster,'Create a cluster...') || isempty(handles.newCluster))
+	    h = errordlg('No destination cluster selected or input. Try again.');
+    
+	    %if dropdown is selected AND manual cluster is not default or blank, throw an
+	    %error
+	elseif ~strcmp(handles.clusterOut, 'Select a cluster...') & (~strcmp(handles.newCluster,'Create a cluster...') & ~isempty(handles.newCluster))
+	    h = errordlg('Both an existing cluster and a novel cluster are selected. Choose one or the other.');
+    
+	    %if dropdown is not empty AND manual cluster is default OR empty,
+	    %classify as dropdown
+	elseif ~strcmp(handles.clusterOut, 'Select a cluster...') & (strcmp(handles.newCluster,'Create a cluster...') || isempty(handles.newCluster))
+	    %call R code to edit workspace to reflect reassignments
+	    %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	    %pathu = strrep(handles.path,' ','\ ');
+	    system(['R --slave --args ' char(34) handles.path char(34) ' ' char(34) handles.clusterOut char(34) ' ' '< ./R/changeClusterAssignmentGUI.r']);
+
+	    %recreate wav files following reassignment
+	    %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	    if handles.assignRun == 0
+	        system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/recreateClusters.r']);
+	    elseif handles.assignRun == 1
+	        system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/recreateClusters2.r']);
+	    end
+
+	    %close gui window; relaunch new one 
+	    close
+	    reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
+    
+	    %if dropdown is default AND manual cluster is not default and not
+	    %empty, classify as manual
+	elseif strcmp(handles.clusterOut, 'Select a cluster...') & (~strcmp(handles.newCluster,'Default') & ~isempty(handles.newCluster))
+	    %call R code to edit workspace to reflect reassignments
+	    %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	    %pathu = strrep(handles.path,' ','\ ');
+	    system(['R --slave --args ' char(34) handles.path char(34) ' ' char(34) handles.newCluster char(34) ' ' '< ./R/changeClusterAssignmentGUI.r']);
+
+	    %recreate wav files following reassignment
+	    %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	    if handles.assignRun == 0
+	        system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/recreateClusters.r']);
+	    elseif handles.assignRun == 1
+	        system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/recreateClusters2.r']);
+	    end
+
+	    %close gui window; relaunch new one 
+	    close
+	    reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
+	end
 end
   
 % --- Executes on slider movement.
@@ -366,18 +498,35 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-if handles.assignRun == 1
-    if handles.pathu(end)~='/'
-        handles.pathu = strcat(handles.pathu,'/');
-    end
-    if handles.refDiru(end)~='/'
-        handles.refDiru = strcat(handles.refDiru,'/');
-    end
-    system(['R --slave --args ' handles.pathu ' ' handles.refDiru ' < calculateSyntaxSimilarity.r']);
-    close
-elseif handles.assignRun == 0
-    system(['R --slave --args ' handles.pathu ' < finalizeClusters.r']);
-    close
+if isunix	
+	if handles.assignRun == 1
+	    if handles.pathu(end)~='/'
+	        handles.pathu = strcat(handles.pathu,'/');
+	    end
+	    if handles.refDiru(end)~='/'
+	        handles.refDiru = strcat(handles.refDiru,'/');
+	    end
+	    system(['R --slave --args ' handles.pathu ' ' handles.refDiru ' < ./R/calculateSyntaxSimilarity.r']);
+	    close
+	elseif handles.assignRun == 0
+	    system(['R --slave --args ' handles.pathu ' < ./R/finalizeClusters.r']);
+	    close
+	end
+elseif ispc
+	x=1;
+	if handles.assignRun == 1
+	    if handles.path(end)~='/'
+	        handles.path = strcat(handles.path,'/');
+	    end
+	    if handles.refDir(end)~='/'
+	        handles.refDir = strcat(handles.refDir,'/');
+	    end
+	    system(['R --slave --args ' char(34) handles.path char(34) ' ' char(34) handles.refDir char(34) ' < ./R/calculateSyntaxSimilarity.r']);
+	    close
+	elseif handles.assignRun == 0
+	    system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/finalizeClusters.r']);
+	    close
+	end
 end
 
 % --- Executes on selection change in popupmenu3.
@@ -468,14 +617,25 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(handles.text6,'String','Probing for subtypes. Please wait...')
-set(handles.pushbutton3,'BackgroundColor','Yellow');
-pause(.000001)
-system(['R --slave --args ' handles.pathu ' ' handles.toSplit ' ' handles.splitN ' ' '< subtypeStatic.r']);
-setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-system(['R --slave --args ' handles.pathu ' < recreateClusters.r']);
-close
-reassign_syllables({handles.path},{handles.refDir},{handles.assignRun});
+if isunix
+	set(handles.text6,'String','Probing for subtypes. Please wait...')
+	set(handles.pushbutton3,'BackgroundColor','Yellow');
+	pause(.000001)
+	system(['R --slave --args ' handles.pathu ' ' handles.toSplit ' ' handles.splitN ' ' '< ./R/subtypeStatic.r']);
+	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	system(['R --slave --args ' handles.pathu ' < ./R/recreateClusters.r']);
+	close
+	reassign_syllables({handles.path},{handles.refDir},{handles.assignRun});
+elseif ispc
+	set(handles.text6,'String','Probing for subtypes. Please wait...')
+	set(handles.pushbutton3,'BackgroundColor','Yellow');
+	pause(.000001)
+	system(['R --slave --args ' char(34) handles.path char(34) ' ' char(34) handles.toSplit char(34) ' ' char(34) handles.splitN char(34) ' ' '< ./R/subtypeStatic.r']);
+	%setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/recreateClusters.r']);
+	close
+	reassign_syllables({handles.path},{handles.refDir},{handles.assignRun});
+end
 
 % --- Executes on selection change in popupmenu8.
 function popupmenu8_Callback(hObject, eventdata, handles)
@@ -534,17 +694,29 @@ for i = 1:length(fieldnames(reassign(1)))
     
     dlmwrite(strcat(handles.path,'reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');
 end
+if isunix	
+	%call R code to edit workspace to reflect reassignments
+	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	pathu = strrep(handles.path,' ','\ ');
+	system(['R --slave --args ' pathu ' ' handles.missing ' ' '< ./R/changeClusterAssignmentGUI.r']);
 
-%call R code to edit workspace to reflect reassignments
-setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-pathu = strrep(handles.path,' ','\ ');
-system(['R --slave --args ' pathu ' ' handles.missing ' ' '< changeClusterAssignmentGUI.r']);
+	%recreate wav files following reassignment
+	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	system(['R --slave --args ' pathu ' < ./R/recreateClusters2.r']);
 
-%recreate wav files following reassignment
-setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-system(['R --slave --args ' pathu ' < recreateClusters2.r']);
+	system(['R --slave --args ' pathu ' < ./R/getClusterIDs.r']);
+elseif ispc
+	%call R code to edit workspace to reflect reassignments
+	%setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	pathu = strrep(handles.path,' ','\ ');
+	system(['R --slave --args ' char(34) handles.path char(34) ' ' char(34) handles.missing char(34) ' ' '< ./R/changeClusterAssignmentGUI.r']);
 
-system(['R --slave --args ' pathu ' < getClusterIDs.r']);
+	%recreate wav files following reassignment
+	%setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/recreateClusters2.r']);
+
+	system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/getClusterIDs.r']);
+end
 
 %close gui window; relaunch new one
 close
@@ -555,11 +727,18 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-pathu = strrep(handles.path,' ','\ ');
-[sylls]=getSyllIDs(pathu,struct(handles));
-set(handles.text6,'String',sylls);
-pause(.000001);
+if isunix
+	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	pathu = strrep(handles.path,' ','\ ');
+	[sylls]=getSyllIDs(pathu,struct(handles));
+	set(handles.text6,'String',sylls);
+	pause(.000001);
+elseif ispc
+	pathu = strrep(handles.path,' ','\ ');
+	[sylls]=getSyllIDs(pathu,struct(handles));
+	set(handles.text6,'String',sylls);
+	pause(.000001);
+end
 
 
 % --- Executes on button press in pushbutton6.
@@ -567,9 +746,17 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-pathu = strrep(handles.path,' ','\ ');
-[deletedSylls]=getSyllIDs(pathu,struct(handles));
-deleteSyllable(deletedSylls,pathu)
-close
-reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
+if isunix	
+	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	pathu = strrep(handles.path,' ','\ ');
+	[deletedSylls]=getSyllIDs(pathu,struct(handles));
+	deleteSyllable(deletedSylls,pathu)
+	close
+	reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
+elseif ispc
+	pathu = strrep(handles.path,' ','\ ');
+	[deletedSylls]=getSyllIDs(pathu,struct(handles));
+	deleteSyllable(deletedSylls,pathu)
+	close
+	reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
+end

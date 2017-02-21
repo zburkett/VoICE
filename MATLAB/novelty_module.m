@@ -55,10 +55,17 @@ function novelty_module_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for novelty_module
 handles.output = hObject;
 
-handles.assignPath = varargin{1}{1};
-handles.assignPathu = strrep(handles.assignPath,' ','\ ');
-handles.refDir = varargin{2}{1};
-handles.refDiru = strrep(handles.refDir,' ','\ ');
+if isunix
+	handles.assignPath = varargin{1}{1};
+	handles.assignPathu = strrep(handles.assignPath,' ','\ ');
+	handles.refDir = varargin{2}{1};
+	handles.refDiru = strrep(handles.refDir,' ','\ ');
+elseif ispc
+	handles.assignPath = varargin{1}{1};
+	handles.assignPath = strrep(handles.assignPath,'\','/');
+	handles.refDir = varargin{2}{1};
+	handles.refDir = strrep(handles.refDir,'\','/');
+end
 
 % dat = csvread(strcat(handles.path,'igsdata.csv'));
 % fid = fopen(strcat(handles.path,'colnames.txt'));
@@ -112,7 +119,7 @@ else
     pause(0.00001);
     set(handles.statusdlg,'String','Generating clusters.');
     set(handles.pushbutton1,'BackgroundColor','Yellow');
-    system(['R --slave --args ', handles.threshold ' ' handles.assignPathu ' ' handles.refDiru ' < determineClustersAssign2.r']);
+    system(['R --slave --args ', handles.threshold ' ' handles.assignPathu ' ' handles.refDiru ' < ./R/determineClustersAssign2.r']);
     pause(0.00001);
     set(handles.pushbutton1,'BackgroundColor','Green');
     set(handles.statusdlg,'String','Clusters generated. Click "Reassign Syllables" to view/edit. BEWARE: Hitting "Generate Clusters" again will wipe all reassignments!');
@@ -190,7 +197,7 @@ x = dir(strcat(handles.assignPath,'unassigned_for_cluster/*.wav'));
 
 if length(x)==1
     
-    system(['R --slave --args ' char(34) handles.assignPath char(34) ' < assignSingleNA.r']);
+    system(['R --slave --args ' char(34) handles.assignPath char(34) ' < ./R/assignSingleNA.r']);
     %alert to move on goes here...
     
     h=msgbox('Only a single novel syllable was found and automatically given a unique ID. Click "Generate Clusters" and proceed.');
@@ -208,10 +215,10 @@ elseif length(x)>1 %if more than one novel syllable, cluster them
     similarity_batch_parallel_headless_unassigned_pub(strcat(handles.assignPath,'unassigned_for_cluster'));
 
     %iterate through tree trimming
-    system(['R --slave --args ' handles.assignPathu ' ' '4 0 1 0.01 ' '< clusterSyllablesAssign_pub.r']);
+    system(['R --slave --args ' handles.assignPathu ' ' '4 0 1 0.01 ' '< ./R/clusterSyllablesAssign_pub.r']);
 
     %prep for GUI
-    system(['R --slave --args ' handles.assignPathu ' < determineClustersAssign1.r']);
+    system(['R --slave --args ' handles.assignPathu ' < ./R/determineClustersAssign1.r']);
 
     %update GUI
     dat = csvread(strcat(handles.assignPath,'igsdata_novel.csv'));

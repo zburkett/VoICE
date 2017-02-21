@@ -4,8 +4,8 @@ format short g
 
 if exist([matlabroot '/toolbox/distcomp']) %if the user has parallel processing capability
     try
-        matlabpool('close'); %try to close existing matlabpool
-        matlabpool;
+        delete(gcp('nocreate')); %try to close existing matlabpool
+        parpool;
     catch %if no existing matlabpool is found...
         try 
            matlabpool; %...try opening a new matlabpool

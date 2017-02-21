@@ -3,7 +3,18 @@ options(stringsAsFactors=FALSE)
 suppressMessages(library(gdata))
 options(warn=-1)
 
-data.path <- paste(comArgs[1],comArgs[2],sep="")
+if(.Platform$OS.type=="unix")
+{
+	sink("/dev/null")
+	data.path <- paste(comArgs[1],comArgs[2],sep="")
+	sink()
+}else if (.Platform$OS.type=="windows")
+{
+	sink(paste(comArgs[1],"sink.txt",sep=""))
+	data.path <- paste(comArgs[1],comArgs[2],sep="")
+	sink()
+}
+
 data.out <- read.xls(data.path,header=FALSE)
 data.out <- data.out[,-1]
 data.out <- data.out[-c(1,2),]
@@ -19,7 +30,7 @@ for(col in 1:ncol(data.out))
 }
 dupes <- duplicated(data.out)
 data.out <- data.out[!dupes,]
-data.out <- subset(data.out,as.numeric(data.out[,"syllable.duration"])>12) #remove syllables < 10 msec to prevent MATLAB error in similarity scoring
+data.out <- subset(data.out,as.numeric(data.out[,"syllable.duration"])>12) #remove syllables < 12 msec to prevent MATLAB error in similarity scoring
 	
 rownames(data.out) <- 1:nrow(data.out)
 	

@@ -1,11 +1,25 @@
 comArgs <- commandArgs(T)
 options(stringsAsFactors=FALSE)
 options(warn=-1)
-sink("/dev/null")
-suppressMessages(library(WGCNA,warn.conflicts=FALSE,verbose=0))
-suppressMessages(library(tcltk))
+if(.Platform$OS.type=="unix")
+{
+	sink("/dev/null")
+	suppressMessages(library(WGCNA,warn.conflicts=FALSE,verbose=0))
+	suppressMessages(library(tcltk))
+	options(warn=-1)
+	sink()
+	if(!exists("flashClust")){flashClust <- hclust}
+}else if (.Platform$OS.type=="windows")
+{
+	sink(file=paste(comArgs[1],"sink.txt",sep=""))
+	suppressMessages(library(WGCNA,warn.conflicts=FALSE,verbose=0))
+	suppressMessages(library(tcltk))
+	options(warn=-1)
+	sink()
+	unlink(paste(comArgs[1],"sink.txt",sep=""))
+}
 options(warn=-1)
-sink()
+
 
 if(!exists("flashClust")){flashClust <- hclust}
 
@@ -122,9 +136,20 @@ for(thresh in merge.range)
     n <- vector()
     
     #Merge clusters that correlate above a given merging threshold
-    sink("/dev/null")
-    merge=mergeCloseModules(t(out.cluster$data),out.cluster$syntax,cutHeight=thresh,verbose=-1,unassdColor="grey",trapErrors=TRUE)
-    sink()
+	if(.Platform$OS.type=="unix")
+	{
+		sink("/dev/null")
+	    merge=mergeCloseModules(t(out.cluster$data),out.cluster$syntax,cutHeight=thresh,verbose=-1,unassdColor="grey",trapErrors=TRUE)
+		sink()
+		if(!exists("flashClust")){flashClust <- hclust}
+	}else if (.Platform$OS.type=="windows")
+	{
+		sink(file=paste(comArgs[1],"sink.txt",sep=""))
+	    merge=mergeCloseModules(t(out.cluster$data),out.cluster$syntax,cutHeight=thresh,verbose=-1,unassdColor="grey",trapErrors=TRUE)
+		
+		sink()
+		unlink(paste(comArgs[1],"sink.txt",sep=""))
+	}
         
     #Label rows in global similarity by cluster assignment for IGS calculation
     clustData <- as.data.frame(cbind(out.cluster$data,merge$colors))

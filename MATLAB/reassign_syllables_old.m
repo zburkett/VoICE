@@ -68,14 +68,14 @@ if exist(strcat(handles.path,'sorted_syllables_assigned/'))
 end
 
 if(handles.assignRun == 1)
-    system(['R --slave --args ' handles.pathu ' < getClusterIDs.r']);
+    system(['R --slave --args ' handles.pathu ' < ./R/getClusterIDs.r']);
     fidPupil = fopen(strcat(handles.path,'usedClusters.txt'));
     if(fidPupil == -1)
         fidPupil = fopen(strcat(handles.path,'/usedClusters.txt'));
     end
     s = textscan(fidPupil,'%s','Delimiter','\n');
     sPupil = strrep(s{1}(:,1),'"','');
-    system(['R --slave --args ' handles.refDiru ' < getClusterIDs.r']);
+    system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']);
     fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
     if(fidTutor == -1)
         fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
@@ -91,8 +91,8 @@ if(handles.assignRun == 1)
     end
     
     %update unusedColors.txt
-    system(['R --slave --args ' handles.refDiru ' ' handles.pathu ' < updateColors.r']);
-    system(['R --slave --args ' handles.pathu ' < recreateClusters2.r']);
+    system(['R --slave --args ' handles.refDiru ' ' handles.pathu ' < ./R/updateColors.r']);
+    system(['R --slave --args ' handles.pathu ' < ./R/recreateClusters2.r']);
 end
 
 fid = fopen(strcat(handles.path,'unusedColors.txt'));
@@ -215,14 +215,14 @@ elseif ~strcmp(handles.clusterOut, 'Select a cluster...') & (strcmp(handles.newC
     %call R code to edit workspace to reflect reassignments
     setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
     pathu = strrep(handles.path,' ','\ ');
-    system(['R --slave --args ' pathu ' ' handles.clusterOut ' ' '< changeClusterAssignmentGUI.r']);
+    system(['R --slave --args ' pathu ' ' handles.clusterOut ' ' '< ./R/changeClusterAssignmentGUI.r']);
 
     %recreate wav files following reassignment
     setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
     if handles.assignRun == 0
-        system(['R --slave --args ' pathu ' < recreateClusters.r']);
+        system(['R --slave --args ' pathu ' < ./R/recreateClusters.r']);
     elseif handles.assignRun == 1
-        system(['R --slave --args ' pathu ' < recreateClusters2.r']);
+        system(['R --slave --args ' pathu ' < ./R/recreateClusters2.r']);
     end
 
     %close gui window; relaunch new one 
@@ -235,14 +235,14 @@ elseif strcmp(handles.clusterOut, 'Select a cluster...') & (~strcmp(handles.newC
     %call R code to edit workspace to reflect reassignments
     setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
     pathu = strrep(handles.path,' ','\ ');
-    system(['R --slave --args ' pathu ' ' handles.newCluster ' ' '< changeClusterAssignmentGUI.r']);
+    system(['R --slave --args ' pathu ' ' handles.newCluster ' ' '< ./R/changeClusterAssignmentGUI.r']);
 
     %recreate wav files following reassignment
     setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
     if handles.assignRun == 0
-        system(['R --slave --args ' pathu ' < recreateClusters.r']);
+        system(['R --slave --args ' pathu ' < ./R/recreateClusters.r']);
     elseif handles.assignRun == 1
-        system(['R --slave --args ' pathu ' < recreateClusters2.r']);
+        system(['R --slave --args ' pathu ' < ./R/recreateClusters2.r']);
     end
 
     %close gui window; relaunch new one 
@@ -363,10 +363,10 @@ if handles.assignRun == 1
     if handles.refDiru(end)~='/'
         handles.refDiru = strcat(handles.refDiru,'/');
     end
-    system(['R --slave --args ' handles.pathu ' ' handles.refDiru ' < calculateSyntaxSimilarity.r']);
+    system(['R --slave --args ' handles.pathu ' ' handles.refDiru ' < ./R/calculateSyntaxSimilarity.r']);
     close
 elseif handles.assignRun == 0
-    system(['R --slave --args ' handles.pathu ' < finalizeClusters.r']);
+    system(['R --slave --args ' handles.pathu ' < ./R/finalizeClusters.r']);
     close
 end
 
@@ -458,9 +458,9 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-system(['R --slave --args ' handles.pathu ' ' handles.toSplit ' ' handles.splitN ' ' '< subtypeStatic.r']);
+system(['R --slave --args ' handles.pathu ' ' handles.toSplit ' ' handles.splitN ' ' '< ./R/subtypeStatic.r']);
 setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-system(['R --slave --args ' handles.pathu ' < recreateClusters.r']);
+system(['R --slave --args ' handles.pathu ' < ./R/recreateClusters.r']);
 close
 reassign_syllables({handles.path},{handles.refDir},{handles.assignRun});
 
@@ -520,13 +520,13 @@ end
 %call R code to edit workspace to reflect reassignments
 setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 pathu = strrep(handles.path,' ','\ ');
-system(['R --slave --args ' pathu ' ' handles.missing ' ' '< changeClusterAssignmentGUI.r']);
+system(['R --slave --args ' pathu ' ' handles.missing ' ' '< ./R/changeClusterAssignmentGUI.r']);
 
 %recreate wav files following reassignment
 setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-system(['R --slave --args ' pathu ' < recreateClusters2.r']);
+system(['R --slave --args ' pathu ' < ./R/recreateClusters2.r']);
 
-system(['R --slave --args ' pathu ' < getClusterIDs.r']);
+system(['R --slave --args ' pathu ' < ./R/getClusterIDs.r']);
 
 %close gui window; relaunch new one
 close

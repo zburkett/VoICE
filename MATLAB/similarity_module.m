@@ -80,31 +80,52 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[handles.file, handles.path] = uigetfile('*.xls','Select a feature batch .XLS file.');
-handles.fileu = strrep(handles.file,' ','\ ');
-handles.pathu = strrep(handles.path,' ','\ ');
-set(handles.text3,'String',strcat(handles.path,handles.file));
-set(handles.pushbutton2,'BackgroundColor','default');
-guidata(hObject,handles);
-
+if isunix
+	[handles.file, handles.path] = uigetfile('*.xls','Select a feature batch .XLS file.');
+	handles.fileu = strrep(handles.file,' ','\ ');
+	handles.pathu = strrep(handles.path,' ','\ ');
+	set(handles.text3,'String',strcat(handles.path,handles.file));
+	set(handles.pushbutton2,'BackgroundColor','default');
+	guidata(hObject,handles);
+elseif ispc
+	[handles.file, handles.path] = uigetfile('*.xls','Select a feature batch .XLS file.');
+	handles.fileu = strrep(handles.file,'\','/');
+	handles.pathu = strrep(handles.path,'\','/');
+	set(handles.text3,'String',strcat(handles.path,handles.file));
+	set(handles.pushbutton2,'BackgroundColor','default');
+	guidata(hObject,handles);
+end
 
 % --- Executes on button press in pushbutton2.
 function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(handles.pushbutton2,'BackgroundColor','yellow');
-set(handles.text6,'String','Cutting .WAV files. Button turns green when done.');
-pause(.0000001)
-setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-system(['R --slave --args' ' ' handles.pathu ' ' handles.fileu ' ' ' < importFeatureBatch.r']);
-setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-system(['R --slave --args' ' ' strcat(handles.pathu,'acoustic_data.csv') ' ' handles.pathu ' ' ' < getSyllableWavs2.r']);
-pause(.0000001)
-set(handles.pushbutton2,'BackgroundColor','green');
-set(handles.text6,'String','WAV files cut. Similarity batch ready to run.');
-guidata(hObject,handles);
-
+if isunix
+	set(handles.pushbutton2,'BackgroundColor','yellow');
+	set(handles.text6,'String','Cutting .WAV files. Button turns green when done.');
+	pause(.0000001)
+	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	system(['R --slave --args' ' ' handles.pathu ' ' handles.fileu ' ' ' < ./R/importFeatureBatch.r']);
+	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	system(['R --slave --args' ' ' strcat(handles.pathu,'acoustic_data.csv') ' ' handles.pathu ' ' ' < ./R/getSyllableWavs2.r']);
+	pause(.0000001)
+	set(handles.pushbutton2,'BackgroundColor','green');
+	set(handles.text6,'String','WAV files cut. Similarity batch ready to run.');
+	guidata(hObject,handles);
+elseif ispc
+	set(handles.pushbutton2,'BackgroundColor','yellow');
+	set(handles.text6,'String','Cutting .WAV files. Button turns green when done.');
+	pause(.0000001)
+	%setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	[status,result]=system(['R --slave --args' ' ' char(34) handles.pathu char(34) ' ' char(34) handles.fileu char(34) ' ' ' < ./R/importFeatureBatch.r']);
+	%setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	system(['R --slave --args' ' ' char(34) strcat(handles.pathu,'acoustic_data.csv') char(34) ' ' char(34) handles.pathu char(34) ' ' ' < ./R/getSyllableWavs2.r']);
+	pause(.0000001)
+	set(handles.pushbutton2,'BackgroundColor','green');
+	set(handles.text6,'String','WAV files cut. Similarity batch ready to run.');
+	guidata(hObject,handles);
+end
 
 % --- Executes on button press in pushbutton3.
 function pushbutton3_Callback(hObject, eventdata, handles)
@@ -114,10 +135,8 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 set(handles.pushbutton3,'BackgroundColor','yellow');
 set(handles.text6,'String','Your similarity batch is running. This may take a while. A status bar will spawn in MATLAB Desktop.');
 pause(.0000001)
-tic
 similarity_batch_parallel_pub(handles.path,str2num(handles.mindur),str2num(handles.winsize));
 pause(.0000001)
-toc
 set(handles.pushbutton3,'BackgroundColor','green');
 set(handles.text6,'String','Similarity batch is complete. Ready to cluster.');
 
@@ -223,21 +242,35 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % syllable clustering step
-setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-set(handles.pushbutton4,'BackgroundColor','yellow');
-set(handles.text6,'String','Syllables being clustered...a status bar will spawn.');
-pause(0.000001)
-system(['R --slave --args' ' ' handles.pathu ' ' '< clusterSyllables.r']);
-pause(0.000001)
-set(handles.pushbutton4,'BackgroundColor','green');
-set(handles.text6,'String','Clustering and iterative trimming complete.');
-
+if isunix
+	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	set(handles.pushbutton4,'BackgroundColor','yellow');
+	set(handles.text6,'String','Syllables being clustered...a status bar will spawn.');
+	pause(0.000001)
+	system(['R --slave --args' ' ' handles.pathu ' ' '< ./R/clusterSyllables.r']);
+	pause(0.000001)
+	set(handles.pushbutton4,'BackgroundColor','green');
+	set(handles.text6,'String','Clustering and iterative trimming complete.');
+elseif ispc
+	set(handles.pushbutton4,'BackgroundColor','yellow');
+	set(handles.text6,'String','Syllables being clustered...a status bar will spawn.');
+	pause(0.000001)
+	system(['R --slave --args' ' ' char(34) handles.pathu char(34) ' ' '< ./R/clusterSyllables.r']);
+	pause(0.000001)
+	set(handles.pushbutton4,'BackgroundColor','green');
+	set(handles.text6,'String','Clustering and iterative trimming complete.');
+end
 
 % --- Executes on button press in pushbutton6.
 function pushbutton6_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-system(['R --slave --args' ' ' handles.pathu ' ' '< determineClusters1.r']);
-determine_merging_threshold({handles.path},{handles.pathu});
+if isunix
+	system(['R --slave --args' ' ' handles.pathu ' ' '< ./R/determineClusters1.r']);
+	determine_merging_threshold({handles.path},{handles.pathu});
+elseif ispc
+	system(['R --slave --args' ' ' char(34) handles.pathu char(34) ' ' '< ./R/determineClusters1.r']);
+	determine_merging_threshold({handles.path},{handles.pathu});
+end

@@ -157,7 +157,7 @@ else
 end
 
 %if ~exist(strcat(handles.comp1,'/workspace.Rdata')) || ~exist(strcat(handles.comp1,'/assign_workspace.Rdata')
-system(['R --slave --args ' handles.comp1u ' ' handles.comp2u ' < calculateSyntaxSimilarity.r']);
+system(['R --slave --args ' handles.comp1u ' ' handles.comp2u ' < ./R/calculateSyntaxSimilarity.r']);
 set(handles.text24,'String','Syntax and acoustic plots generated and stored in the Session 1 directory.');
 
 

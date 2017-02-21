@@ -17,6 +17,8 @@ unusedColors.txt
 cluster_dendrogram.pdf
 tree_trim_curve.pdf
 tree_trim_curve.png
+*~
+parfor_progress.txt
 
 .Rapp.history
 .dropbox

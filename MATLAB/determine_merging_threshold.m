@@ -110,7 +110,11 @@ else
     set(handles.statusdlg,'String','Generating clusters.');
     set(handles.pushbutton1,'BackgroundColor','Yellow');
     pause(0.00001);
-    system(['R --slave --args' ' ' handles.pathu ' '  handles.threshold ' ' '< determineClusters2.r']);
+	if isunix
+    	system(['R --slave --args' ' ' handles.pathu ' '  handles.threshold ' ' '< ./R/determineClusters2.r']);
+	elseif ispc
+		system(['R --slave --args' ' ' char(34) handles.pathu char(34) ' ' handles.threshold ' ' '< determineClusters2.r']);
+	end
     pause(0.00001);
     set(handles.pushbutton1,'BackgroundColor','Green');
     set(handles.statusdlg,'String','Clusters generated. Click "Reassign Syllables" to view/edit. BEWARE: Hitting "Generate Clusters" again will wipe all reassignments!');
