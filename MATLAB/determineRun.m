@@ -13,7 +13,12 @@ if exist(strcat(Filedir2,'similarity_batch_assign.csv'),'file')~=0
         
         save(strcat(Filedir2,strcat('assignment_similarity_batch_completed','_a',assignDir,'_r',refDir)));
         
-        simbatchOrig=csvread(strcat(Filedir2,'/similarity_batch_assign.csv'));
+		if isunix
+			simbatchOrig=csvread(strcat(Filedir2,'/similarity_batch_assign.csv'));
+		elseif ispc
+	        simbatchOrig=csvread(strcat(Filedir2,'similarity_batch_assign.csv'));
+		end
+        
         dlmwrite(strcat(Filedir2,'similarity_batch_assign','_a',assignDir,'_r',refDir,'.csv'),simbatchOrig);
     %end
 end

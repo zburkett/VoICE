@@ -52,7 +52,7 @@ function voice_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to voice (see VARARGIN)
 
-installdir = which('clustR_bird');
+installdir = which('voice.m');
 f = findstr('/',installdir);
 f= f(1:(length(f)-1));
 installdir = installdir(1:max(f));

@@ -111,53 +111,102 @@ function runBatch_Callback(hObject, eventdata, handles)
 % hObject    handle to runBatch (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+	if isunix
+	set(handles.runBatch,'BackgroundColor','yellow');
+	set(handles.text33,'String','Your similarity batch is running. This may take a while. A status bar will spawn in MATLAB Desktop after a few moments.');
 
-set(handles.runBatch,'BackgroundColor','yellow');
-set(handles.text33,'String','Your similarity batch is running. This may take a while. A status bar will spawn in MATLAB Desktop after a few moments.');
-setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 
-if ~exist(strcat(handles.assignPath,'cut_syllables/'))
-    %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-    system(['R --slave --args' ' ' handles.assignPathu ' ' handles.assignFileu ' ' ' < ./R/importFeatureBatch.r']);
-    %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-    system(['R --slave --args' ' ' strcat(handles.assignPathu,'acoustic_data.csv') ' ' handles.assignPathu ' ' ' < ./R/getSyllableWavs2.r']);
+	if ~exist(strcat(handles.assignPath,'cut_syllables/'))
+	    %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	    system(['R --slave --args' ' ' handles.assignPathu ' ' handles.assignFileu ' ' ' < ./R/importFeatureBatch.r']);
+	    %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	    system(['R --slave --args' ' ' strcat(handles.assignPathu,'acoustic_data.csv') ' ' handles.assignPathu ' ' ' < ./R/getSyllableWavs2.r']);
+	end
+
+	handles.refDiru = strrep(handles.refDir, ' ', '\ ');
+	system(['R --slave --args ' strcat(handles.refDiru,'/') ' ' handles.pct, ' < ./R/sortClusterReps2.r']);
+	pause(.0000001)
+	if exist(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat'),'file')
+	    determineRun(handles.assignPath)
+	end
+	similarity_batch_parallel_assign_pub(handles.refDir,handles.assignPath,str2num(handles.mindur),str2num(handles.winsize));
+	pause(.0000001)
+	set(handles.runBatch,'BackgroundColor','green');
+	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
+	pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	handles.totalSyllables = length(dir(pattern));
+	if exist(strcat(handles.assignPath,'NDs.csv'))==2;
+	    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
+	    set(handles.n_tied,'String',length(NDs));
+	    delete(strcat(handles.assignPath,'NDs.csv'));
+	else
+	    set(handles.n_tied,'String','0');
+	end
+
+	if exist(strcat(handles.assignPath,'NAs.csv'))==2
+	    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
+	    set(handles.n_novel,'String',length(NAs));
+	    delete(strcat(handles.assignPath,'NAs.csv'));
+	else
+	    set(handles.n_novel,'String','0');
+	end
+
+	set(handles.n_assigned,'String', handles.totalSyllables - (str2num(get(handles.n_tied,'String')) + str2num(get(handles.n_novel,'String'))));
+	set(handles.text33,'String',strcat('Now showing assignment breakdown for GS threshold ', strcat('= ', handles.gsfloor), '. Ready to assign.'));
+	set(handles.runBatch,'BackgroundColor','green');
+	set(handles.assign_go,'Enable','on');
+elseif ispc
+	set(handles.runBatch,'BackgroundColor','yellow');
+	set(handles.text33,'String','Your similarity batch is running. This may take a while. A status bar will spawn in MATLAB Desktop after a few moments.');
+	%setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	%setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+
+	if ~exist(strcat(handles.assignPath,'cut_syllables/'))
+	    %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	    system(['R --slave --args' ' ' char(34) handles.assignPath char(34) ' ' char(34) handles.assignFile char(34) ' ' ' < importFeatureBatch.r']);
+	    %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	    system(['R --slave --args' ' ' char(34) strcat(handles.assignPath,'acoustic_data.csv') char(34) ' ' char(34) handles.assignPath char(34) ' ' ' < getSyllableWavs2.r']);
+	end
+
+	%handles.refDiru = strrep(handles.refDir, ' ', '\ ');
+	system(['R --slave --args ' char(34) strcat(handles.refDir,'/') char(34) ' ' char(34) handles.pct char(34) ' < sortClusterReps2.r']);
+	pause(.0000001)
+	if exist(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat'),'file')
+	    determineRun(handles.assignPath)
+	end
+	similarity_batch_parallel_assign_pub(handles.refDir,handles.assignPath,str2num(handles.mindur),str2num(handles.winsize));
+	pause(.0000001)
+	set(handles.runBatch,'BackgroundColor','green');
+	%setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	%setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	system(['R --slave --args ' char(34) handles.refDir char(34) ' ' char(34) handles.assignPath char(34) ' ' char(34) handles.gsfloor char(34) ' < assignSyllables.r']);
+	pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	handles.totalSyllables = length(dir(pattern));
+	if exist(strcat(handles.assignPath,'NDs.csv'))==2;
+	    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
+	    set(handles.n_tied,'String',length(NDs));
+	    delete(strcat(handles.assignPath,'NDs.csv'));
+	else
+	    set(handles.n_tied,'String','0');
+	end
+
+	if exist(strcat(handles.assignPath,'NAs.csv'))==2
+	    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
+	    set(handles.n_novel,'String',length(NAs));
+	    delete(strcat(handles.assignPath,'NAs.csv'));
+	else
+	    set(handles.n_novel,'String','0');
+	end
+
+	set(handles.n_assigned,'String', handles.totalSyllables - (str2num(get(handles.n_tied,'String')) + str2num(get(handles.n_novel,'String'))));
+	set(handles.text33,'String',strcat('Now showing assignment breakdown for GS threshold ', strcat('= ', handles.gsfloor), '. Ready to assign.'));
+	set(handles.runBatch,'BackgroundColor','green');
+	set(handles.assign_go,'Enable','on');
 end
-
-handles.refDiru = strrep(handles.refDir, ' ', '\ ');
-system(['R --slave --args ' strcat(handles.refDiru,'/') ' ' handles.pct, ' < ./R/sortClusterReps2.r']);
-pause(.0000001)
-if exist(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat'),'file')
-    determineRun(handles.assignPath)
-end
-similarity_batch_parallel_assign_pub(handles.refDir,handles.assignPath,str2num(handles.mindur),str2num(handles.winsize));
-pause(.0000001)
-set(handles.runBatch,'BackgroundColor','green');
-setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
-pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
-handles.totalSyllables = length(dir(pattern));
-if exist(strcat(handles.assignPath,'NDs.csv'))==2;
-    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
-    set(handles.n_tied,'String',length(NDs));
-    delete(strcat(handles.assignPath,'NDs.csv'));
-else
-    set(handles.n_tied,'String','0');
-end
-
-if exist(strcat(handles.assignPath,'NAs.csv'))==2
-    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
-    set(handles.n_novel,'String',length(NAs));
-    delete(strcat(handles.assignPath,'NAs.csv'));
-else
-    set(handles.n_novel,'String','0');
-end
-
-set(handles.n_assigned,'String', handles.totalSyllables - (str2num(get(handles.n_tied,'String')) + str2num(get(handles.n_novel,'String'))));
-set(handles.text33,'String',strcat('Now showing assignment breakdown for GS threshold ', strcat('= ', handles.gsfloor), '. Ready to assign.'));
-set(handles.runBatch,'BackgroundColor','green');
-set(handles.assign_go,'Enable','on');
 guidata(hObject,handles);
 
 
@@ -206,62 +255,124 @@ function selectRefDir_Callback(hObject, eventdata, handles)
 % hObject    handle to selectRefDir (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.refDir = uigetdir(cd,'Select directory containing existing clusters.');
-handles.refDiru = strrep(handles.refDir,' ','\ ');
-set(handles.refDirString,'String',handles.refDir);
+if isunix
+	handles.refDir = uigetdir(cd,'Select directory containing existing clusters.');
+	handles.refDiru = strrep(handles.refDir,' ','\ ');
+	set(handles.refDirString,'String',handles.refDir);
 
-if exist(strcat(handles.refDir,'/workspace.Rdata')) || exist(strcat(handles.refDir,'/assign_workspace.Rdata')) & exist(strcat(handles.refDir,'/sorted_syllables/')) || exist(strcat(handles.refDir,'/sorted_syllables_assigned/'))
-    handles.validRD = 1;
-else
-    handles.validRD = 0;
-end
+	if exist(strcat(handles.refDir,'/workspace.Rdata')) || exist(strcat(handles.refDir,'/assign_workspace.Rdata')) & exist(strcat(handles.refDir,'/sorted_syllables/')) || exist(strcat(handles.refDir,'/sorted_syllables_assigned/'))
+	    handles.validRD = 1;
+	else
+	    handles.validRD = 0;
+	end
 
-if isfield(handles,'validFB') & isfield(handles,'validRD')
-    if handles.validFB + handles.validRD == 2
-        set(handles.text33,'String','Valid assignment feature batch and valid reference directory selected. Similarity batch can now be run.')
-        set(handles.runBatch,'Enable','on');
-        if exist(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat')) ~=0
-            load(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat'))
-            if strmatch(folder1,handles.refDir) == 1 & strmatch(Filedir2,handles.assignPath) == 1
-                set(handles.text33,'String','These two sessions have already been run against each other. Proceed to assignment');
-                set(handles.runBatch,'BackgroundColor','green');
-                setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-                setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-                system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
-                pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
-                handles.totalSyllables = length(dir(pattern));
-                if exist(strcat(handles.assignPath,'NDs.csv'))==2;
-                    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
-                    set(handles.n_tied,'String',length(NDs));
-                    delete(strcat(handles.assignPath,'NDs.csv'));
-                else
-                    set(handles.n_tied,'String','0');
-                end
+	if isfield(handles,'validFB') & isfield(handles,'validRD')
+	    if handles.validFB + handles.validRD == 2
+	        set(handles.text33,'String','Valid assignment feature batch and valid reference directory selected. Similarity batch can now be run.')
+	        set(handles.runBatch,'Enable','on');
+	        if exist(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat')) ~=0
+	            load(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat'))
+	            if strmatch(folder1,handles.refDir) == 1 & strmatch(Filedir2,handles.assignPath) == 1
+	                set(handles.text33,'String','These two sessions have already been run against each other. Proceed to assignment');
+	                set(handles.runBatch,'BackgroundColor','green');
+	                setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	                setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	                system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
+	                pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	                handles.totalSyllables = length(dir(pattern));
+	                if exist(strcat(handles.assignPath,'NDs.csv'))==2;
+	                    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
+	                    set(handles.n_tied,'String',length(NDs));
+	                    delete(strcat(handles.assignPath,'NDs.csv'));
+	                else
+	                    set(handles.n_tied,'String','0');
+	                end
                 
-                if exist(strcat(handles.assignPath,'NAs.csv'))==2
-                    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
-                    set(handles.n_novel,'String',length(NAs));
-                    delete(strcat(handles.assignPath,'NAs.csv'));
-                else
-                    set(handles.n_novel,'String','0');
-                end
+	                if exist(strcat(handles.assignPath,'NAs.csv'))==2
+	                    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
+	                    set(handles.n_novel,'String',length(NAs));
+	                    delete(strcat(handles.assignPath,'NAs.csv'));
+	                else
+	                    set(handles.n_novel,'String','0');
+	                end
                 
-                set(handles.n_assigned,'String', handles.totalSyllables - (str2num(get(handles.n_tied,'String')) + str2num(get(handles.n_novel,'String'))));
-                set(handles.text33,'String',strcat('Now showing assignment breakdown for GS threshold ', strcat('= ', handles.gsfloor), '. Ready to assign.'));
-                set(handles.runBatch,'BackgroundColor','green');
-                set(handles.assign_go,'Enable','on');
-            end
-        end
+	                set(handles.n_assigned,'String', handles.totalSyllables - (str2num(get(handles.n_tied,'String')) + str2num(get(handles.n_novel,'String'))));
+	                set(handles.text33,'String',strcat('Now showing assignment breakdown for GS threshold ', strcat('= ', handles.gsfloor), '. Ready to assign.'));
+	                set(handles.runBatch,'BackgroundColor','green');
+	                set(handles.assign_go,'Enable','on');
+	            end
+	        end
         
-    elseif handles.validFB == 0 & handles.validRD == 1
-        set(handles.text33,'String','Invalid feature batch selected. Please choose a .xls file.');
-    elseif handles.validFB == 1 & handles.validRD == 0
-        set(handles.text33,'String','Invalid reference directory selected. Please make sure the audio in your selected directory has been clustered.')
-    end
-elseif ~isfield(handles,'validFB') & isfield(handles,'validRD')
-    set(handles.text33,'String','Valid reference directory chosen. Please choose a feature batch to assign to these clusters.');
-elseif isfield(handles,'validFB') & ~isfield(handles,'validRD')
-    set(handles.text33,'String','Valid assignment feature batch chosen. Please choose a reference directory.');
+	    elseif handles.validFB == 0 & handles.validRD == 1
+	        set(handles.text33,'String','Invalid feature batch selected. Please choose a .xls file.');
+	    elseif handles.validFB == 1 & handles.validRD == 0
+	        set(handles.text33,'String','Invalid reference directory selected. Please make sure the audio in your selected directory has been clustered.')
+	    end
+	elseif ~isfield(handles,'validFB') & isfield(handles,'validRD')
+	    set(handles.text33,'String','Valid reference directory chosen. Please choose a feature batch to assign to these clusters.');
+	elseif isfield(handles,'validFB') & ~isfield(handles,'validRD')
+	    set(handles.text33,'String','Valid assignment feature batch chosen. Please choose a reference directory.');
+	end
+elseif ispc
+	handles.refDir = uigetdir(cd,'Select directory containing existing clusters.');
+	%handles.refDiru = strrep(handles.refDir,' ','\ ');
+	handles.refDir = strrep(handles.refDir,'\','/');
+	set(handles.refDirString,'String',handles.refDir);
+
+	if exist(strcat(handles.refDir,'/workspace.Rdata')) || exist(strcat(handles.refDir,'/assign_workspace.Rdata')) & exist(strcat(handles.refDir,'/sorted_syllables/')) || exist(strcat(handles.refDir,'/sorted_syllables_assigned/'))
+	    handles.validRD = 1;
+	else
+	    handles.validRD = 0;
+	end
+
+	if isfield(handles,'validFB') & isfield(handles,'validRD')
+	    if handles.validFB + handles.validRD == 2
+	        set(handles.text33,'String','Valid assignment feature batch and valid reference directory selected. Similarity batch can now be run.')
+	        set(handles.runBatch,'Enable','on');
+	        if exist(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat')) ~=0
+	            load(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat'))
+	            if strmatch(folder1,handles.refDir) == 1 & strmatch(Filedir2,handles.assignPath) == 1
+	                set(handles.text33,'String','These two sessions have already been run against each other. Proceed to assignment');
+	                set(handles.runBatch,'BackgroundColor','green');
+	                %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	                %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	                system(['R --slave --args ' char(34) handles.refDir char(34) ' ' char(34) handles.assignPath char(34) ' ' handles.gsfloor ' < assignSyllables.r']);
+	                pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	                handles.totalSyllables = length(dir(pattern));
+	                if exist(strcat(handles.assignPath,'NDs.csv'))==2;
+	                    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
+	                    set(handles.n_tied,'String',length(NDs));
+	                    delete(strcat(handles.assignPath,'NDs.csv'));
+	                else
+	                    set(handles.n_tied,'String','0');
+	                end
+                
+	                if exist(strcat(handles.assignPath,'NAs.csv'))==2
+	                    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
+	                    set(handles.n_novel,'String',length(NAs));
+	                    delete(strcat(handles.assignPath,'NAs.csv'));
+	                else
+	                    set(handles.n_novel,'String','0');
+	                end
+                
+	                set(handles.n_assigned,'String', handles.totalSyllables - (str2num(get(handles.n_tied,'String')) + str2num(get(handles.n_novel,'String'))));
+	                set(handles.text33,'String',strcat('Now showing assignment breakdown for GS threshold ', strcat('= ', handles.gsfloor), '. Ready to assign.'));
+	                set(handles.runBatch,'BackgroundColor','green');
+	                set(handles.assign_go,'Enable','on');
+	            end
+	        end
+        
+	    elseif handles.validFB == 0 & handles.validRD == 1
+	        set(handles.text33,'String','Invalid feature batch selected. Please choose a .xls file.');
+	    elseif handles.validFB == 1 & handles.validRD == 0
+	        set(handles.text33,'String','Invalid reference directory selected. Please make sure the audio in your selected directory has been clustered.')
+	    end
+    
+	elseif ~isfield(handles,'validFB') & isfield(handles,'validRD')
+	    set(handles.text33,'String','Valid reference directory chosen. Please choose a feature batch to assign to these clusters.');
+	elseif isfield(handles,'validFB') & ~isfield(handles,'validRD')
+	    set(handles.text33,'String','Valid assignment feature batch chosen. Please choose a reference directory.');
+	end
 end
 guidata(hObject,handles);
 
@@ -271,54 +382,79 @@ function assign_go_Callback(hObject, eventdata, handles)
 % hObject    handle to assign_go (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+if isunix
+	
+	set(handles.text33,'String','Preparing assignment pipeline. The interface will launch momentarily.');
 
-set(handles.text33,'String','Preparing assignment pipeline. The interface will launch momentarily.');
+	pause(.0000001);
 
-pause(.0000001);
+	%perform assignments per user dictated gs floor
+	system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
 
-%perform assignments per user dictated gs floor
-system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
+	%figure out which pathway to take for analysis:
+	%All syllables have been assigned a cluster with no ties or novel syllables; proceed to reassignment
+	if str2num(get(handles.n_assigned,'String')) == handles.totalSyllables & str2num(get(handles.n_tied,'String')) == 0 & str2num(get(handles.n_novel,'String')) == 0
+	    %insert code to launch reassignment module, then finalize things
+	    system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']); %get cluster names for ref directory
+	    system(['R --slave --args ' handles.assignPathu ' < ./R/getClusterIDs.r']);
+	    system(['R --slave --args ' handles.assignPathu ' ' handles.refDiru ' < ./R/finalizeClustersAssignedNDs.r']); %prep for reassignment
+	    close
+	    reassign_syllables({handles.assignPath},{handles.refDir},{1});
+	elseif str2num(get(handles.n_assigned,'String')) + str2num(get(handles.n_tied,'String')) == handles.totalSyllables & str2num(get(handles.n_assigned,'String')) ~= 0 & str2num(get(handles.n_tied,'String')) ~= 0
+	    %...or all syllables have been assigned to a cluster or need a tiebreak
+	    %insert code to launch tiebreak module; make tiebreak module launch
+	    %reassignment to finalize
+	    system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < ./R/getTieSpectrogramsContext2.r']);
+	    tiebreaking_module({handles.assignPath},{handles.refDir},{get(handles.n_novel,'String')},{1});
+	    %think about if NAs arise during tiebreaking...
+	elseif str2num(get(handles.n_assigned,'String')) + str2num(get(handles.n_novel,'String')) == handles.totalSyllables & str2num(get(handles.n_novel,'String')) ~= 0
+	    %...or all syllables are either assigned or deemed novel
+	    %insert code to launch novelty module; then novel launches
+	    %reassignment, then finalize
+	    novelty_module({handles.assignPath},{handles.refDir});
+	else
+	    %...or there are all of the above
+	    %insert code to tiebreak, then novelty, then reassign, then finalize
+	    system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < ./R/getTieSpectrogramsContext2.r']);
+	    tiebreaking_module({handles.assignPath},{handles.refDir},{get(handles.n_novel,'String')},{1});
+	end
+elseif ispc
+	set(handles.text33,'String','Preparing assignment pipeline. The interface will launch momentarily.');
 
-%figure out which pathway to take for analysis:
-%All syllables have been assigned a cluster with no ties or novel syllables; proceed to reassignment
-if str2num(get(handles.n_assigned,'String')) == handles.totalSyllables & str2num(get(handles.n_tied,'String')) == 0 & str2num(get(handles.n_novel,'String')) == 0
-    %insert code to launch reassignment module, then finalize things
-    system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']); %get cluster names for ref directory
-    system(['R --slave --args ' handles.assignPathu ' < ./R/getClusterIDs.r']);
-    system(['R --slave --args ' handles.assignPathu ' ' handles.refDiru ' < ./R/finalizeClustersAssignedNDs.r']); %prep for reassignment
-    close
-    reassign_syllables({handles.assignPath},{handles.refDir},{1});
-elseif str2num(get(handles.n_assigned,'String')) + str2num(get(handles.n_tied,'String')) == handles.totalSyllables & str2num(get(handles.n_assigned,'String')) ~= 0 & str2num(get(handles.n_tied,'String')) ~= 0
-    %...or all syllables have been assigned to a cluster or need a tiebreak
-    %insert code to launch tiebreak module; make tiebreak module launch
-    %reassignment to finalize
-    system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < ./R/getTieSpectrogramsContext2.r']);
-    tiebreaking_module({handles.assignPath},{handles.refDir},{get(handles.n_novel,'String')},{1});
-    %think about if NAs arise during tiebreaking...
-elseif str2num(get(handles.n_assigned,'String')) + str2num(get(handles.n_novel,'String')) == handles.totalSyllables & str2num(get(handles.n_novel,'String')) ~= 0
-    %...or all syllables are either assigned or deemed novel
-    %insert code to launch novelty module; then novel launches
-    %reassignment, then finalize
-    novelty_module({handles.assignPath},{handles.refDir});
-else
-    %...or there are all of the above
-    %insert code to tiebreak, then novelty, then reassign, then finalize
-    system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < ./R/getTieSpectrogramsContext2.r']);
-    tiebreaking_module({handles.assignPath},{handles.refDir},{get(handles.n_novel,'String')},{1});
-end
+	pause(.0000001);
 
-%if there are tiebreaks to perform
-% if exist(strcat(handles.assignPath,'NDs.csv'))==2;
-%     %generate spectrograms using sox and imagemagick
-%     system(['R --slave --args ', handles.assignPathu ' '  handles.refDiru ' < ./R/getTieSpectrogramsContext2.r']);
-%
-%     %then launch module for tiebreaking; novel derivation starts after, if
-%     %applicable
-%     tiebreaking_module({handles.assignPath},{handles.refDir},{get(handles.n_novel,'String')});
-%
-% elseif exist(strcat(handles.assignPath,'NDs.csv'))==0 & exist(strcat(handles.assignPath,'NAs.csv'))==2;
-%     %launch module for novelty detection only
-%end
+	%perform assignments per user dictated gs floor
+	system(['R --slave --args ' char(34) handles.refDir char(34) ' ' char(34) handles.assignPath char(34) ' ' char(34) handles.gsfloor char(34) ' < assignSyllables.r']);
+
+	%figure out which pathway to take for analysis:
+	%All syllables have been assigned a cluster with no ties or novel syllables; proceed to reassignment
+	if str2num(get(handles.n_assigned,'String')) == handles.totalSyllables & str2num(get(handles.n_tied,'String')) == 0 & str2num(get(handles.n_novel,'String')) == 0
+	    %insert code to launch reassignment module, then finalize things
+	    system(['R --slave --args ' char(34) handles.refDir char(34) ' < getClusterIDs.r']); %get cluster names for ref directory
+	    system(['R --slave --args ' char(34) handles.assignPath char(34) ' < getClusterIDs.r']);
+	    system(['R --slave --args ' char(34) handles.assignPath char(34) ' ' char(34) handles.refDir char(34) ' < finalizeClustersAssignedNDs.r']); %prep for reassignment
+	    close
+	    reassign_syllables({handles.assignPath},{handles.refDir},{1});
+	elseif str2num(get(handles.n_assigned,'String')) + str2num(get(handles.n_tied,'String')) == handles.totalSyllables & str2num(get(handles.n_assigned,'String')) ~= 0 & str2num(get(handles.n_tied,'String')) ~= 0
+	    %...or all syllables have been assigned to a cluster or need a tiebreak
+	    %insert code to launch tiebreak module; make tiebreak module launch
+	    %reassignment to finalize
+	    system(['R --slave --args ', char(34) handles.assignPath char(34) ' ' char(34) handles.refDir char(34) ' < getTieSpectrogramsContext2.r']);
+	    %resume at breakpoint
+	    tiebreaking_module({handles.assignPath},{handles.refDir},{get(handles.n_novel,'String')},{1});
+	    %think about if NAs arise during tiebreaking...
+	elseif str2num(get(handles.n_assigned,'String')) + str2num(get(handles.n_novel,'String')) == handles.totalSyllables & str2num(get(handles.n_novel,'String')) ~= 0
+	    %...or all syllables are either assigned or deemed novel
+	    %insert code to launch novelty module; then novel launches
+	    %reassignment, then finalize
+	    novelty_module({handles.assignPath},{handles.refDir});
+	else
+	    %...or there are all of the above
+	    %insert code to tiebreak, then novelty, then reassign, then finalize
+	    system(['R --slave --args ', char(34) handles.assignPath char(34) ' '  char(34) handles.refDir char(34) ' < getTieSpectrogramsContext2.r']); %needs char(34)
+	    tiebreaking_module({handles.assignPath},{handles.refDir},{get(handles.n_novel,'String')},{1});
+	end
+
 
 
 function edit2_Callback(hObject, eventdata, handles)
@@ -328,36 +464,68 @@ function edit2_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit2 as text
 %        str2double(get(hObject,'String')) returns contents of edit2 as a double
-set(handles.text33,'String','Calculating assignment breakdown...please wait.');
-pause(.0000001)
-handles.gsfloor = get(hObject,'String');
-if str2num(handles.gsfloor) > 99 | str2num(handles.gsfloor) < 1
-    h = errordlg('Enter a GS floor from 1 to 99');
-end
-setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
-pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
-handles.totalSyllables = length(dir(pattern));
+if isunix
+	set(handles.text33,'String','Calculating assignment breakdown...please wait.');
+	pause(.0000001)
+	handles.gsfloor = get(hObject,'String');
+	if str2num(handles.gsfloor) > 99 | str2num(handles.gsfloor) < 1
+	    h = errordlg('Enter a GS floor from 1 to 99');
+	end
+	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
+	pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	handles.totalSyllables = length(dir(pattern));
 
-if exist(strcat(handles.assignPath,'NDs.csv'))==2;
-    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
-    set(handles.n_tied,'String',length(NDs));
-    delete(strcat(handles.assignPath,'NDs.csv'));
-else
-    set(handles.n_tied,'String','0');
-end
+	if exist(strcat(handles.assignPath,'NDs.csv'))==2;
+	    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
+	    set(handles.n_tied,'String',length(NDs));
+	    delete(strcat(handles.assignPath,'NDs.csv'));
+	else
+	    set(handles.n_tied,'String','0');
+	end
 
-if exist(strcat(handles.assignPath,'NAs.csv'))==2
-    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
-    set(handles.n_novel,'String',length(NAs));
-    delete(strcat(handles.assignPath,'NAs.csv'));
-else
-    set(handles.n_novel,'String','0');
-end
+	if exist(strcat(handles.assignPath,'NAs.csv'))==2
+	    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
+	    set(handles.n_novel,'String',length(NAs));
+	    delete(strcat(handles.assignPath,'NAs.csv'));
+	else
+	    set(handles.n_novel,'String','0');
+	end
 
-set(handles.n_assigned,'String', handles.totalSyllables - (str2num(get(handles.n_tied,'String')) + str2num(get(handles.n_novel,'String'))));
-set(handles.text33,'String',strcat('Now showing assignment breakdown for GS threshold ', strcat('= ', handles.gsfloor), '. Ready to assign.'));
+	set(handles.n_assigned,'String', handles.totalSyllables - (str2num(get(handles.n_tied,'String')) + str2num(get(handles.n_novel,'String'))));
+	set(handles.text33,'String',strcat('Now showing assignment breakdown for GS threshold ', strcat('= ', handles.gsfloor), '. Ready to assign.'));
+elseif ispc
+	set(handles.text33,'String','Calculating assignment breakdown...please wait.');
+	pause(.0000001)
+	handles.gsfloor = get(hObject,'String');
+	if str2num(handles.gsfloor) > 99 | str2num(handles.gsfloor) < 1
+	    h = errordlg('Enter a GS floor from 1 to 99');
+	end
+	%setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
+	%setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
+	system(['R --slave --args ' char(34) handles.refDir char(34) ' ' char(34) handles.assignPath char(34) ' ' char(34) handles.gsfloor char(34) ' < assignSyllables.r']);
+	pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	handles.totalSyllables = length(dir(pattern));
+	if exist(strcat(handles.assignPath,'NDs.csv'))==2;
+	    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
+	    set(handles.n_tied,'String',length(NDs));
+	    delete(strcat(handles.assignPath,'NDs.csv'));
+	else
+	    set(handles.n_tied,'String','0');
+	end
+
+	if exist(strcat(handles.assignPath,'NAs.csv'))==2
+	    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
+	    set(handles.n_novel,'String',length(NAs));
+	    delete(strcat(handles.assignPath,'NAs.csv'));
+	else
+	    set(handles.n_novel,'String','0');
+	end
+
+	set(handles.n_assigned,'String', handles.totalSyllables - (str2num(get(handles.n_tied,'String')) + str2num(get(handles.n_novel,'String'))));
+	set(handles.text33,'String',strcat('Now showing assignment breakdown for GS threshold ', strcat('= ', handles.gsfloor), '. Ready to assign.'));
+end	
 guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.

@@ -55,10 +55,17 @@ function novelty_module_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for novelty_module
 handles.output = hObject;
 
-handles.assignPath = varargin{1}{1};
-handles.assignPathu = strrep(handles.assignPath,' ','\ ');
-handles.refDir = varargin{2}{1};
-handles.refDiru = strrep(handles.refDir,' ','\ ');
+if isunix
+	handles.assignPath = varargin{1}{1};
+	handles.assignPathu = strrep(handles.assignPath,' ','\ ');
+	handles.refDir = varargin{2}{1};
+	handles.refDiru = strrep(handles.refDir,' ','\ ');
+elseif ispc
+	handles.assignPath = varargin{1}{1};
+	handles.assignPath = strrep(handles.assignPath,'\','/');
+	handles.refDir = varargin{2}{1};
+	handles.refDir = strrep(handles.refDir,'\','/');
+end
 
 % dat = csvread(strcat(handles.path,'igsdata.csv'));
 % fid = fopen(strcat(handles.path,'colnames.txt'));
@@ -190,7 +197,7 @@ x = dir(strcat(handles.assignPath,'unassigned_for_cluster/*.wav'));
 
 if length(x)==1
     
-    system(['R --slave --args ' char(34) handles.assignPath char(34) ' < assignSingleNA.r']);
+    system(['R --slave --args ' char(34) handles.assignPath char(34) ' < ./R/assignSingleNA.r']);
     %alert to move on goes here...
     
     h=msgbox('Only a single novel syllable was found and automatically given a unique ID. Click "Generate Clusters" and proceed.');
