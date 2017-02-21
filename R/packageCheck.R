@@ -3,7 +3,7 @@ if(!file.exists('./R/.pkgSuccess'))
 	chooseCRANmirror(ind=1)
 	print('Checking to see if you have all the required R packages...')
 	primaryPkgs <- c("WGCNA","tcltk","gdata","png","ggmap")
-	deps = unlist(tools::package_dependencies(c("WGCNA","tcltk","gdata","png","ggmap"),recursive=T,db=available.packages())[[1]])
+	deps = unlist(tools::package_dependencies(c("WGCNA","tcltk","gdata","png","ggmap"),recursive=T,db=available.packages()))
 	deps = c(deps,primaryPkgs)
 	inst = installed.packages()
 	toInstall = deps[!deps%in%inst[,1]]
