@@ -104,7 +104,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-if strcmp(handles.threshold,'Select a threshold...')
+if strcmp(handles.threshold,'Select a threshold...') || strcmp(handles.threshold,'default')
     h = errordlg('No merging threshold selected. Choose one from the dropdown menu.');
 else
     set(handles.statusdlg,'String','Generating clusters.');

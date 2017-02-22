@@ -259,6 +259,10 @@ if(.Platform$OS.type=="unix")
 	z=dev.off()
 }else if (.Platform$OS.type=="windows")
 {
+    comArgs <- commandArgs(T)
+	options(stringsAsFactors=FALSE)
+	options(warn=-1)
+
 	sink(paste(comArgs[1],"sink.txt",sep=""))
 	suppressMessages(library(WGCNA))
 	suppressMessages(library(gdata))
