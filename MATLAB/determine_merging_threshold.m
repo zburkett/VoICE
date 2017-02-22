@@ -113,7 +113,7 @@ else
 	if isunix
     	system(['R --slave --args' ' ' handles.pathu ' '  handles.threshold ' ' '< ./R/determineClusters2.r']);
 	elseif ispc
-		system(['R --slave --args' ' ' char(34) handles.pathu char(34) ' ' handles.threshold ' ' '< determineClusters2.r']);
+		system(['R --slave --args' ' ' char(34) handles.pathu char(34) ' ' handles.threshold ' ' '< ./R/determineClusters2.r']);
 	end
     pause(0.00001);
     set(handles.pushbutton1,'BackgroundColor','Green');
