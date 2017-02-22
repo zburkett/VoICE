@@ -143,6 +143,10 @@ elseif ispc
                     disp('Unable to add ImageMagick to PATH. Please remedy this yourself.')
                 else
                     disp('Added ImageMagick to PATH. Proceeding.')
+                    fid = fopen('.magickFound','wt');
+                    out = strrep(pathstr,'\','\\');
+                    fprintf(fid,[char(34) out char(34)]);
+                    fclose(fid);
                     system('attrib +h .magickFound');
                 end
             end

@@ -472,7 +472,7 @@ if(.Platform$OS.type=="unix")
 			system(paste("convert", all.names.out, "+append", paste(outDir,"/",tiename,".png",sep="")))
 		}else{
         
-	        system(paste("imconvert", all.names.out, "+append", dQuote(paste(outDir,"/",tiename,".png",sep=""))))
+	        system(paste("magick", all.names.out, "+append", dQuote(paste(outDir,"/",tiename,".png",sep=""))))
 	    }
     
 	    write.table(round(clusterMeans,2),paste(outDir,"/",gsub(" ",0,sprintf(name.assign,tie)),".csv",sep=""),row.names=FALSE,col.names=FALSE,sep=",")
@@ -574,8 +574,8 @@ if(.Platform$OS.type=="unix")
 		tieNum <- sprintf(name.assign,tie)
 	    if(!Sys.info()['sysname']=="Darwin"){tieNum <- gsub(" ",0,tieNum)}
 	
-		#system(paste("imconvert ",dQuote(paste(pupilDir,"temp_spectro/",tie,".png",sep="")), " -fill none -stroke red -strokewidth 3 -draw 'line ", line.start,",162, ", line.end,",162' ", dQuote(paste(pupilDir,"temp_spectro/",tieNum,"-line.png",sep=""))))
-		system(paste("imconvert ",dQuote(paste(pupilDir,"temp_spectro/",tie,".png",sep="")), " -fill none -stroke red -strokewidth 3 -draw ", dQuote(paste("line ",line.start,",",162," ",line.end,",",162,sep=""))," ",dQuote(paste(pupilDir,"temp_spectro/",tieNum,"-line.png",sep="")),sep=""))
+		#system(paste("magick ",dQuote(paste(pupilDir,"temp_spectro/",tie,".png",sep="")), " -fill none -stroke red -strokewidth 3 -draw 'line ", line.start,",162, ", line.end,",162' ", dQuote(paste(pupilDir,"temp_spectro/",tieNum,"-line.png",sep=""))))
+		system(paste("magick ",dQuote(paste(pupilDir,"temp_spectro/",tie,".png",sep="")), " -fill none -stroke red -strokewidth 3 -draw ", dQuote(paste("line ",line.start,",",162," ",line.end,",",162,sep=""))," ",dQuote(paste(pupilDir,"temp_spectro/",tieNum,"-line.png",sep="")),sep=""))
 		unlink(paste(pupilDir,"temp_spectro/",tie,".png",sep=""))
 	}
 
@@ -587,6 +587,6 @@ if(.Platform$OS.type=="unix")
 
 	for(file in 1:length(list.files(paste(pupilDir,"temp_spectro",sep=""),pattern="*.png")))
 	{
-		system(paste("imconvert", dQuote(paste(pupilDir,"temp_spectro/",list.files(paste(pupilDir,"temp_spectro",sep=""))[file],sep="")), dQuote(paste(tutorDir,"/spectrograms/", list.files(paste(tutorDir,"/spectrograms/",sep=""),pattern="*.png")[file],sep="")), "-append", dQuote(paste(pupilDir,"final_spectro/", gsub(".wav","",list.files(paste(tutorDir,"/spectrograms/",sep=""),pattern="*.png")[file]),sep=""))))
+		system(paste("magick", dQuote(paste(pupilDir,"temp_spectro/",list.files(paste(pupilDir,"temp_spectro",sep=""))[file],sep="")), dQuote(paste(tutorDir,"/spectrograms/", list.files(paste(tutorDir,"/spectrograms/",sep=""),pattern="*.png")[file],sep="")), "-append", dQuote(paste(pupilDir,"final_spectro/", gsub(".wav","",list.files(paste(tutorDir,"/spectrograms/",sep=""),pattern="*.png")[file]),sep=""))))
 	}
 }
