@@ -6,6 +6,8 @@ Zachary Burkett
 
 http://www.nature.com/articles/srep10237
 
+VoICE is for analysis of bird songs. If you're interested in rodent ultrasonic vocalizations, go to [VoICE_USV](https://github.com/zburkett/VoICE_USV).
+
 Author/Support
 ==============
 Zachary Burkett, zburkett@ucla.edu
@@ -47,7 +49,7 @@ brew install sox
 brew install imagemagick
 ```
 
-VoICE also relies on R and Perl, which are already included with Mac OS X. If either or both are, please download and install R from https://cloud.r-project.org and Perl from https://www.perl.org/get.html or by:
+VoICE also relies on R and Perl, which are already included with Mac OS X. If either or both are missing, please download and install R from https://cloud.r-project.org and Perl from https://www.perl.org/get.html or by:
 ```bash
 # Install Homebrew if not already done for SoX:
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -74,7 +76,7 @@ SoX is available here: https://sourceforge.net/projects/sox/files/sox/
 ImageMagick is available here: https://www.imagemagick.org/script/download.php#windows [Note: If you already have an older version of ImageMagick for Windows installed, it may need updating.]
 
 Software Requirements
-==============================
+=====================
   * MATLAB (Tested up through R2015a; unsure of support for more recent versions)
   * MATLAB Parallel Processing Toolbox (Not required by VERY STRONGLY recommended)
   * MATLAB Signal Processing Toolbox
