@@ -24,7 +24,7 @@ Directory Contents
   * README.md: README, you're looking at it
 
 Installation
-=====================
+============
 1. Complete the steps below specific to your operating system.
 
 2. Download this directory and unzip to a location in which you would like to store the software.
