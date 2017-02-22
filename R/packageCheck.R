@@ -55,7 +55,10 @@ if(!file.exists('./R/.pkgSuccess'))
 	if(!exists("errs"))
 	{
 		system(paste("touch","./R/.pkgSuccess"))
-		system(paste("attrib +h ./R/.pkgsuccess"))
+		if(..Platform$OS.type=="windows")
+		{
+			system(paste("attrib +h ./R/.pkgsuccess"))
+		}
 	}
 }
 
