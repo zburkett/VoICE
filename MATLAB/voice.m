@@ -80,6 +80,12 @@ if isunix
     if ~exist(strcat(result))
         error('No ImageMagick installation detected.')
     end
+	
+    %check for Perl installation
+    % [status,result] = system('which perl');
+ %    if ~exist(strcat(result))
+ %        error('No Perl installation detected.')
+ %    end
     
 elseif ispc
     f = findstr('\',installdir);
@@ -92,6 +98,36 @@ elseif ispc
     if ~exist(strcat(result))
         error('No R installation detected. Please install R and try again.')
     end
+	
+    %check for Perl installation
+    % [status0,result0] = system('where perl');
+%     if ~status0 == 0
+%         if exist('.perlFound')
+%             pathstr = char(textread('.perlFound','%q'));
+%             setenv('PATH',[getenv('PATH') strcat(';',pathstr)]);
+%         elseif ~status0 == 0 & ~exist('.perlFound')
+%             disp('Perl not found in system path, checking for installation...')
+%             [status,result] = system('cd \ & dir /b/s perl.exe');
+%             if ~exist(strcat(result))
+%                 error('No SoX installation detected in Program Files. Install Perl and try again.')
+%             elseif exist(strcat(result))
+%                 disp('Found SoX install, adding to PATH...')
+%                 [pathstr,name,ext] = fileparts(result);
+%                 setenv('PATH',[getenv('PATH') strcat(';',pathstr)]);
+%                 [status3,result3] = system('where sox');
+%                 if ~status3 == 0
+%                     disp('Unable to add Perl to PATH. Please remedy this yourself.')
+%                 else
+%                     disp('Added Perl to PATH. Proceeding.')
+%                     fid = fopen('.perlFound','wt');
+%                     out = strrep(pathstr,'\','\\');
+%                     fprintf(fid,[char(34) out char(34)]);
+%                     fclose(fid);
+%                     system('attrib +h .perlFound');
+%                 end
+%             end
+%         end
+%     end
     
     %check for SoX installation
     [status0,result0] = system('where sox');
@@ -123,7 +159,7 @@ elseif ispc
         end
     end
     
-    %check for imagemagick installation
+    %check for ImageMagick installation
     [status0,result0] = system('where magick');
     if ~status0 == 0
         if exist('.magickFound')
