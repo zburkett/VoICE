@@ -12,16 +12,17 @@ Author/Support
 ==============
 Zachary Burkett, zburkett@ucla.edu
 
-Manual
-======
-Coming Soon.
+Software Tutorial/Walkthrough
+=============================
+A brief overview of VoICE's functionality and step-by-step instructions for using VoICE on the sample_data directory are available in the [walkthrough](https://github.com/zburkett/VoICE/blob/master/walkthrough.pdf)
 
 Directory Contents
 ==================
   * MATLAB: Contains all MATLAB functions
   * R: Contains all R functions
-  * sample_data: Contains an example dataset, see walkthrough in the manual
+  * sample_data: Contains an example dataset, see walkthrough.
   * README.md: README, you're looking at it
+  * walkthrough.pdf: A brief overview of VoICE's functionality using the sample_data.
 
 Installation
 ============
