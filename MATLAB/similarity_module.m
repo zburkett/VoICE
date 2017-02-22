@@ -22,7 +22,7 @@ function varargout = similarity_module(varargin)
 
 % Edit the above text to modify the response to help similarity_module
 
-% Last Modified by GUIDE v2.5 24-Jun-2014 17:29:07
+% Last Modified by GUIDE v2.5 22-Feb-2017 11:16:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
