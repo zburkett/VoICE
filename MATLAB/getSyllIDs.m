@@ -2,7 +2,9 @@ function [sylls]=getSyllIDs(folderPath,handles)
 
 %sprintf('sorting syllables')
 
-if exist(strcat(folderPath,'/sorted_syllables'),'dir')
+folderPath = strrep(folderPath,'\','');
+
+if exist([folderPath 'sorted_syllables'],'dir')
     sortedSylls=strcat(folderPath,'sorted_syllables');
 else
     sortedSylls=strcat(folderPath,'sorted_syllables_assigned');
