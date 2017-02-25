@@ -16,10 +16,11 @@ if findstr('.DS_Store',sylls2{1})~=0
 sylls2=sylls2(2:length(sylls2));
 end
 
+numel = 1+floor(log10(abs(length(sylls2))));
 num=zeros(length(sylls2),1);
 for i=1:length(sylls2)
 f=findstr(sylls2{i},'.wav');
-nums=str2num(sylls2{i}(f-3:f-1));
+nums=str2num(sylls2{i}(f-numel:f-1));
 num(i)=nums;
 end
 
