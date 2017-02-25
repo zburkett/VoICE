@@ -108,7 +108,7 @@ if isunix
 	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	system(['R --slave --args' ' ' handles.pathu ' ' handles.fileu ' ' ' < ./R/importFeatureBatch.r']);
 	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-	system(['R --slave --args' ' ' strcat(handles.pathu,'.acoustic_data.csv') ' ' handles.pathu ' ' ' < ./R/getSyllableWavs2.r']);
+	system(['R --slave --args' ' ' strcat(handles.pathu,'.acoustic_data.csv') ' ' [handles.pathu 'voice_results/'] ' ' ' < ./R/getSyllableWavs2.r']);
 	pause(.0000001)
 	set(handles.pushbutton2,'BackgroundColor','green');
 	set(handles.text6,'String','WAV files cut. Similarity batch ready to run.');
@@ -120,7 +120,7 @@ elseif ispc
 	%setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	[status,result]=system(['R --slave --args' ' ' char(34) handles.pathu char(34) ' ' char(34) handles.fileu char(34) ' ' ' < ./R/importFeatureBatch.r']);
 	%setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-	system(['R --slave --args' ' ' char(34) strcat(handles.pathu,'.acoustic_data.csv') char(34) ' ' char(34) handles.pathu char(34) ' ' ' < ./R/getSyllableWavs2.r']);
+	system(['R --slave --args' ' ' char(34) strcat(handles.pathu,'.acoustic_data.csv') char(34) ' ' char(34) [handles.pathu 'voice_results/'] char(34) ' ' ' < ./R/getSyllableWavs2.r']);
 	pause(.0000001)
 	set(handles.pushbutton2,'BackgroundColor','green');
 	set(handles.text6,'String','WAV files cut. Similarity batch ready to run.');

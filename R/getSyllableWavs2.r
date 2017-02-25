@@ -71,7 +71,7 @@ if(.Platform$OS.type=="unix")
 			
 				if(!Sys.info()['sysname']=="Darwin") {name.out <- gsub(" ",0,name.out)}
 			
-				filename.out <- paste(comArgs[2],filename,sep="")
+				filename.out <- paste(gsub("voice_results/","",comArgs[2]),filename,sep="")
 				filename.out <- gsub(" ","\\\\ ",filename.out)
 				output = paste(comArgs[2],"cut_syllables/",paste(name.out,".wav",sep=''),sep="")
 				output = gsub(" ","\\\\ ",output)
@@ -163,7 +163,7 @@ if(.Platform$OS.type=="unix")
 			
 				if(!Sys.info()['sysname']=="Darwin") {name.out <- gsub(" ",0,name.out)}
 			
-				filename.out <- paste(comArgs[2],filename,sep="")
+				filename.out <- paste(gsub("voice_results/","",comArgs[2]),filename,sep="")
 				#filename.out <- gsub(" ","\\\\ ",filename.out)
 				output = paste(comArgs[2],"cut_syllables/",paste(name.out,".wav",sep=''),sep="")
 				#output = gsub(" ","\\\\ ",output)
