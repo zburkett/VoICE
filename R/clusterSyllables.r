@@ -4,18 +4,18 @@ options(stringsAsFactors=FALSE)
 
 if(.Platform$OS.type=="unix")
 {
+	options(warn=-1)
 	sink("/dev/null")
 	suppressMessages(library(WGCNA,warn.conflicts=FALSE,verbose=0))
 	suppressMessages(library(tcltk))
-	options(warn=-1)
 	sink()
 	if(!exists("flashClust")){flashClust <- hclust}
 }else if (.Platform$OS.type=="windows")
 {
+	options(warn=-1)
 	sink(file=paste(comArgs[1],"sink.txt",sep=""))
 	suppressMessages(library(WGCNA,warn.conflicts=FALSE,verbose=0))
 	suppressMessages(library(tcltk))
-	options(warn=-1)
 	sink()
 	unlink(paste(comArgs[1],"sink.txt",sep=""))
 	if(!exists("flashClust")){flashClust <- hclust}
@@ -30,6 +30,8 @@ Filedir <- paste(Filedir,"similarity_batch_self.csv",sep="")
 input <- read.csv(Filedir,header=FALSE)
 input <- input[,1:6]
 colnames(input) <- c("Sound 1", "Sound 2","Similarity","Accuracy","Seq. Match","globalsim")
+if(is.na(input[1,1])){input = input[-1,] ; rownames(input) = 1:nrow(input)} # fix potential error after Matlab has reopened a simbatch and left NAs across row 1
+if(class(input[,3])=="character"){input=data.matrix(input)}
 input[,3] <- 100*input[,3]
 input[,4] <- 100*input[,4]
 input[,5] <- 100*input[,5]
@@ -133,7 +135,8 @@ for(thresh in merge.range)
 }
 close(pb)
 outlist = list(IGS.out=IGS.out,gsMatrix=input)
-save(outlist,file=paste(Filedir.in,"igs.Rdata",sep=""))
+save(outlist,file=paste(Filedir.in,".igs.Rdata",sep=""))
+if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir.in,".igs.Rdata",sep="")))}
 
 	
 

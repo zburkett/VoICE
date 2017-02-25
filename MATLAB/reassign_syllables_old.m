@@ -69,16 +69,16 @@ end
 
 if(handles.assignRun == 1)
     system(['R --slave --args ' handles.pathu ' < ./R/getClusterIDs.r']);
-    fidPupil = fopen(strcat(handles.path,'usedClusters.txt'));
+    fidPupil = fopen(strcat(handles.path,'.usedClusters.txt'));
     if(fidPupil == -1)
-        fidPupil = fopen(strcat(handles.path,'/usedClusters.txt'));
+        fidPupil = fopen(strcat(handles.path,'/.usedClusters.txt'));
     end
     s = textscan(fidPupil,'%s','Delimiter','\n');
     sPupil = strrep(s{1}(:,1),'"','');
     system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']);
-    fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+    fidTutor = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
     if(fidTutor == -1)
-        fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+        fidTutor = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
     end
     s = textscan(fidTutor,'%s','Delimiter','\n');
     sTutor = strrep(s{1}(:,1),'"','');
@@ -95,7 +95,7 @@ if(handles.assignRun == 1)
     system(['R --slave --args ' handles.pathu ' < ./R/recreateClusters2.r']);
 end
 
-fid = fopen(strcat(handles.path,'unusedColors.txt'));
+fid = fopen(strcat(handles.path,'.unusedColors.txt'));
 s = textscan(fid,'%s','Delimiter','\n');
 s = strrep(s{1}(:,1),'"','');
 set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});
@@ -107,10 +107,10 @@ sz = size(handles.path);
 if(handles.path(sz(2)) ~= '/')
     handles.path = strcat(handles.path,'/');
 end
-handles.clusterNames = dir(strcat(handles.path,'cluster_tables_mat/*.csv'));
+handles.clusterNames = dir(strcat(handles.path,'.cluster_tables_mat/*.csv'));
 for i = 1:length(handles.clusterNames)
     handles.clusterNames(i).name = strrep(handles.clusterNames(i).name,'.csv','');
-    handles.clusterNames(i).starts = csvread(strcat(handles.path,'cluster_tables_mat/',handles.clusterNames(i).name,'.csv'));
+    handles.clusterNames(i).starts = csvread(strcat(handles.path,'.cluster_tables_mat/',handles.clusterNames(i).name,'.csv'));
     handles.clusterNames(i).starts = [handles.clusterNames(i).starts zeros(length(handles.clusterNames(i).starts),1)];
     handles.clusterNames(i).starts(1,2) = handles.clusterNames(i).starts(1,1);
     handles.clusterNames(i).starts(1,1) = 0;

@@ -39,4 +39,5 @@ rownames(data.out) <- 1:nrow(data.out)
 syllable.end <- as.numeric(data.out[,"syllable.duration"])+as.numeric(data.out[,"syllable.start"])
 data.out <- cbind(data.out[,1:3],syllable.end,data.out[,4:ncol(data.out)])
 	
-write.csv(data.out,paste(comArgs[1],"acoustic_data.csv",sep=""))
+write.table(data.out,paste(comArgs[1],".acoustic_data.csv",sep=""),row.names=T,col.names=T,sep=",")
+if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".acoustic_data.csv",sep="")))}

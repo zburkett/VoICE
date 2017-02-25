@@ -221,13 +221,13 @@ elseif length(x)>1 %if more than one novel syllable, cluster them
     system(['R --slave --args ' handles.assignPathu ' < ./R/determineClustersAssign1.r']);
 
     %update GUI
-    dat = csvread(strcat(handles.assignPath,'igsdata_novel.csv'));
-    fid = fopen(strcat(handles.assignPath,'colnames_novel.txt'));
+    dat = csvread(strcat(handles.assignPath,'.igsdata_novel.csv'));
+    fid = fopen(strcat(handles.assignPath,'.colnames_novel.txt'));
     s = textscan(fid,'%s','Delimiter','\n');
     s = strrep(s{1}(:,1),'"','');
     set(handles.uitable2,'Data',dat,'ColumnName',s);
     set(handles.popupmenu1,'String',{'Select a threshold...',dat(:,1)})  
-    handles.curve = imread(strcat(handles.assignPath,'tree_trim_curve_novel.png'),'png');
+    handles.curve = imread(strcat(handles.assignPath,'.tree_trim_curve_novel.png'),'png');
     imshow(handles.curve,'Parent',handles.axes1);
     handles.threshold = 'default';
 

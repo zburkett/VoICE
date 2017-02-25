@@ -176,7 +176,10 @@ for(thresh in merge.range)
 }
 close(pb)
 outlist = list(IGS.out=IGS.out,gsMatrix=input)
-save(outlist,file=paste(Filedir.in,"igs_assigned.Rdata",sep=""))
+save(outlist,file=paste(Filedir.in,".igs_assigned.Rdata",sep=""))
+if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir.in,".igs_assigned.Rdata",sep="")))}
+
+
  
     
  

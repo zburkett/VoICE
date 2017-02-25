@@ -29,7 +29,7 @@ if(.Platform$OS.type=="unix")
 		syntax <- assignedSyntax
 	}
 
-	originalData <- read.csv(paste(comArgs[1],"acoustic_data.csv",sep=""),header=TRUE,row.names=1)
+	originalData <- read.csv(paste(comArgs[1],".acoustic_data.csv",sep=""),header=TRUE)
 
 	clusters = unique(syntax)
 	clusterTable = list()
@@ -210,14 +210,15 @@ if(.Platform$OS.type=="unix")
 		if(file.exists(paste(comArgs[1],'cluster_tables/',sep="")))
 		{
 			unlink(paste(comArgs[1],'cluster_tables/',sep=""),recursive=TRUE)
-			unlink(paste(comArgs[1],'cluster_tables_mat',sep=""),recursive=TRUE)
+			unlink(paste(comArgs[1],'.cluster_tables_mat',sep=""),recursive=TRUE)
 			dir.create(paste(comArgs[1],"cluster_tables/",sep=''))
-	    	dir.create(paste(comArgs[1],"cluster_tables_mat/",sep=''))
+	    	dir.create(paste(comArgs[1],".cluster_tables_mat/",sep=''))
+			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".cluster_tables_mat/",sep='')))}
 	    	for (cluster in names(clusterTable))
 			{
 				filename = paste(cluster,sep='',".csv")
 				write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(comArgs[1],'cluster_tables/',filename,sep=""))
-	   		    write.table(as.data.frame(clusterTable[[cluster]][,																								2]),file=paste(comArgs[1],'cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+	   		    write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(comArgs[1],'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 			}
 		
 			input = out.cluster.tutor$data
@@ -227,7 +228,7 @@ if(.Platform$OS.type=="unix")
 			pdf(file=paste(comArgs[1],"cluster_dendrogram.pdf",sep=""))
 			if("mergedSyntax" %in% names(out.cluster.tutor))
 			{
-				plotDendroAndColors(dendro=out,colors=cbind(out.cluster.tutor$syntax,out.cluster.tutor															$mergedSyntax),dendroLabels=FALSE,groupLabels=c("unmerged","merged"))
+				plotDendroAndColors(dendro=out,colors=cbind(out.cluster.tutor$syntax,out.cluster.tutor$mergedSyntax),dendroLabels=FALSE,groupLabels=c("unmerged","merged"))
 		
 				out.cluster.tutor$usedColors <- unique(c(out.cluster.tutor$mergedSyntax,out.cluster.tutor$syntax))
 			}else
@@ -236,22 +237,24 @@ if(.Platform$OS.type=="unix")
 				out.cluster.tutor$usedColors <- unique(out.cluster.tutor$syntax)
 			}
 			save(out.cluster.tutor,file=paste(comArgs[1],"workspace.Rdata",sep=""))
-			write.table(t(colors()[!colors()%in%out.cluster.tutor																							$usedColors]),paste(comArgs[1],'unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+			write.table(t(colors()[!colors()%in%out.cluster.tutor$usedColors]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
 			z=dev.off()
 		}else if(file.exists(paste(comArgs[1],'cluster_tables_assigned/',sep="")))
 		{
 			unlink(paste(comArgs[1],'cluster_tables_assigned/',sep=""),recursive=TRUE)
-			unlink(paste(comArgs[1],'cluster_tables_mat',sep=""),recursive=TRUE)
+			unlink(paste(comArgs[1],'.cluster_tables_mat',sep=""),recursive=TRUE)
 			dir.create(paste(comArgs[1],"cluster_tables_assigned/",sep=''))
-	    	dir.create(paste(comArgs[1],"cluster_tables_mat/",sep=''))
+	    	dir.create(paste(comArgs[1],".cluster_tables_mat/",sep=''))
+			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".cluster_tables_mat/",sep='')))}
+				
 	    	for (cluster in names(clusterTable))
 			{
 				filename = paste(cluster,sep='',".csv")
 				write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(comArgs[1],'cluster_tables_assigned/',filename,sep=""))
-	   		    write.table(as.data.frame(clusterTable[[cluster]][,																								2]),file=paste(comArgs[1],'cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+	   		    write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(comArgs[1],'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 			}
 			save(assignedSyntax,file=paste(comArgs[1],"assigned_complete_workspace.Rdata",sep=""))
-			write.table(t(colors()[!colors()%in%assignedSyntax]),paste(comArgs[1],'unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+			write.table(t(colors()[!colors()%in%assignedSyntax]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
 		}
 }else if (.Platform$OS.type=="windows")
 {	
@@ -282,7 +285,7 @@ if(.Platform$OS.type=="unix")
 		syntax <- assignedSyntax
 	}
 
-	originalData <- read.csv(paste(comArgs[1],"acoustic_data.csv",sep=""),header=TRUE,row.names=1)
+	originalData <- read.csv(paste(comArgs[1],".acoustic_data.csv",sep=""),header=TRUE)
 
 	clusters = unique(syntax)
 	clusterTable = list()
@@ -463,14 +466,16 @@ if(.Platform$OS.type=="unix")
 		if(file.exists(paste(comArgs[1],'cluster_tables',sep="")))
 		{
 			unlink(paste(comArgs[1],'cluster_tables',sep=""),recursive=TRUE)
-			unlink(paste(comArgs[1],'cluster_tables_mat',sep=""),recursive=TRUE)
+			unlink(paste(comArgs[1],'.cluster_tables_mat',sep=""),recursive=TRUE)
 			dir.create(paste(comArgs[1],"cluster_tables/",sep=''))
-	    	dir.create(paste(comArgs[1],"cluster_tables_mat/",sep=''))
+	    	dir.create(paste(comArgs[1],".cluster_tables_mat/",sep=''))
+			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".cluster_tables_mat/",sep='')))}
+				
 	    	for (cluster in names(clusterTable))
 			{
 				filename = paste(cluster,sep='',".csv")
 				write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(comArgs[1],'cluster_tables/',filename,sep=""))
-	   		    write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(comArgs[1],'cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+	   		    write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(comArgs[1],'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 			}
 		
 			input = out.cluster.tutor$data
@@ -480,7 +485,7 @@ if(.Platform$OS.type=="unix")
 			pdf(file=paste(comArgs[1],"cluster_dendrogram.pdf",sep=""))
 			if("mergedSyntax" %in% names(out.cluster.tutor))
 			{
-				plotDendroAndColors(dendro=out,colors=cbind(out.cluster.tutor$syntax,out.cluster.tutor															$mergedSyntax),dendroLabels=FALSE,groupLabels=c("unmerged","merged"))
+				plotDendroAndColors(dendro=out,colors=cbind(out.cluster.tutor$syntax,out.cluster.tutor$mergedSyntax),dendroLabels=FALSE,groupLabels=c("unmerged","merged"))
 		
 				out.cluster.tutor$usedColors <- unique(c(out.cluster.tutor$mergedSyntax,out.cluster.tutor$syntax))
 			}else
@@ -489,21 +494,25 @@ if(.Platform$OS.type=="unix")
 				out.cluster.tutor$usedColors <- unique(out.cluster.tutor$syntax)
 			}
 			save(out.cluster.tutor,file=paste(comArgs[1],"workspace.Rdata",sep=""))
-			write.table(t(colors()[!colors()%in%out.cluster.tutor																							$usedColors]),paste(comArgs[1],'unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+			write.table(t(colors()[!colors()%in%out.cluster.tutor$usedColors]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.unusedColors.txt',sep="")))}
 			z=dev.off()
 		}else if(file.exists(paste(comArgs[1],'cluster_tables_assigned',sep="")))
 		{
 			unlink(paste(comArgs[1],'cluster_tables_assigned',sep=""),recursive=TRUE)
-			unlink(paste(comArgs[1],'cluster_tables_mat',sep=""),recursive=TRUE)
+			unlink(paste(comArgs[1],'.cluster_tables_mat',sep=""),recursive=TRUE)
 			dir.create(paste(comArgs[1],"cluster_tables_assigned/",sep=''))
-	    	dir.create(paste(comArgs[1],"cluster_tables_mat/",sep=''))
+	    	dir.create(paste(comArgs[1],".cluster_tables_mat/",sep=''))
+			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".cluster_tables_mat/",sep='')))}
+				
 	    	for (cluster in names(clusterTable))
 			{
 				filename = paste(cluster,sep='',".csv")
 				write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(comArgs[1],'cluster_tables_assigned/',filename,sep=""))
-	   		    write.table(as.data.frame(clusterTable[[cluster]][,																								2]),file=paste(comArgs[1],'cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+	   		    write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(comArgs[1],'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 			}
 			save(assignedSyntax,file=paste(comArgs[1],"assigned_complete_workspace.Rdata",sep=""))
-			write.table(t(colors()[!colors()%in%assignedSyntax]),paste(comArgs[1],'unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+			write.table(t(colors()[!colors()%in%assignedSyntax]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.unusedColors.txt',sep="")))}
 		}
 }

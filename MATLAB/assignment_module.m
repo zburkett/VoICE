@@ -122,7 +122,7 @@ function runBatch_Callback(hObject, eventdata, handles)
 	    %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	    system(['R --slave --args' ' ' handles.assignPathu ' ' handles.assignFileu ' ' ' < ./R/importFeatureBatch.r']);
 	    %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-	    system(['R --slave --args' ' ' strcat(handles.assignPathu,'acoustic_data.csv') ' ' handles.assignPathu ' ' ' < ./R/getSyllableWavs2.r']);
+	    system(['R --slave --args' ' ' strcat(handles.assignPathu,'.acoustic_data.csv') ' ' handles.assignPathu ' ' ' < ./R/getSyllableWavs2.r']);
 	end
 
 	handles.refDiru = strrep(handles.refDir, ' ', '\ ');
@@ -169,7 +169,7 @@ elseif ispc
 	    %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	    system(['R --slave --args' ' ' char(34) handles.assignPath char(34) ' ' char(34) handles.assignFile char(34) ' ' ' < importFeatureBatch.r']);
 	    %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-	    system(['R --slave --args' ' ' char(34) strcat(handles.assignPath,'acoustic_data.csv') char(34) ' ' char(34) handles.assignPath char(34) ' ' ' < getSyllableWavs2.r']);
+	    system(['R --slave --args' ' ' char(34) strcat(handles.assignPath,'.acoustic_data.csv') char(34) ' ' char(34) handles.assignPath char(34) ' ' ' < getSyllableWavs2.r']);
 	end
 
 	%handles.refDiru = strrep(handles.refDir, ' ', '\ ');
@@ -454,6 +454,7 @@ elseif ispc
 	    system(['R --slave --args ', char(34) handles.assignPath char(34) ' '  char(34) handles.refDir char(34) ' < getTieSpectrogramsContext2.r']); %needs char(34)
 	    tiebreaking_module({handles.assignPath},{handles.refDir},{get(handles.n_novel,'String')},{1});
 	end
+end
 
 
 

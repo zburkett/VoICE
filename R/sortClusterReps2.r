@@ -33,7 +33,7 @@ if(.Platform$OS.type=="unix")
 		
 	dir.create(paste(folder1,"/sorted_syllables_for_batch/",sep=""))
 
-	final.acoustic <- read.csv(paste(folder1,"/acoustic_data.csv",sep=""),header=TRUE)
+	final.acoustic <- read.csv(paste(folder1,"/.acoustic_data.csv",sep=""),header=TRUE)
 
 	final.acoustic <-final.acoustic[,c("syllable.duration","mean.pitch","mean.FM","mean.entropy","mean.pitch.goodness","var.pitch","mean.mean.freq","var.FM","var.entropy","var.pitch.goodness","var.mean.freq","var.AM")] 
 
@@ -158,7 +158,7 @@ if(.Platform$OS.type=="unix")
 		
 	dir.create(paste(folder1,"sorted_syllables_for_batch",sep=""))
 
-	final.acoustic <- read.csv(paste(folder1,"acoustic_data.csv",sep=""),header=TRUE)
+	final.acoustic <- read.csv(paste(folder1,".acoustic_data.csv",sep=""),header=TRUE)
 
 	final.acoustic <-final.acoustic[,c("syllable.duration","mean.pitch","mean.FM","mean.entropy","mean.pitch.goodness","var.pitch","mean.mean.freq","var.FM","var.entropy","var.pitch.goodness","var.mean.freq","var.AM")] 
 

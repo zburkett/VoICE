@@ -17,7 +17,7 @@ function hAx = addAxis(i,handles,cluster)
         end
        
         %csvwrite(strcat(handles.path,'pnext.csv'),pnext);
-        dlmwrite(strcat(handles.path,'pnext.csv'),pnext);
+        dlmwrite(strcat(handles.path,'.pnext.csv'),pnext);
 
         axes(handles.axesDrawn(i)); 
         specgram(sp,512,44100);
@@ -41,7 +41,7 @@ function hAx = addAxis(i,handles,cluster)
         set(handles.hPan, 'Position',[p(1) p(2)-h p(3) p(4)+h])
 
         % compute position of new axis: append on top (y-shifted)
-        p = csvread(strcat(handles.path,'pnext.csv'));
+        p = csvread(strcat(handles.path,'.pnext.csv'));
         h=p(4);
         p = [p(1,1) p(1,2)+h+50 p(1,3) p(1,4)];
 
@@ -50,7 +50,7 @@ function hAx = addAxis(i,handles,cluster)
            'Units','pixels', 'Position',p);
         pnext = get(handles.axesDrawn(i),'Position');
        %csvwrite(strcat(handles.path,'pnext.csv'),pnext);
-        dlmwrite(strcat(handles.path,'pnext.csv'),pnext);
+        dlmwrite(strcat(handles.path,'.pnext.csv'),pnext);
         
         if exist(strcat(handles.path,'joined_clusters/',cluster,'.wav')) == 2;
             sp = audioread(strcat(handles.path,'joined_clusters/',cluster,'.wav'));

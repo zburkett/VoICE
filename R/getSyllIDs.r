@@ -18,10 +18,10 @@ if(file.exists(paste(comArgs[1],'workspace.Rdata',sep='')))
 
 changeList <- list()
 
-for(i in 1:length(dir(paste(comArgs[1],'reassign',sep=''))))
+for(i in 1:length(dir(paste(comArgs[1],'.reassign',sep=''))))
 {
 	#read the csv
-	clicks <- read.csv(paste(comArgs[1],'reassign/',gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i]),'.csv',sep=''),header=FALSE)
+	clicks <- read.csv(paste(comArgs[1],'.reassign/',gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i]),'.csv',sep=''),header=FALSE)
 	
 	#store names of syllables clicked in changeList
 	if(exists("out.cluster.tutor"))
@@ -29,25 +29,25 @@ for(i in 1:length(dir(paste(comArgs[1],'reassign',sep=''))))
 		if("mergedSyntax" %in% names(out.cluster.tutor))
 		{
 			clicks <- as.logical(clicks)
-			names(clicks) <- names(subset(out.cluster.tutor$mergedSyntax,out.cluster.tutor																	$mergedSyntax==gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])))
-			changeList[[gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])]] <- names(clicks)[clicks]
+			names(clicks) <- names(subset(out.cluster.tutor$mergedSyntax,out.cluster.tutor$mergedSyntax==gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])))
+			changeList[[gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])]] <- names(clicks)[clicks]
 		}
 	
 		if(!"mergedSyntax" %in% names(out.cluster.tutor))
 		{
 			clicks <- as.logical(clicks)
-			colnames(clicks) <- names(subset(out.cluster.tutor$syntax,out.cluster.tutor																		$syntax==gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])))
-			changeList[[gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])]] <- names(clicks)[clicks]
+			colnames(clicks) <- names(subset(out.cluster.tutor$syntax,out.cluster.tutor$syntax==gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])))
+			changeList[[gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])]] <- names(clicks)[clicks]
 		}	
 	}else if(exists("assignedSyntax"))
 		{
 			clicks <- as.logical(clicks)
-			names(clicks) <- names(subset(assignedSyntax,assignedSyntax==gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])))
-			changeList[[gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])]] <- names(clicks)[clicks]
+			names(clicks) <- names(subset(assignedSyntax,assignedSyntax==gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])))
+			changeList[[gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])]] <- names(clicks)[clicks]
 		}else if(exists("saveList"))
 		{
 			clicks <- as.logical(clicks)
-			names(clicks) <- names(subset(saveList$out.assign,saveList$out.assign==gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])))
-			changeList[[gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])]] <- names(clicks)[clicks]
+			names(clicks) <- names(subset(saveList$out.assign,saveList$out.assign==gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])))
+			changeList[[gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])]] <- names(clicks)[clicks]
 		}
 }

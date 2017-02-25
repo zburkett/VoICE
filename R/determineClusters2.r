@@ -18,6 +18,8 @@ if(.Platform$OS.type=="unix")
 	input <- read.csv(paste(Filedir,"similarity_batch_self.csv",sep=""),header=FALSE)
 	input <- input[,1:6]
 	colnames(input) <- c("Sound 1", "Sound 2","Similarity","Accuracy","Seq. Match","globalsim")
+	if(is.na(input[1,1])){input = input[-1,] ; rownames(input) = 1:nrow(input)} # fix potential error after Matlab has reopened a simbatch and left NAs across row 1
+	if(class(input[,3])=="character"){input=data.matrix(input)}
 	input[,3] <- 100*input[,3]
 	input[,4] <- 100*input[,4]
 	input[,5] <- 100*input[,5]
@@ -71,8 +73,8 @@ if(.Platform$OS.type=="unix")
 	colnames(mergedMEList$varExplained)=colnames(mergedMEList$eigengenes)
 
 	#originalData <- read.xls(acousticData,header=FALSE)
-	originalData <- read.csv(paste(comArgs[1],"acoustic_data.csv",sep=""));
-	originalData <- originalData[,-1]
+	originalData <- read.csv(paste(comArgs[1],".acoustic_data.csv",sep=""),header=T);
+	#originalData <- originalData[,-1]
 	#originalData <- originalData[-c(1,2),]
 	#colnames(originalData) <-c("name","syllable.duration","syllable.start","mean.amplitude","mean.pitch","mean.FM","mean.AM.2","mean.entropy","mean.pitch.goodness","mean.mean.freq","var.pitch","var.FM","var.entropy","var.pitch.goodness","var.mean.freq","var.AM","month","day","hour","minute","second","cluster","file.name","comments")
 	
@@ -217,19 +219,20 @@ if(.Platform$OS.type=="unix")
 			unlink(paste(Filedir,'cluster_tables/',sep=""),recursive=TRUE)
 		}
 	
-		if(file.exists(paste(Filedir,'cluster_tables_mat/',sep="")))
+		if(file.exists(paste(Filedir,'.cluster_tables_mat/',sep="")))
 		{
-			unlink(paste(Filedir,'cluster_tables_mat/',sep=""),recursive=TRUE)
+			unlink(paste(Filedir,'.cluster_tables_mat/',sep=""),recursive=TRUE)
 		}
 	
 		dir.create(paste(Filedir,"cluster_tables/",sep=''))
-	    dir.create(paste(Filedir,"cluster_tables_mat/",sep=''))
+	    dir.create(paste(Filedir,".cluster_tables_mat/",sep=''))
+		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir,".cluster_tables_mat/",sep='')))}
 	
 		for (cluster in names(clusterTable))
 		{
 			filename = paste(cluster,sep='',".csv")
 			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(Filedir,'cluster_tables/',filename,sep=""))
-	        write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+	        write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
 
 	    if ("mergedSyntax" %in% names(out.cluster) & "syntax" %in% names(out.cluster))
@@ -247,7 +250,7 @@ if(.Platform$OS.type=="unix")
 	        usedColors <- unique(out.cluster$syntax)
 	    }
 
-	    write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[1],'unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+	    write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
 
 	    out.cluster$usedColors <- usedColors
 		out.cluster.tutor <- out.cluster
@@ -276,6 +279,8 @@ if(.Platform$OS.type=="unix")
 	input <- read.csv(paste(Filedir,"similarity_batch_self.csv",sep=""),header=FALSE)
 	input <- input[,1:6]
 	colnames(input) <- c("Sound 1", "Sound 2","Similarity","Accuracy","Seq. Match","globalsim")
+	if(is.na(input[1,1])){input = input[-1,] ; rownames(input) = 1:nrow(input)} # fix potential error after Matlab has reopened a simbatch and left NAs across row 1
+	if(class(input[,3])=="character"){input=data.matrix(input)}
 	input[,3] <- 100*input[,3]
 	input[,4] <- 100*input[,4]
 	input[,5] <- 100*input[,5]
@@ -328,8 +333,8 @@ if(.Platform$OS.type=="unix")
 	colnames(mergedMEList$varExplained)=colnames(mergedMEList$eigengenes)
 	
 	#originalData <- read.xls(acousticData,header=FALSE)
-	originalData <- read.csv(paste(comArgs[1],"acoustic_data.csv",sep=""));
-	originalData <- originalData[,-1]
+	originalData <- read.csv(paste(comArgs[1],".acoustic_data.csv",sep=""),header=T);
+	#originalData <- originalData[,-1]
 	#originalData <- originalData[-c(1,2),]
 	#colnames(originalData) <-c("name","syllable.duration","syllable.start","mean.amplitude","mean.pitch","mean.FM","mean.AM.2","mean.entropy","mean.pitch.goodness","mean.mean.freq","var.pitch","var.FM","var.entropy","var.pitch.goodness","var.mean.freq","var.AM","month","day","hour","minute","second","cluster","file.name","comments")
 		
@@ -474,19 +479,20 @@ if(.Platform$OS.type=="unix")
 			unlink(paste(Filedir,'cluster_tables/',sep=""),recursive=TRUE)
 		}
 		
-		if(file.exists(paste(Filedir,'cluster_tables_mat/',sep="")))
+		if(file.exists(paste(Filedir,'.cluster_tables_mat/',sep="")))
 		{
-			unlink(paste(Filedir,'cluster_tables_mat/',sep=""),recursive=TRUE)
+			unlink(paste(Filedir,'.cluster_tables_mat/',sep=""),recursive=TRUE)
 		}
 		
 		dir.create(paste(Filedir,"cluster_tables/",sep=''))
-	    dir.create(paste(Filedir,"cluster_tables_mat/",sep=''))
+	    dir.create(paste(Filedir,".cluster_tables_mat/",sep=''))
+		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir,".cluster_tables_mat/",sep='')))}
 		
 		for (cluster in names(clusterTable))
 		{
 			filename = paste(cluster,sep='',".csv")
 			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(Filedir,'cluster_tables/',filename,sep=""))
-	        write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+	        write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
 	
 	    if ("mergedSyntax" %in% names(out.cluster) & "syntax" %in% names(out.cluster))
@@ -504,7 +510,8 @@ if(.Platform$OS.type=="unix")
 	        usedColors <- unique(out.cluster$syntax)
 	    }
 	
-	    write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[1],'unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+	    write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.unusedColors.txt',sep="")))}
 	
 	    out.cluster$usedColors <- usedColors
 		out.cluster.tutor <- out.cluster

@@ -73,12 +73,12 @@ if isunix
 	%populate dropdown menu with possible cluster assignments
 	system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']);
 
-	fid = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	fid = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
 	s = textscan(fid,'%s','Delimiter','\n');
 	s = strrep(s{1}(:,1),'"','');
-	pat = fullfile(strcat(handles.refDir,'/spectrograms/'),'*.csv');
+	pat = fullfile(strcat(handles.refDir,'/.spectrograms/'),'*.csv');
 	csvs = dir(pat);
-	csv = csvread(strcat(handles.refDir,'/spectrograms/',csvs(handles.count).name));
+	csv = csvread(strcat(handles.refDir,'/.spectrograms/',csvs(handles.count).name));
 	j = {'novel',s{:}};
 
 	for u = 1:length(j)-1
@@ -122,12 +122,12 @@ elseif ispc
 	%populate dropdown menu with possible cluster assignments
 	system(['R --slave --args ' char(34) handles.refDir char(34) ' < ./R/getClusterIDs.r']);
 
-	fid = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	fid = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
 	s = textscan(fid,'%s','Delimiter','\n');
 	s = strrep(s{1}(:,1),'"','');
-	pat = fullfile(strcat(handles.refDir,'/spectrograms/'),'*.csv');
+	pat = fullfile(strcat(handles.refDir,'/.spectrograms/'),'*.csv');
 	csvs = dir(pat);
-	csv = csvread(strcat(handles.refDir,'/spectrograms/',csvs(handles.count).name));
+	csv = csvread(strcat(handles.refDir,'/.spectrograms/',csvs(handles.count).name));
 	j = {'novel',s{:}};
 
 	for u = 1:length(j)-1
@@ -204,7 +204,7 @@ if isunix
 
 	if novelSyls > 0
 	    handles.NAs = 1;
-	elseif handles.NAs ~= 0 %ND added lines 132-133 to force novelty module
+	elseif handles.NAs ~= 0
 	    handles.NAs=handles.NAs;
 	else
 	    handles.NAs = 0;
@@ -278,12 +278,12 @@ axes(handles.axes1);
 imshow(I,map);
 set(handles.currentsyl,'String',handles.count);
 
-fid = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+fid = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
 s = textscan(fid,'%s','Delimiter','\n');
 s = strrep(s{1}(:,1),'"','');
-pat = fullfile(strcat(handles.refDir,'/spectrograms/'),'*.csv');
+pat = fullfile(strcat(handles.refDir,'/.spectrograms/'),'*.csv');
 csvs = dir(pat);
-csv = csvread(strcat(handles.refDir,'/spectrograms/',csvs(handles.count).name));
+csv = csvread(strcat(handles.refDir,'/.spectrograms/',csvs(handles.count).name));
 j = {'novel',s{:}};
 
 for u = 1:length(j)-1
@@ -326,8 +326,8 @@ function confirm_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 if isunix
-	handles.assignment = strsplit(handles.assignment, ' ');
-	handles.assignment = handles.assignment(1);
+	%handles.assignment = strsplit(handles.assignment, ' ');
+	%handles.assignment = handles.assignment(1);
 
 	% apply whatever is in dropdown menu to syllable ID
 	handles.imgs(handles.count).assignment = handles.assignment;
@@ -346,12 +346,12 @@ if isunix
 	    imshow(I,map);
 	    set(handles.currentsyl,'String',handles.count);
     
-	    fid = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	    fid = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
 	    s = textscan(fid,'%s','Delimiter','\n');
 	    s = strrep(s{1}(:,1),'"','');
-	    pat = fullfile(strcat(handles.refDir,'/spectrograms/'),'*.csv');
+	    pat = fullfile(strcat(handles.refDir,'/.spectrograms/'),'*.csv');
 	    csvs = dir(pat);
-	    csv = csvread(strcat(handles.refDir,'/spectrograms/',csvs(handles.count).name));
+	    csv = csvread(strcat(handles.refDir,'/.spectrograms/',csvs(handles.count).name));
 	    j = {'novel',s{:}};
 
 	    for u = 1:length(j)-1
@@ -377,12 +377,12 @@ elseif ispc
 	    imshow(I,map);
 	    set(handles.currentsyl,'String',handles.count);
 
-	    fid = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	    fid = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
 	    s = textscan(fid,'%s','Delimiter','\n');
 	    s = strrep(s{1}(:,1),'"','');
-	    pat = fullfile(strcat(handles.refDir,'/spectrograms/'),'*.csv');
+	    pat = fullfile(strcat(handles.refDir,'/.spectrograms/'),'*.csv');
 	    csvs = dir(pat);
-	    csv = csvread(strcat(handles.refDir,'/spectrograms/',csvs(handles.count).name));
+	    csv = csvread(strcat(handles.refDir,'/.spectrograms/',csvs(handles.count).name));
 	    j = {'novel',s{:}};
 
 	    for u = 1:length(j)-1

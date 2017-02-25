@@ -174,7 +174,7 @@ if(sum(is.na(out.assign))>0)
 	if(file.exists(paste(pupil.dir,"unassigned_for_cluster",sep=""))){unlink(paste(pupil.dir,"unassigned_for_cluster",sep=""),recursive=TRUE)}
 	dir.create(paste(pupil.dir,"unassigned_for_cluster",sep=""))
 	
-	data <- read.csv(paste(pupil.dir,"acoustic_data.csv",sep=""),header=TRUE)
+	data <- read.csv(paste(pupil.dir,".acoustic_data.csv",sep=""),header=TRUE)
 	
 	for(name in subset(names(out.assign),is.na(out.assign)))
 	{

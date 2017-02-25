@@ -37,10 +37,10 @@ if(.Platform$OS.type=="unix")
 
 
 
-	acoustic.data.1.all <- read.csv(paste(tutorDir,"/acoustic_data.csv",sep=""))
+	acoustic.data.1.all <- read.csv(paste(tutorDir,"/.acoustic_data.csv",sep=""),header=T)
 	acoustic.data.1 <- acoustic.data.1.all[,c("syllable.duration","mean.pitch","mean.FM","mean.entropy","mean.pitch.goodness","var.pitch","mean.mean.freq","var.FM","var.entropy","var.pitch.goodness","var.mean.freq","var.AM")]
 
-	acoustic.data.2.all <- read.csv(paste(pupilDir,"acoustic_data.csv",sep=""))
+	acoustic.data.2.all <- read.csv(paste(pupilDir,".acoustic_data.csv",sep=""),header=T)
 	acoustic.data.2 <- acoustic.data.2.all[,c("syllable.duration","mean.pitch","mean.FM","mean.entropy","mean.pitch.goodness","var.pitch","mean.mean.freq","var.FM","var.entropy","var.pitch.goodness","var.mean.freq","var.AM")]
 
 	if(length(syntaxStr)>4)
@@ -108,13 +108,14 @@ if(.Platform$OS.type=="unix")
 	rm(out.center)
 
 	#Create directory for spectrograms
-	if(file.exists(paste(tutorDir,"/spectrograms",sep="")))
+	if(file.exists(paste(tutorDir,"/.spectrograms",sep="")))
 	{
-		unlink(paste(tutorDir,"/spectrograms",sep=""),recursive=TRUE)
+		unlink(paste(tutorDir,"/.spectrograms",sep=""),recursive=TRUE)
 	}
 
-	tutdir <- paste(tutorDir,"/spectrograms",sep="")
+	tutdir <- paste(tutorDir,"/.spectrograms",sep="")
 	dir.create(tutdir)
+	if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(tutorDir,"/.spectrograms",sep="")))}
 
 	#Generate spectrograms for cluster center syllables
 	for(file in 1:length(centers))
@@ -126,7 +127,7 @@ if(.Platform$OS.type=="unix")
 		filename <- paste(tutorDir,"/cut_syllables/",name.out,".wav",sep="")
 		filename <- gsub(" ","\\\\ ",filename)
 				
-		output <- paste(tutorDir,"/spectrograms/",names(centers)[file],".png",sep="")
+		output <- paste(tutorDir,"/.spectrograms/",names(centers)[file],".png",sep="")
 		output <- gsub(" ","\\\\ ",output)
 		system(paste("sox",filename,"-n rate 20k spectrogram -m -l -Z -20 -Y 260 -X 1200 -z 100  ","-t",names(centers)[file], "-o", output)) 
 	}
@@ -148,14 +149,14 @@ if(.Platform$OS.type=="unix")
 		clusterMeans <- tapply(sub[,"globalsim"],sub[,"out.colors"],mean)
 	
 		candidates <- sort(clusterMeans,decreasing=TRUE)
-		tutor.order <- paste(tutorDir,"/spectrograms/",names(candidates),".png",sep="")
+		tutor.order <- paste(tutorDir,"/.spectrograms/",names(candidates),".png",sep="")
 	
 		name.assign <- paste("%0",nchar(max(as.numeric(rownames(acoustic.data.2)))),"s",sep="")
 		tiename <- paste(sprintf(name.assign,tie),".wav",sep="")
 	
 		pupil.file <- paste(pupilDir,"cut_syllables/",tiename,sep="")
 		pupil.file <- gsub(" ","\\\\ ",pupil.file)
-		outDir <- paste(tutorDir,"/spectrograms",sep="")
+		outDir <- paste(tutorDir,"/.spectrograms",sep="")
 		outDir <- gsub(" ","\\\\ ",outDir)
 	
 		#system(paste("sox",pupil.file,"-n spectrogram -Y 260 -X 1200 -z 100 ","-t",paste(tiename), "-o", paste(outDir,"/",tiename,".png",sep="")))
@@ -183,7 +184,7 @@ if(.Platform$OS.type=="unix")
 
 	for(color in names(centers))
 	{
-	    unlink(paste(tutorDir,'/spectrograms/',color,'.png',sep=''))
+	    unlink(paste(tutorDir,'/.spectrograms/',color,'.png',sep=''))
 	}
 
 	#underline syllables in their motif context
@@ -288,7 +289,7 @@ if(.Platform$OS.type=="unix")
 
 	for(file in 1:length(list.files(paste(pupilDir,"temp_spectro",sep=""))))
 	{
-		system(paste("convert", paste(gsub(" ","\\\\ ",pupilDir),"temp_spectro/",list.files(paste(pupilDir,"temp_spectro",sep=""))[file],sep=""), paste(gsub(" ","\\\\ ",tutorDir),"/spectrograms/", list.files(paste(tutorDir,"/spectrograms/",sep=""),pattern="*.png")[file],sep=""), "-append", paste(gsub(" ","\\\\ ",pupilDir),"final_spectro/", gsub(".wav","",list.files(paste(tutorDir,"/spectrograms/",sep=""),pattern="*.png")[file]),sep="")))
+		system(paste("convert", paste(gsub(" ","\\\\ ",pupilDir),"temp_spectro/",list.files(paste(pupilDir,"temp_spectro",sep=""))[file],sep=""), paste(gsub(" ","\\\\ ",tutorDir),"/.spectrograms/", list.files(paste(tutorDir,"/.spectrograms/",sep=""),pattern="*.png")[file],sep=""), "-append", paste(gsub(" ","\\\\ ",pupilDir),"final_spectro/", gsub(".wav","",list.files(paste(tutorDir,"/.spectrograms/",sep=""),pattern="*.png")[file]),sep="")))
 	}
 }else if (.Platform$OS.type=="windows")
 {
@@ -330,10 +331,10 @@ if(.Platform$OS.type=="unix")
 
 
 
-	acoustic.data.1.all <- read.csv(paste(tutorDir,"/acoustic_data.csv",sep=""))
+	acoustic.data.1.all <- read.csv(paste(tutorDir,"/.acoustic_data.csv",sep=""),header=T)
 	acoustic.data.1 <- acoustic.data.1.all[,c("syllable.duration","mean.pitch","mean.FM","mean.entropy","mean.pitch.goodness","var.pitch","mean.mean.freq","var.FM","var.entropy","var.pitch.goodness","var.mean.freq","var.AM")]
 
-	acoustic.data.2.all <- read.csv(paste(pupilDir,"acoustic_data.csv",sep=""))
+	acoustic.data.2.all <- read.csv(paste(pupilDir,".acoustic_data.csv",sep=""),header=T)
 	acoustic.data.2 <- acoustic.data.2.all[,c("syllable.duration","mean.pitch","mean.FM","mean.entropy","mean.pitch.goodness","var.pitch","mean.mean.freq","var.FM","var.entropy","var.pitch.goodness","var.mean.freq","var.AM")]
 
 	if(length(syntaxStr)>4)
@@ -401,13 +402,14 @@ if(.Platform$OS.type=="unix")
 	rm(out.center)
 
 	#Create directory for spectrograms
-	if(file.exists(paste(tutorDir,"/spectrograms",sep="")))
+	if(file.exists(paste(tutorDir,"/.spectrograms",sep="")))
 	{
-		unlink(paste(tutorDir,"/spectrograms",sep=""),recursive=TRUE)
+		unlink(paste(tutorDir,"/.spectrograms",sep=""),recursive=TRUE)
 	}
 
-	tutdir <- paste(tutorDir,"/spectrograms",sep="")
+	tutdir <- paste(tutorDir,"/.spectrograms",sep="")
 	dir.create(tutdir)
+	if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(tutorDir,"/.spectrograms",sep="")))}
 
 	#Generate spectrograms for cluster center syllables
 	for(file in 1:length(centers))
@@ -419,7 +421,7 @@ if(.Platform$OS.type=="unix")
 		filename <- paste(tutorDir,"/cut_syllables/",name.out,".wav",sep="")
 		#filename <- gsub(" ","\\\\ ",filename)
 				
-		output <- paste(tutorDir,"/spectrograms/",names(centers)[file],".png",sep="")
+		output <- paste(tutorDir,"/.spectrograms/",names(centers)[file],".png",sep="")
 		#output <- gsub(" ","\\\\ ",output)
 		system(paste("sox",dQuote(filename),"-n rate 20k spectrogram -m -l -Z -20 -Y 260 -X 1200 -z 100  ","-t",names(centers)[file], "-o", dQuote(output))) 
 	}
@@ -441,7 +443,7 @@ if(.Platform$OS.type=="unix")
 		clusterMeans <- tapply(sub[,"globalsim"],sub[,"out.colors"],mean)
 	
 		candidates <- sort(clusterMeans,decreasing=TRUE)
-		tutor.order <- paste(tutorDir,"/spectrograms/",names(candidates),".png",sep="")
+		tutor.order <- paste(tutorDir,"/.spectrograms/",names(candidates),".png",sep="")
 	
 		name.assign <- paste("%0",nchar(max(as.numeric(rownames(acoustic.data.2)))),"s",sep="")
 		tiename <- paste(sprintf(name.assign,tie),".wav",sep="")
@@ -449,7 +451,7 @@ if(.Platform$OS.type=="unix")
 	
 		pupil.file <- paste(pupilDir,"cut_syllables/",tiename,sep="")
 		#pupil.file <- gsub(" ","\\\\ ",pupil.file)
-		outDir <- paste(tutorDir,"/spectrograms",sep="")
+		outDir <- paste(tutorDir,"/.spectrograms",sep="")
 		#outDir <- gsub(" ","\\\\ ",outDir)
 	
 		#system(paste("sox",pupil.file,"-n spectrogram -Y 260 -X 1200 -z 100 ","-t",paste(tiename), "-o", paste(outDir,"/",tiename,".png",sep="")))
@@ -481,7 +483,7 @@ if(.Platform$OS.type=="unix")
 
 	for(color in names(centers))
 	{
-	    unlink(paste(tutorDir,'/spectrograms/',color,'.png',sep=''))
+	    unlink(paste(tutorDir,'/.spectrograms/',color,'.png',sep=''))
 	}
 
 	#underline syllables in their motif context
@@ -587,6 +589,6 @@ if(.Platform$OS.type=="unix")
 
 	for(file in 1:length(list.files(paste(pupilDir,"temp_spectro",sep=""),pattern="*.png")))
 	{
-		system(paste("magick", dQuote(paste(pupilDir,"temp_spectro/",list.files(paste(pupilDir,"temp_spectro",sep=""))[file],sep="")), dQuote(paste(tutorDir,"/spectrograms/", list.files(paste(tutorDir,"/spectrograms/",sep=""),pattern="*.png")[file],sep="")), "-append", dQuote(paste(pupilDir,"final_spectro/", gsub(".wav","",list.files(paste(tutorDir,"/spectrograms/",sep=""),pattern="*.png")[file]),sep=""))))
+		system(paste("magick", dQuote(paste(pupilDir,"temp_spectro/",list.files(paste(pupilDir,"temp_spectro",sep=""))[file],sep="")), dQuote(paste(tutorDir,"/.spectrograms/", list.files(paste(tutorDir,"/.spectrograms/",sep=""),pattern="*.png")[file],sep="")), "-append", dQuote(paste(pupilDir,"final_spectro/", gsub(".wav","",list.files(paste(tutorDir,"/.spectrograms/",sep=""),pattern="*.png")[file]),sep=""))))
 	}
 }

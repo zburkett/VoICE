@@ -1,3 +1,4 @@
+rm(list=ls())
 if(.Platform$OS.type=="windows" & file.exists("./.libraries")){.libPaths("./.libraries")}
 comArgs <- commandArgs(T)
 options(stringsAsFactors=FALSE)
@@ -7,22 +8,24 @@ options(warn=-1)
 
 if(file.exists(paste(comArgs[1],'workspace.Rdata',sep='')))
 {
+	#print('Found workspace.Rdata')
 	load(paste(comArgs[1],'workspace.Rdata',sep='')) #load workspace
 }else if(file.exists(paste(comArgs[1],'assign_workspace.Rdata',sep=''))) #load workspace
 {
+	#print('Found assign_workspace.Rdata')
 	load(paste(comArgs[1],'assign_workspace.Rdata',sep=''))
 }else if (file.exists(paste(comArgs[1],'assigned_complete_workspace.Rdata',sep='')))
 {
+	#print('Found assigned_complete_workspace.Rdata')
 	load(paste(comArgs[1],'assigned_complete_workspace.Rdata',sep=''))
 }
 
-
 changeList <- list()
 
-for(i in 1:length(dir(paste(comArgs[1],'reassign',sep=''))))
+for(i in 1:length(dir(paste(comArgs[1],'.reassign',sep=''))))
 {
 	#read the csv
-	clicks <- read.csv(paste(comArgs[1],'reassign/',gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i]),'.csv',sep=''),header=FALSE)
+	clicks <- read.csv(paste(comArgs[1],'.reassign/',gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i]),'.csv',sep=''),header=FALSE)
 	
 	#store names of syllables clicked in changeList
 	if(exists("out.cluster.tutor"))
@@ -30,28 +33,30 @@ for(i in 1:length(dir(paste(comArgs[1],'reassign',sep=''))))
 		if("mergedSyntax" %in% names(out.cluster.tutor))
 		{
 			clicks <- as.logical(clicks)
-			names(clicks) <- names(subset(out.cluster.tutor$mergedSyntax,out.cluster.tutor																	$mergedSyntax==gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])))
-			changeList[[gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])]] <- names(clicks)[clicks]
+			names(clicks) <- names(subset(out.cluster.tutor$mergedSyntax,out.cluster.tutor$mergedSyntax==gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])))
+			changeList[[gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])]] <- names(clicks)[clicks]
 		}
 	
 		if(!"mergedSyntax" %in% names(out.cluster.tutor))
 		{
 			clicks <- as.logical(clicks)
-			colnames(clicks) <- names(subset(out.cluster.tutor$syntax,out.cluster.tutor																		$syntax==gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])))
-			changeList[[gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])]] <- names(clicks)[clicks]
+			colnames(clicks) <- names(subset(out.cluster.tutor$syntax,out.cluster.tutor$syntax==gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])))
+			changeList[[gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])]] <- names(clicks)[clicks]
 		}	
 	}else if(exists("assignedSyntax"))
 		{
 			clicks <- as.logical(clicks)
-			names(clicks) <- names(subset(assignedSyntax,assignedSyntax==gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])))
-			changeList[[gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])]] <- names(clicks)[clicks]
-		}else if(exists("saveList"))
+			names(clicks) <- names(subset(assignedSyntax,assignedSyntax==gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])))
+			changeList[[gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])]] <- names(clicks)[clicks]
+	}else if(exists("saveList"))
 		{
 			clicks <- as.logical(clicks)
-			names(clicks) <- names(subset(saveList$out.assign,saveList$out.assign==gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])))
-			changeList[[gsub('.csv','',dir(paste(comArgs[1],'reassign',sep=''))[i])]] <- names(clicks)[clicks]
+			names(clicks) <- names(subset(saveList$out.assign,saveList$out.assign==gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])))
+			changeList[[gsub('.csv','',dir(paste(comArgs[1],'.reassign',sep=''))[i])]] <- names(clicks)[clicks]
 		}
 }
+
+#print(which(changeList>0))
 
 for(name in names(changeList))
 {
@@ -79,25 +84,28 @@ for(name in names(changeList))
 				assignedSyntax[names(assignedSyntax)==changeList[[name]][i]] <- comArgs[2]
 			}
 	}else if(exists("saveList"))
-		{
+	{
 			for(i in 1:length(changeList[[name]]))
 			{
 				saveList$out.assign[names(saveList$out.assign)==changeList[[name]][i]] <- comArgs[2]
 			}
-		}
+	}
 }
 
 if(exists("out.cluster.tutor"))
 {
+	#print("writing workspace.rdata")
 	save(out.cluster.tutor,file=paste(comArgs[1],"workspace.Rdata",sep=""))
 }else if(exists("assignedSyntax"))
 {
+	#print("writing assigned_complete_workspace.rdata")
 	save(assignedSyntax,file=paste(comArgs[1],"assigned_complete_workspace.Rdata",sep=""))
 	load(paste(comArgs[1],"assign_workspace.Rdata",sep=""))
 	saveList$out.assign <- assignedSyntax
 	save(saveList,file=paste(comArgs[1],"assign_workspace.Rdata",sep=""))
 }else if(exists("saveList"))
 {
+	#print("writing assign_workspace.rdata")
 	save(saveList,file=paste(comArgs[1],"assign_workspace.Rdata",sep=""))
 }
 

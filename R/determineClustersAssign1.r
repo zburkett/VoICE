@@ -5,7 +5,7 @@ options(warn=-1)
 
 Filedir <- comArgs[1]
 
-load(paste(Filedir,"igs_assigned.Rdata",sep=""))
+load(paste(Filedir,".igs_assigned.Rdata",sep=""))
 input <- outlist$gsMatrix
 IGS.out <- outlist$IGS.out
 
@@ -70,7 +70,9 @@ out.mat <- as.data.frame(out.mat)
 out.mat <- data.matrix(out.mat)
 out.mat[is.na(out.mat)]=0
  
-write.table(out.mat,paste(comArgs[1],'igsdata_novel.csv',sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+write.table(out.mat,paste(comArgs[1],'.igsdata_novel.csv',sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.igsdata_novel.csv',sep="")))}
+
  
 outnames <- vector()
 for(name in colnames(icilist[[1]][[1]]))
@@ -79,10 +81,13 @@ for(name in colnames(icilist[[1]][[1]]))
 }
 outnames <- c("Threshold", outnames)
  
-write.table(t(outnames),paste(comArgs[1],'colnames_novel.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+write.table(t(outnames),paste(comArgs[1],'.colnames_novel.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.colnames_novel.txt',sep="")))}
  
-pdf(file=paste(comArgs[1],"tree_trim_curve_novel.pdf",sep=""))
-png(file=paste(comArgs[1],"tree_trim_curve_novel.png",sep=""))
+pdf(file=paste(comArgs[1],".tree_trim_curve_novel.pdf",sep=""))
+png(file=paste(comArgs[1],".tree_trim_curve_novel.png",sep=""))
+if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".tree_trim_curve_novel.pdf",sep="")))}
+if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".tree_trim_curve_novel.pdf",sep="")))}
 plot(as.numeric(names(n.break.all)),n.break.all,ylab="Cluster n",xlab="1-merging threshold",main="Iterative Tree Trimming Curve",pch=16)
 z <- dev.off()
 

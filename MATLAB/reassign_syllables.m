@@ -78,16 +78,16 @@ if isunix
 
 	if handles.assignRun == 1
 	    system(['R --slave --args ' handles.pathu ' < ./R/getClusterIDs.r']);
-	    fidPupil = fopen(strcat(handles.path,'usedClusters.txt'));
+	    fidPupil = fopen(strcat(handles.path,'.usedClusters.txt'));
 	    if(fidPupil == -1)
-	        fidPupil = fopen(strcat(handles.path,'/usedClusters.txt'));
+	        fidPupil = fopen(strcat(handles.path,'/.usedClusters.txt'));
 	    end
 	    s = textscan(fidPupil,'%s','Delimiter','\n');
 	    sPupil = strrep(s{1}(:,1),'"','');
 	    system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']);
-	    fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	    fidTutor = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
 	    if(fidTutor == -1)
-	        fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	        fidTutor = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
 	    end
 	    s = textscan(fidTutor,'%s','Delimiter','\n');
 	    sTutor = strrep(s{1}(:,1),'"','');
@@ -104,7 +104,7 @@ if isunix
 	    system(['R --slave --args ' handles.pathu ' < ./R/recreateClusters2.r']);
 	end
 
-	fid = fopen(strcat(handles.path,'/unusedColors.txt'));
+	fid = fopen(strcat(handles.path,'/.unusedColors.txt'));
 	s = textscan(fid,'%s','Delimiter','\n');
 	s = strrep(s{1}(:,1),'"','');
 	set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});
@@ -134,16 +134,16 @@ elseif ispc
 
 	if handles.assignRun == 1
 	    system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/getClusterIDs.r']);
-	    fidPupil = fopen(strcat(handles.path,'usedClusters.txt'));
+	    fidPupil = fopen(strcat(handles.path,'.usedClusters.txt'));
 	    if(fidPupil == -1)
-	        fidPupil = fopen(strcat(handles.path,'usedClusters.txt'));
+	        fidPupil = fopen(strcat(handles.path,'.usedClusters.txt'));
 	    end
 	    s = textscan(fidPupil,'%s','Delimiter','\n');
 	    sPupil = strrep(s{1}(:,1),'"','');
 	    system(['R --slave --args ' char(34) handles.refDir char(34) ' < ./R/getClusterIDs.r']);
-	    fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	    fidTutor = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
 	    if(fidTutor == -1)
-	        fidTutor = fopen(strcat(handles.refDir,'/usedClusters.txt'));
+	        fidTutor = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
 	    end
 	    s = textscan(fidTutor,'%s','Delimiter','\n');
 	    sTutor = strrep(s{1}(:,1),'"','');
@@ -160,7 +160,7 @@ elseif ispc
 	    system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/recreateClusters2.r']);
 	end
 
-	fid = fopen(strcat(handles.path,'unusedColors.txt'));
+	fid = fopen(strcat(handles.path,'.unusedColors.txt'));
 	s = textscan(fid,'%s','Delimiter','\n');
 	s = strrep(s{1}(:,1),'"','');
 	set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});
@@ -169,10 +169,10 @@ end
 %read in duration information for syllables, calculate start/stop for each
 %syllable in each cluster
 
-handles.clusterNames = dir(strcat(handles.path,'cluster_tables_mat/*.csv'));
+handles.clusterNames = dir(strcat(handles.path,'.cluster_tables_mat/*.csv'));
 for i = 1:length(handles.clusterNames)
     handles.clusterNames(i).name = strrep(handles.clusterNames(i).name,'.csv','');
-    handles.clusterNames(i).starts = csvread(strcat(handles.path,'cluster_tables_mat/',handles.clusterNames(i).name,'.csv'));
+    handles.clusterNames(i).starts = csvread(strcat(handles.path,'.cluster_tables_mat/',handles.clusterNames(i).name,'.csv'));
     %handles.clusterNames(i).starts = dlmread(strcat(handles.path,'cluster_tables_mat/',handles.clusterNames(i).name,'.csv'),',');
     handles.clusterNames(i).starts = [handles.clusterNames(i).starts zeros(length(handles.clusterNames(i).starts),1)];
     handles.clusterNames(i).starts(1,2) = handles.clusterNames(i).starts(1,1);
@@ -253,18 +253,18 @@ if isunix
 	    reassign.(handles.clusterNames(i).name) = handles.clusterNames(i).drawn>0;
 	end
 
-	if exist(strcat(handles.path,'reassign/'))
-	    rmdir(strcat(handles.path,'reassign/'),'s');
+	if exist(strcat(handles.path,'.reassign/'))
+	    rmdir(strcat(handles.path,'.reassign/'),'s');
 	end
 
 	for i = 1:length(fieldnames(reassign(1)))
 	    fns = fieldnames(reassign(1));
 	    fn = fns(i);
 	    if i == 1
-	        mkdir(strcat(handles.path,'reassign/'));
+	        mkdir(strcat(handles.path,'.reassign/'));
 	    end
     
-	    dlmwrite(strcat(handles.path,'reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');
+	    dlmwrite(strcat(handles.path,'.reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');
 	end
 
 	%if dropdown is unselected AND manual cluster assignment is at default OR
@@ -327,18 +327,19 @@ elseif ispc
 	    reassign.(handles.clusterNames(i).name) = handles.clusterNames(i).drawn>0;
 	end
 
-	if exist(strcat(handles.path,'reassign/'))
-	    rmdir(strcat(handles.path,'reassign/'),'s');
+	if exist(strcat(handles.path,'.reassign/'))
+	    rmdir(strcat(handles.path,'.reassign/'),'s');
 	end
 
 	for i = 1:length(fieldnames(reassign(1)))
 	    fns = fieldnames(reassign(1));
 	    fn = fns(i);
 	    if i == 1
-	        mkdir(strcat(handles.path,'reassign/'));
+	        mkdir(strcat(handles.path,'.reassign/'));
+			system(['attrib +h ' strcat(handles.path,'.reassign/')])
 	    end
     
-	    dlmwrite(strcat(handles.path,'reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');
+	    dlmwrite(strcat(handles.path,'.reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');
 	end
 
 	%if dropdown is unselected AND manual cluster assignment is at default OR
@@ -681,18 +682,19 @@ for i = 1:length(handles.clusterNames)
     reassign.(handles.clusterNames(i).name) = handles.clusterNames(i).drawn>0;
 end
 
-if exist(strcat(handles.path,'reassign/'))
-    rmdir(strcat(handles.path,'reassign/'),'s');
+if exist(strcat(handles.path,'.reassign/'))
+    rmdir(strcat(handles.path,'.reassign/'),'s');
 end
 
 for i = 1:length(fieldnames(reassign(1)))
     fns = fieldnames(reassign(1));
     fn = fns(i);
     if i == 1
-        mkdir(strcat(handles.path,'reassign/'));
+        mkdir(strcat(handles.path,'.reassign/'));
+		system(['attrib +h ' strcat(handles.path,'.reassign/')])
     end
     
-    dlmwrite(strcat(handles.path,'reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');
+    dlmwrite(strcat(handles.path,'.reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');
 end
 if isunix	
 	%call R code to edit workspace to reflect reassignments
@@ -746,17 +748,29 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-if isunix	
+pathu = strrep(handles.path,' ','\ ');
+[deletedSylls]=getSyllIDs(pathu,struct(handles));
+
+%construct warning dialog box
+choice = questdlg(['WARNING: You are about to delete all of the highlighted syllables. Recovery after deletion requires some effort. Are you sure?'], ...
+    'Delete Syllables', ...
+    'Yes, delete syllables', 'No, go back','No, go back');
+
+%handle response
+switch choice
+    case 'Yes, delete syllables'
+        proceed = 1;
+    case 'No, go back'
+        proceed = 0;
+end
+
+if isunix && proceed == 1
 	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-	pathu = strrep(handles.path,' ','\ ');
-	[deletedSylls]=getSyllIDs(pathu,struct(handles));
 	deleteSyllable(deletedSylls,pathu)
 	close
 	reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
-elseif ispc
-	pathu = strrep(handles.path,' ','\ ');
-	[deletedSylls]=getSyllIDs(pathu,struct(handles));
+elseif ispc && proceed == 1
 	deleteSyllable(deletedSylls,pathu)
 	close
-	reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})
+	reassign_syllables({handles.path},{handles.refDir},{handles.assignRun})   
 end

@@ -92,7 +92,7 @@ if(.Platform$OS.type=="unix")
 		colnames(mergedMEList$varExplained)=colnames(mergedMEList$eigengenes)
 		}
 	
-		originalData <- read.csv(paste(Filedir,"acoustic_data.csv",sep=""),header=TRUE)
+		originalData <- read.csv(paste(Filedir,".acoustic_data.csv",sep=""),header=TRUE)
 		originalData <- originalData[,-1]	
 		rownames(originalData) <- 1:nrow(originalData)
 	
@@ -151,7 +151,7 @@ if(.Platform$OS.type=="unix")
 
 	if(thresh=="none")
 	{
-	    originalData <- read.csv(paste(Filedir,"acoustic_data.csv",sep=""),header=TRUE)
+	    originalData <- read.csv(paste(Filedir,".acoustic_data.csv",sep=""),header=TRUE)
 	    originalData <- originalData[,-1]	
 	    rownames(originalData) <- 1:nrow(originalData)
 
@@ -278,19 +278,20 @@ if(.Platform$OS.type=="unix")
 			unlink(paste(Filedir,'cluster_tables_assigned/',sep=""),recursive=TRUE)
 		}
 	
-		if(file.exists(paste(Filedir,'cluster_tables_mat/',sep="")))
+		if(file.exists(paste(Filedir,'.cluster_tables_mat/',sep="")))
 		{
-			unlink(paste(Filedir,'cluster_tables_mat/',sep=""),recursive=TRUE)
+			unlink(paste(Filedir,'.cluster_tables_mat/',sep=""),recursive=TRUE)
 		}
 	
-		dir.create(paste(Filedir,"cluster_tables_mat/",sep=''))	
+		dir.create(paste(Filedir,".cluster_tables_mat/",sep=''))	
 		dir.create(paste(Filedir,"cluster_tables_assigned/",sep=''))
+		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir,".cluster_tables_mat/",sep='')))}
 	
 		for (cluster in names(clusterTable))
 		{
 			filename = paste(cluster,sep='',".csv")
 			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(Filedir,'cluster_tables_assigned/',filename,sep=""))
-			write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+			write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
 	
 		if(!thresh=="none")
@@ -308,7 +309,7 @@ if(.Platform$OS.type=="unix")
 	
 		usedColors <- unique(assignedSyntax)
 	
-		write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[2],'unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+		write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[2],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
 	
 		if(!thresh=="none")
 	    {
@@ -408,7 +409,7 @@ if(.Platform$OS.type=="unix")
 	    colnames(mergedMEList$varExplained)=colnames(mergedMEList$eigengenes)
 	    }
 
-	    originalData <- read.csv(paste(Filedir,"acoustic_data.csv",sep=""),header=TRUE)
+	    originalData <- read.csv(paste(Filedir,".acoustic_data.csv",sep=""),header=TRUE)
 	    originalData <- originalData[,-1]	
 	    rownames(originalData) <- 1:nrow(originalData)
 
@@ -468,7 +469,7 @@ if(.Platform$OS.type=="unix")
 
 	if(thresh=="none")
 	{
-	    originalData <- read.csv(paste(Filedir,"acoustic_data.csv",sep=""),header=TRUE)
+	    originalData <- read.csv(paste(Filedir,".acoustic_data.csv",sep=""),header=TRUE)
 	    originalData <- originalData[,-1]	
 	    rownames(originalData) <- 1:nrow(originalData)
 
@@ -595,19 +596,20 @@ if(.Platform$OS.type=="unix")
 			unlink(paste(Filedir,'cluster_tables_assigned',sep=""),recursive=TRUE)
 		}
 	
-		if(file.exists(paste(Filedir,'cluster_tables_mat',sep="")))
+		if(file.exists(paste(Filedir,'.cluster_tables_mat',sep="")))
 		{
-			unlink(paste(Filedir,'cluster_tables_mat',sep=""),recursive=TRUE)
+			unlink(paste(Filedir,'.cluster_tables_mat',sep=""),recursive=TRUE)
 		}
 	
-		dir.create(paste(Filedir,"cluster_tables_mat/",sep=''))	
+		dir.create(paste(Filedir,".cluster_tables_mat/",sep=''))	
 		dir.create(paste(Filedir,"cluster_tables_assigned/",sep=''))
+		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir,".cluster_tables_mat/",sep='')))}
 	
 		for (cluster in names(clusterTable))
 		{
 			filename = paste(cluster,sep='',".csv")
 			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(Filedir,'cluster_tables_assigned/',filename,sep=""))
-			write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+			write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
 	
 	    if(!thresh=="none")
@@ -624,8 +626,9 @@ if(.Platform$OS.type=="unix")
 	
 		usedColors <- unique(assignedSyntax)
 	
-		write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[2],'unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
-    
+		write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[2],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[2],'.unusedColors.txt',sep="")))}
+		
 	    if(!thresh=="none")
 	    {
 	        pdf(file=paste(Filedir,"novel_syllable_dendrogram.pdf",sep=""))

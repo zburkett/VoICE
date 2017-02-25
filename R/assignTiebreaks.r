@@ -13,11 +13,11 @@ tiebreakSyllables <- names(subset(saveList$out.assign,saveList$out.assign=="ND")
 
 for(i in 1:nrow(tiebreaks))
 {
-    if (tiebreaks[i,]=="novel")
+    if (tiebreaks[i,1]=="novel")
     {
         saveList$out.assign[as.numeric(tiebreakSyllables[i])] <- NA
     }else{
-	saveList$out.assign[as.numeric(tiebreakSyllables[i])] <- tiebreaks[i,]
+		saveList$out.assign[as.numeric(tiebreakSyllables[i])] <- tiebreaks[i,1]
     }
 }
 
@@ -31,7 +31,7 @@ if (.Platform$OS.type=="unix")
 		if(file.exists(paste(pupil.dir,"unassigned_for_cluster",sep=""))){unlink(paste(pupil.dir,"unassigned_for_cluster",sep=""),recursive=TRUE)}
 		dir.create(paste(pupil.dir,"unassigned_for_cluster",sep=""))
 	
-		data <- read.csv(paste(pupil.dir,"acoustic_data.csv",sep=""),header=TRUE)
+		data <- read.csv(paste(pupil.dir,".acoustic_data.csv",sep=""),header=TRUE)
 	
 		for(name in subset(names(saveList$out.assign),is.na(saveList$out.assign)))
 		{
@@ -50,7 +50,7 @@ if (.Platform$OS.type=="unix")
 		if(file.exists(paste(pupil.dir,"unassigned_for_cluster",sep=""))){unlink(paste(pupil.dir,"unassigned_for_cluster/",sep=""),recursive=TRUE)}
 		dir.create(paste(pupil.dir,"unassigned_for_cluster",sep=""))
 	
-		data <- read.csv(paste(pupil.dir,"acoustic_data.csv",sep=""),header=TRUE)
+		data <- read.csv(paste(pupil.dir,".acoustic_data.csv",sep=""),header=TRUE)
 	
 		for(name in subset(names(saveList$out.assign),is.na(saveList$out.assign)))
 		{
