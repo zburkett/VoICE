@@ -118,7 +118,7 @@ function runBatch_Callback(hObject, eventdata, handles)
 	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 
-	if ~exist(strcat(handles.assignPath,'cut_syllables/'))
+	if ~exist(strcat(handles.assignPath,'voice_results/cut_syllables/'))
 	    %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	    system(['R --slave --args' ' ' handles.assignPathu ' ' handles.assignFileu ' ' ' < ./R/importFeatureBatch.r']);
 	    %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
@@ -137,7 +137,7 @@ function runBatch_Callback(hObject, eventdata, handles)
 	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 	system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
-	pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	pattern = strcat(handles.assignPath,'voice_results/cut_syllables/','*.wav');
 	handles.totalSyllables = length(dir(pattern));
 	if exist(strcat(handles.assignPath,'NDs.csv'))==2;
 	    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
@@ -165,7 +165,7 @@ elseif ispc
 	%setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	%setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 
-	if ~exist(strcat(handles.assignPath,'cut_syllables/'))
+	if ~exist(strcat(handles.assignPath,'voice_results/cut_syllables/'))
 	    %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	    system(['R --slave --args' ' ' char(34) handles.assignPath char(34) ' ' char(34) handles.assignFile char(34) ' ' ' < importFeatureBatch.r']);
 	    %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
@@ -184,7 +184,7 @@ elseif ispc
 	%setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	%setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 	system(['R --slave --args ' char(34) handles.refDir char(34) ' ' char(34) handles.assignPath char(34) ' ' char(34) handles.gsfloor char(34) ' < assignSyllables.r']);
-	pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	pattern = strcat(handles.assignPath,'voice_results/cut_syllables/','*.wav');
 	handles.totalSyllables = length(dir(pattern));
 	if exist(strcat(handles.assignPath,'NDs.csv'))==2;
 	    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
@@ -278,7 +278,7 @@ if isunix
 	                setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	                setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 	                system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
-	                pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	                pattern = strcat(handles.assignPath,'voice_results/cut_syllables/','*.wav');
 	                handles.totalSyllables = length(dir(pattern));
 	                if exist(strcat(handles.assignPath,'NDs.csv'))==2;
 	                    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
@@ -337,7 +337,7 @@ elseif ispc
 	                %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	                %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 	                system(['R --slave --args ' char(34) handles.refDir char(34) ' ' char(34) handles.assignPath char(34) ' ' handles.gsfloor ' < assignSyllables.r']);
-	                pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	                pattern = strcat(handles.assignPath,'voice_results/cut_syllables/','*.wav');
 	                handles.totalSyllables = length(dir(pattern));
 	                if exist(strcat(handles.assignPath,'NDs.csv'))==2;
 	                    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
@@ -475,7 +475,7 @@ if isunix
 	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 	system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
-	pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	pattern = strcat(handles.assignPath,'voice_results/cut_syllables/','*.wav');
 	handles.totalSyllables = length(dir(pattern));
 
 	if exist(strcat(handles.assignPath,'NDs.csv'))==2;
@@ -506,7 +506,7 @@ elseif ispc
 	%setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	%setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 	system(['R --slave --args ' char(34) handles.refDir char(34) ' ' char(34) handles.assignPath char(34) ' ' char(34) handles.gsfloor char(34) ' < assignSyllables.r']);
-	pattern = strcat(handles.assignPath,'cut_syllables/','*.wav');
+	pattern = strcat(handles.assignPath,'voice_results/cut_syllables/','*.wav');
 	handles.totalSyllables = length(dir(pattern));
 	if exist(strcat(handles.assignPath,'NDs.csv'))==2;
 	    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));

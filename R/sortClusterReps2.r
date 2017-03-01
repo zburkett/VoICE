@@ -118,7 +118,7 @@ if(.Platform$OS.type=="unix")
 				name.assign <- paste("%0",nchar(max(as.numeric(names(assignedSyntax)))),"s",sep="")
 				name.out <- sprintf(name.assign,name)
 			
-				file.copy(paste(folder1,"/cut_syllables/",name.out,".wav",sep=""),paste(folder1,"/sorted_syllables_for_batch/",cluster,"/",name.out,".wav",sep=""))
+				file.copy(paste(folder1,"/voice_results/cut_syllables/",name.out,".wav",sep=""),paste(folder1,"/sorted_syllables_for_batch/",cluster,"/",name.out,".wav",sep=""))
 			}
 		}
 	#}
@@ -243,7 +243,7 @@ if(.Platform$OS.type=="unix")
 				name.assign <- paste("%0",nchar(max(as.numeric(names(assignedSyntax)))),"s",sep="")
 				name.out <- sprintf(name.assign,name)
 			
-				file.copy(paste(folder1,"cut_syllables/",name.out,".wav",sep=""),paste(folder1,"sorted_syllables_for_batch/",cluster,"/",name.out,".wav",sep=""))
+				file.copy(paste(folder1,"voice_results/cut_syllables/",name.out,".wav",sep=""),paste(folder1,"sorted_syllables_for_batch/",cluster,"/",name.out,".wav",sep=""))
 			}
 		}
 	#}

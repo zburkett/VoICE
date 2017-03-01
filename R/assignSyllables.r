@@ -190,7 +190,7 @@ if(sum(is.na(out.assign))>0)
 		}else{
 			stop(paste('Unable to determine OS.'))
 		}
-		file.copy(from=paste(pupil.dir,"cut_syllables/",name.out,".wav",sep=""),to=paste(pupil.dir,"unassigned_for_cluster/",name.out,".wav",sep=""))
+		file.copy(from=paste(pupil.dir,"voice_results/cut_syllables/",name.out,".wav",sep=""),to=paste(pupil.dir,"unassigned_for_cluster/",name.out,".wav",sep=""))
 	}
 }
 

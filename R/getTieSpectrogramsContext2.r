@@ -124,7 +124,7 @@ if(.Platform$OS.type=="unix")
 		name.out <- sprintf(name.assign,centers[file])
 		if(!Sys.info()['sysname']=="Darwin"){name.out <- gsub(" ",0,name.out)}
 				
-		filename <- paste(tutorDir,"/cut_syllables/",name.out,".wav",sep="")
+		filename <- paste(tutorDir,"/voice_results/cut_syllables/",name.out,".wav",sep="")
 		filename <- gsub(" ","\\\\ ",filename)
 				
 		output <- paste(tutorDir,"/.spectrograms/",names(centers)[file],".png",sep="")
@@ -154,7 +154,7 @@ if(.Platform$OS.type=="unix")
 		name.assign <- paste("%0",nchar(max(as.numeric(rownames(acoustic.data.2)))),"s",sep="")
 		tiename <- paste(sprintf(name.assign,tie),".wav",sep="")
 	
-		pupil.file <- paste(pupilDir,"cut_syllables/",tiename,sep="")
+		pupil.file <- paste(pupilDir,"voice_results/cut_syllables/",tiename,sep="")
 		pupil.file <- gsub(" ","\\\\ ",pupil.file)
 		outDir <- paste(tutorDir,"/.spectrograms",sep="")
 		outDir <- gsub(" ","\\\\ ",outDir)
@@ -272,7 +272,7 @@ if(.Platform$OS.type=="unix")
 			line.end <- line.start + ((acoustic.data.2.all[tie,"syllable.duration"]/100)*61)
 		}
 	
-		maxChar <- nchar(max(gsub(".wav","",list.files(paste(pupilDir,"cut_syllables",sep="")))))
+		maxChar <- nchar(max(gsub(".wav","",list.files(paste(pupilDir,"voice_results/cut_syllables",sep="")))))
 		name.assign <- paste("%0",maxChar,"s",sep="")
 		tieNum <- sprintf(name.assign,tie)
 	
@@ -418,7 +418,7 @@ if(.Platform$OS.type=="unix")
 		name.out <- sprintf(name.assign,centers[file])
 		if(!Sys.info()['sysname']=="Darwin"){name.out <- gsub(" ",0,name.out)}
 				
-		filename <- paste(tutorDir,"/cut_syllables/",name.out,".wav",sep="")
+		filename <- paste(tutorDir,"/voice_results/cut_syllables/",name.out,".wav",sep="")
 		#filename <- gsub(" ","\\\\ ",filename)
 				
 		output <- paste(tutorDir,"/.spectrograms/",names(centers)[file],".png",sep="")
@@ -449,7 +449,7 @@ if(.Platform$OS.type=="unix")
 		tiename <- paste(sprintf(name.assign,tie),".wav",sep="")
 	    if(!Sys.info()['sysname']=="Darwin"){tiename <- gsub(" ",0,tiename)}
 	
-		pupil.file <- paste(pupilDir,"cut_syllables/",tiename,sep="")
+		pupil.file <- paste(pupilDir,"voice_results/cut_syllables/",tiename,sep="")
 		#pupil.file <- gsub(" ","\\\\ ",pupil.file)
 		outDir <- paste(tutorDir,"/.spectrograms",sep="")
 		#outDir <- gsub(" ","\\\\ ",outDir)
@@ -571,7 +571,7 @@ if(.Platform$OS.type=="unix")
 			line.end <- line.start + ((acoustic.data.2.all[tie,"syllable.duration"]/100)*61)
 		}
 	
-		maxChar <- nchar(max(gsub(".wav","",list.files(paste(pupilDir,"cut_syllables",sep="")))))
+		maxChar <- nchar(max(gsub(".wav","",list.files(paste(pupilDir,"voice_results/cut_syllables",sep="")))))
 		name.assign <- paste("%0",maxChar,"s",sep="")
 		tieNum <- sprintf(name.assign,tie)
 	    if(!Sys.info()['sysname']=="Darwin"){tieNum <- gsub(" ",0,tieNum)}

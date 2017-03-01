@@ -70,7 +70,7 @@ if (!file.exists(paste(folder1, ".acoustic_data_original.csv", sep = "/"))) {
 for (syll in sylls) { #delete single syllable
 	name.assign <- paste("%0", nchar(max(vectA)), "s", sep = "")
 	name.out <- sprintf(name.assign, vectA[syll])
-	unlink(paste(folder1, "/cut_syllables/", name.out, ".wav", sep = "")) #deletes syllable .wav file
+	unlink(paste(folder1, "/voice_results/cut_syllables/", name.out, ".wav", sep = "")) #deletes syllable .wav file
 
 	#vect = as.numeric(names(subset(saveList$out.assign, names(saveList$out.assign) != syll))) #create variable name for syllable number
 	#vect = 1:length(vect)
@@ -128,7 +128,7 @@ for (syll in sylls) { #delete single syllable
 
 }
 
-CS = paste(folder1, "cut_syllables/", sep = "")
+CS = paste(folder1, "voice_results/cut_syllables/", sep = "")
 allWavs = dir(CS,pattern=".wav")
 totFiles = length(list.files(CS))
 name.assign <- paste("%0", nchar(max(vect)), "s", sep = "")
@@ -137,8 +137,8 @@ for (number in 1:totFiles) {
 
 	name.out <- sprintf(name.assign, vect[number])
 
-	from = paste(folder1, "cut_syllables/", allWavs[number], sep = "")
-	to = paste(folder1, "cut_syllables/", paste(as.character(name.out), ".wav", sep = ""), sep = "")
+	from = paste(folder1, "voice_results/cut_syllables/", allWavs[number], sep = "")
+	to = paste(folder1, "voice_results/cut_syllables/", paste(as.character(name.out), ".wav", sep = ""), sep = "")
 
 	file.rename(from, to)
 	#unlink(from)

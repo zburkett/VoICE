@@ -57,9 +57,9 @@ if(.Platform$OS.type=="unix")
 			}
 
 			
-			if (!file.exists(paste(comArgs[2],"cut_syllables",sep="")))
+			if (!file.exists(paste(comArgs[2],"/cut_syllables",sep="")))
 			{
-				dir.create(paste(comArgs[2],"cut_syllables",sep=""))
+				dir.create(paste(comArgs[2],"/cut_syllables",sep=""))
 			}
 				
 			if (file.exists(paste(comArgs[2],"cut_syllables",sep="")))
@@ -149,9 +149,9 @@ if(.Platform$OS.type=="unix")
 			}
 
 			
-			if (!file.exists(paste(comArgs[2],"cut_syllables",sep="")))
+			if (!file.exists(paste(comArgs[2],"/cut_syllables",sep="")))
 			{
-				dir.create(paste(comArgs[2],"cut_syllables",sep=""))
+				dir.create(paste(comArgs[2],"/cut_syllables",sep=""))
 			}
 				
 			if (file.exists(paste(comArgs[2],"cut_syllables",sep="")))

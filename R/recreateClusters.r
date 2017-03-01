@@ -83,7 +83,7 @@ if(.Platform$OS.type=="unix")
 				}	
 			}
 		
-			names <- paste(Filedir,"cut_syllables/",names,".wav",sep="")
+			names <- paste(Filedir,"voice_results/cut_syllables/",names,".wav",sep="")
 		
 			outwav <- paste(filename)
 			if(file.exists(paste(comArgs[1],"joined_clusters/",sep="")))
@@ -164,7 +164,7 @@ if(.Platform$OS.type=="unix")
 		syntax[is.na(syntax)] <- "none"
 	
 		clusters = unique(syntax)
-		all.files <- list.files(paste(Filedir,"cut_syllables/",sep=""))
+		all.files <- list.files(paste(Filedir,"voice_results/cut_syllables/",sep=""))
 		for (name in clusters)
 		{
 			syls = subset(syntax,syntax==name)
@@ -197,10 +197,10 @@ if(.Platform$OS.type=="unix")
 				}
 				if(file.exists(paste(comArgs[1],"sorted_syllables/",sep="")))
 				{
-					file.copy(from=paste(comArgs[1],"cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables/",name,sep=''))
+					file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables/",name,sep=''))
 				}else if(file.exists(paste(comArgs[1],"sorted_syllables_assigned/",sep="")))
 				{
-					file.copy(from=paste(comArgs[1],"cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables_assigned/",name,sep=''))
+					file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables_assigned/",name,sep=''))
 				}
 			}		
 		}
@@ -339,7 +339,7 @@ if(.Platform$OS.type=="unix")
 				}	
 			}
 		
-			names <- paste(Filedir,"cut_syllables/",names,".wav",sep="")
+			names <- paste(Filedir,"voice_results/cut_syllables/",names,".wav",sep="")
 		
 			outwav <- paste(filename)
 			if(file.exists(paste(comArgs[1],"joined_clusters",sep="")))
@@ -420,7 +420,7 @@ if(.Platform$OS.type=="unix")
 		syntax[is.na(syntax)] <- "none"
 	
 		clusters = unique(syntax)
-		all.files <- list.files(paste(Filedir,"cut_syllables/",sep=""))
+		all.files <- list.files(paste(Filedir,"voice_results/cut_syllables/",sep=""))
 		for (name in clusters)
 		{
 			syls = subset(syntax,syntax==name)
@@ -453,10 +453,10 @@ if(.Platform$OS.type=="unix")
 				}
 				if(file.exists(paste(comArgs[1],"sorted_syllables",sep="")))
 				{
-					file.copy(from=paste(comArgs[1],"cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables/",name,sep=''))
+					file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables/",name,sep=''))
 				}else if(file.exists(paste(comArgs[1],"sorted_syllables_assigned",sep="")))
 				{
-					file.copy(from=paste(comArgs[1],"cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables_assigned/",name,sep=''))
+					file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables_assigned/",name,sep=''))
 				}
 			}		
 		}

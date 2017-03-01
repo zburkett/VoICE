@@ -199,7 +199,7 @@ if(.Platform$OS.type=="unix")
 					names <- c(names,name)
 				}	
 			}
-			names <- paste(Filedir,"cut_syllables/",names,".wav",sep="")
+			names <- paste(Filedir,"voice_results/cut_syllables/",names,".wav",sep="")
 		
 			outwav <- paste(filename)
 			tempoutwav <- paste(Filedir,"joined_clusters_assigned/tempout.wav",sep="")
@@ -244,7 +244,7 @@ if(.Platform$OS.type=="unix")
 		syntax[is.na(syntax)] <- "none"
 	
 		clusters = unique(syntax)
-		all.files <- list.files(paste(Filedir,"cut_syllables/",sep=""))
+		all.files <- list.files(paste(Filedir,"voice_results/cut_syllables/",sep=""))
 		for (name in clusters)
 		{
 			syls = subset(syntax,syntax==name)
@@ -267,7 +267,7 @@ if(.Platform$OS.type=="unix")
 					dir.create(paste(Filedir,"sorted_syllables_assigned/",name,sep=''))
 				}
 			
-				file.copy(from=paste(Filedir,"cut_syllables/",wav,sep=''),to=paste(Filedir,"sorted_syllables_assigned/",name,sep=''))
+				file.copy(from=paste(Filedir,"voice_results/cut_syllables/",wav,sep=''),to=paste(Filedir,"sorted_syllables_assigned/",name,sep=''))
 			}		
 		}
 	
@@ -517,7 +517,7 @@ if(.Platform$OS.type=="unix")
 					names <- c(names,name)
 				}	
 			}
-			names <- paste(Filedir,"cut_syllables/",names,".wav",sep="")
+			names <- paste(Filedir,"voice_results/cut_syllables/",names,".wav",sep="")
 		
 			outwav <- paste(filename)
 			tempoutwav <- paste(Filedir,"joined_clusters_assigned/tempout.wav",sep="")
@@ -562,7 +562,7 @@ if(.Platform$OS.type=="unix")
 		syntax[is.na(syntax)] <- "none"
 	
 		clusters = unique(syntax)
-		all.files <- list.files(paste(Filedir,"cut_syllables/",sep=""))
+		all.files <- list.files(paste(Filedir,"voice_results/cut_syllables/",sep=""))
 		for (name in clusters)
 		{
 			syls = subset(syntax,syntax==name)
@@ -585,7 +585,7 @@ if(.Platform$OS.type=="unix")
 					dir.create(paste(Filedir,"sorted_syllables_assigned/",name,sep=''))
 				}
 			
-				file.copy(from=paste(Filedir,"cut_syllables/",wav,sep=''),to=paste(Filedir,"sorted_syllables_assigned/",name,sep=''))
+				file.copy(from=paste(Filedir,"voice_results/cut_syllables/",wav,sep=''),to=paste(Filedir,"sorted_syllables_assigned/",name,sep=''))
 			}		
 		}
 	

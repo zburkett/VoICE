@@ -41,7 +41,7 @@ ticID=tic;
 
 % read in sound a
 sounds1d=strcat(folder1, '/sorted_syllables_for_batch/');
-sounds2d=strcat(Filedir2, 'cut_syllables/');
+sounds2d=strcat(Filedir2, 'voice_results/cut_syllables/');
 same = 1;
 
 %p tables; located in matlab_functions/similarity

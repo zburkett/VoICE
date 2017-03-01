@@ -37,7 +37,7 @@ if (.Platform$OS.type=="unix")
 		{
 			name.assign <- paste("%0",nchar(max(as.numeric(rownames(data)))),"s",sep="")
 			name.out <- sprintf(name.assign,name)
-			file.copy(from=paste(pupil.dir,"cut_syllables/",name.out,".wav",sep=""),to=paste(pupil.dir,"unassigned_for_cluster/",name.out,".wav",sep=""))
+			file.copy(from=paste(pupil.dir,"voice_results/cut_syllables/",name.out,".wav",sep=""),to=paste(pupil.dir,"unassigned_for_cluster/",name.out,".wav",sep=""))
 		}
 	}
 }else if (.Platform$OS.type=="windows"){
@@ -57,7 +57,7 @@ if (.Platform$OS.type=="unix")
 			name.assign <- paste("%0",nchar(max(as.numeric(rownames(data)))),"s",sep="")
 			name.out <- sprintf(name.assign,name)
 	        name.out <- gsub(" ","0",name.out)
-			file.copy(from=paste(pupil.dir,"cut_syllables/",name.out,".wav",sep=""),to=paste(pupil.dir,"unassigned_for_cluster/",name.out,".wav",sep=""))
+			file.copy(from=paste(pupil.dir,"voice_results/cut_syllables/",name.out,".wav",sep=""),to=paste(pupil.dir,"unassigned_for_cluster/",name.out,".wav",sep=""))
 		}
 	}
 }

@@ -38,8 +38,8 @@ fs=44100;
 %ticID=tic;
 
 % read in sound a
-sounds1d=strcat(Filedir,'cut_syllables/');
-sounds2d=strcat(Filedir,'cut_syllables/');
+sounds1d=strcat(Filedir,'voice_results/cut_syllables/');
+sounds2d=strcat(Filedir,'voice_results/cut_syllables/');
 same = 1;
 
 %p tables; located in matlab_functions/similarity
