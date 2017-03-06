@@ -4,8 +4,8 @@ format short g
 
 if exist([matlabroot '/toolbox/distcomp']) %if the user has parallel processing capability
     try
-        delete(gcp('nocreate')); %try to close existing matlabpool
-        parpool;
+        matlabpool close;
+        matlabpool;
     catch %if no existing matlabpool is found...
         try 
            matlabpool; %...try opening a new matlabpool
@@ -326,8 +326,8 @@ end
 %sprintf('Saving!')
 
 outmatrix = [transpose(fns(:)') transpose(fns2(:)') transpose(similarity(:)') transpose(accuracy(:)') transpose(SeqMatch(:)') transpose(globalSim(:)') transpose(Pitch_diff(:)') transpose(FM_diff(:)') transpose(Entropy_diff(:)') transpose(PGood_diff(:)') transpose(AM_diff(:)') transpose(localDistance(:)') transpose(globalDistance(:)')];
-save(strcat(Filedir,'similarity_batch_completed.mat'))
-savenameSB=strcat(Filedir,'similarity_batch_self.csv');
+save(strcat(Filedir,'/voice_results/similarity_batch_completed.mat'))
+savenameSB=strcat(Filedir,'/voice_results/similarity_batch_self.csv');
 dlmwrite(savenameSB,outmatrix);
 
 

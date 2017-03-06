@@ -248,7 +248,7 @@ if isunix
 	set(handles.pushbutton4,'BackgroundColor','yellow');
 	set(handles.text6,'String','Syllables being clustered...a status bar will spawn.');
 	pause(0.000001)
-	system(['R --slave --args' ' ' handles.pathu ' ' '< ./R/clusterSyllables.r']);
+	system(['R --slave --args' ' ' [handles.pathu 'voice_results/'] ' ' '< ./R/clusterSyllables.r']);
 	pause(0.000001)
 	set(handles.pushbutton4,'BackgroundColor','green');
 	set(handles.text6,'String','Clustering and iterative trimming complete.');
@@ -256,7 +256,7 @@ elseif ispc
 	set(handles.pushbutton4,'BackgroundColor','yellow');
 	set(handles.text6,'String','Syllables being clustered...a status bar will spawn.');
 	pause(0.000001)
-	system(['R --slave --args' ' ' char(34) handles.pathu char(34) ' ' '< ./R/clusterSyllables.r']);
+	system(['R --slave --args' ' ' char(34) [handles.pathu 'voice_results/'] char(34) ' ' '< ./R/clusterSyllables.r']);
 	pause(0.000001)
 	set(handles.pushbutton4,'BackgroundColor','green');
 	set(handles.text6,'String','Clustering and iterative trimming complete.');
@@ -268,9 +268,9 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 if isunix
-	system(['R --slave --args' ' ' handles.pathu ' ' '< ./R/determineClusters1.r']);
+	system(['R --slave --args' ' ' [handles.pathu 'voice_results/'] ' ' '< ./R/determineClusters1.r']);
 	determine_merging_threshold({handles.path},{handles.pathu});
 elseif ispc
-	system(['R --slave --args' ' ' char(34) handles.pathu char(34) ' ' '< ./R/determineClusters1.r']);
+	system(['R --slave --args' ' ' char(34) [handles.pathu 'voice_results/'] char(34) ' ' '< ./R/determineClusters1.r']);
 	determine_merging_threshold({handles.path},{handles.pathu});
 end

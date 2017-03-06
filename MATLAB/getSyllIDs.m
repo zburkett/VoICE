@@ -4,10 +4,10 @@ function [sylls]=getSyllIDs(folderPath,handles)
 
 folderPath = strrep(folderPath,'\','');
 
-if exist([folderPath 'sorted_syllables'],'dir')
-    sortedSylls=strcat(folderPath,'sorted_syllables');
+if exist([folderPath 'voice_results/sorted_syllables'],'dir')
+    sortedSylls=strcat(folderPath,'voice_results/sorted_syllables');
 else
-    sortedSylls=strcat(folderPath,'sorted_syllables_assigned');
+    sortedSylls=strcat(folderPath,'voice_results/sorted_syllables_assigned');
 end
 
 [sylls2]=getAllFiles(sortedSylls);

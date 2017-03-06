@@ -24,6 +24,12 @@ parfor_progress.txt
 .magickFound
 walkthrough.docx
 .acoustic_data.csv
+.cluster_tables_mat/
+.pnext.csv
+.reassign/
+.unusedColors.txt
+Yellow119_122013_small.xls
+voice_results/
 
 .Rapp.history
 .dropbox

@@ -10,10 +10,10 @@ function hAx = addAxis(i,handles,cluster)
         set(handles.axesDrawn(i), 'Units','pixels');
         pnext = get(handles.axesDrawn(i),'Position');
         
-        if exist(strcat(handles.path,'joined_clusters/',cluster,'.wav')) == 2;
-             sp = audioread(strcat(handles.path,'joined_clusters/',cluster,'.wav'));
-        elseif exist(strcat(handles.path,'joined_clusters_assigned/',cluster,'.wav')) == 2
-             sp = audioread(strcat(handles.path,'joined_clusters_assigned/',cluster,'.wav'));
+        if exist(strcat(handles.path,'voice_results/joined_clusters/',cluster,'.wav')) == 2;
+             sp = audioread(strcat(handles.path,'voice_results/joined_clusters/',cluster,'.wav'));
+        elseif exist(strcat(handles.path,'voice_results/joined_clusters_assigned/',cluster,'.wav')) == 2
+             sp = audioread(strcat(handles.path,'voice_results/joined_clusters_assigned/',cluster,'.wav'));
         end
        
         %csvwrite(strcat(handles.path,'pnext.csv'),pnext);
@@ -52,10 +52,10 @@ function hAx = addAxis(i,handles,cluster)
        %csvwrite(strcat(handles.path,'pnext.csv'),pnext);
         dlmwrite(strcat(handles.path,'.pnext.csv'),pnext);
         
-        if exist(strcat(handles.path,'joined_clusters/',cluster,'.wav')) == 2;
-            sp = audioread(strcat(handles.path,'joined_clusters/',cluster,'.wav'));
-        elseif exist(strcat(handles.path,'joined_clusters_assigned/',cluster,'.wav')) == 2
-            sp = audioread(strcat(handles.path,'joined_clusters_assigned/',cluster,'.wav'));
+        if exist(strcat(handles.path,'voice_results/joined_clusters/',cluster,'.wav')) == 2;
+            sp = audioread(strcat(handles.path,'voice_results/joined_clusters/',cluster,'.wav'));
+        elseif exist(strcat(handles.path,'voice_results/joined_clusters_assigned/',cluster,'.wav')) == 2
+            sp = audioread(strcat(handles.path,'voice_results/joined_clusters_assigned/',cluster,'.wav'));
         end
         
         axes(handles.axesDrawn(i));

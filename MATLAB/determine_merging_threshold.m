@@ -58,13 +58,13 @@ handles.output = hObject;
 handles.path = varargin{1}{1};
 handles.pathu = varargin{2}{1};
 
-dat = csvread(strcat(handles.path,'.igsdata.csv'));
-fid = fopen(strcat(handles.path,'.colnames.txt'));
+dat = csvread(strcat(handles.path,'voice_results/.igsdata.csv'));
+fid = fopen(strcat(handles.path,'voice_results/.colnames.txt'));
 s = textscan(fid,'%s','Delimiter','\n');
 s = strrep(s{1}(:,1),'"','');
 set(handles.uitable2,'Data',dat,'ColumnName',s);
 set(handles.popupmenu1,'String',{'Select a threshold...',dat(:,1)})  
-handles.curve = imread(strcat(handles.path,'.tree_trim_curve.png'),'png');
+handles.curve = imread(strcat(handles.path,'voice_results/.tree_trim_curve.png'),'png');
 imshow(handles.curve,'Parent',handles.axes1);
 handles.threshold = 'default';
 
