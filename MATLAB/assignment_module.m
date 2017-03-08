@@ -260,7 +260,7 @@ if isunix
 	handles.refDiru = strrep(handles.refDir,' ','\ ');
 	set(handles.refDirString,'String',handles.refDir);
 
-	if exist(strcat(handles.refDir,'/workspace.Rdata')) || exist(strcat(handles.refDir,'/assign_workspace.Rdata')) & exist(strcat(handles.refDir,'/sorted_syllables/')) || exist(strcat(handles.refDir,'/sorted_syllables_assigned/'))
+	if exist(strcat(handles.refDir,'/voice_results/workspace.Rdata')) || exist(strcat(handles.refDir,'/voice_results/assign_workspace.Rdata')) & exist(strcat(handles.refDir,'/voice_results/sorted_syllables/')) || exist(strcat(handles.refDir,'/voice_results/sorted_syllables_assigned/'))
 	    handles.validRD = 1;
 	else
 	    handles.validRD = 0;
@@ -270,8 +270,8 @@ if isunix
 	    if handles.validFB + handles.validRD == 2
 	        set(handles.text33,'String','Valid assignment feature batch and valid reference directory selected. Similarity batch can now be run.')
 	        set(handles.runBatch,'Enable','on');
-	        if exist(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat')) ~=0
-	            load(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat'))
+	        if exist(strcat(handles.assignPath,'voice_results/assignment_similarity_batch_completed.mat')) ~=0
+	            load(strcat(handles.assignPath,'voice_results/assignment_similarity_batch_completed.mat'))
 	            if strmatch(folder1,handles.refDir) == 1 & strmatch(Filedir2,handles.assignPath) == 1
 	                set(handles.text33,'String','These two sessions have already been run against each other. Proceed to assignment');
 	                set(handles.runBatch,'BackgroundColor','green');
@@ -280,18 +280,18 @@ if isunix
 	                system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
 	                pattern = strcat(handles.assignPath,'voice_results/cut_syllables/','*.wav');
 	                handles.totalSyllables = length(dir(pattern));
-	                if exist(strcat(handles.assignPath,'NDs.csv'))==2;
-	                    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
+	                if exist(strcat(handles.assignPath,'voice_results/NDs.csv'))==2;
+	                    NDs = csvread(strcat(handles.assignPath,'voice_results/NDs.csv'));
 	                    set(handles.n_tied,'String',length(NDs));
-	                    delete(strcat(handles.assignPath,'NDs.csv'));
+	                    delete(strcat(handles.assignPath,'voice_results/NDs.csv'));
 	                else
 	                    set(handles.n_tied,'String','0');
 	                end
                 
-	                if exist(strcat(handles.assignPath,'NAs.csv'))==2
-	                    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
+	                if exist(strcat(handles.assignPath,'voice_results/NAs.csv'))==2
+	                    NAs = csvread(strcat(handles.assignPath,'voice_results/NAs.csv'));
 	                    set(handles.n_novel,'String',length(NAs));
-	                    delete(strcat(handles.assignPath,'NAs.csv'));
+	                    delete(strcat(handles.assignPath,'voice_results/NAs.csv'));
 	                else
 	                    set(handles.n_novel,'String','0');
 	                end
@@ -319,7 +319,7 @@ elseif ispc
 	handles.refDir = strrep(handles.refDir,'\','/');
 	set(handles.refDirString,'String',handles.refDir);
 
-	if exist(strcat(handles.refDir,'/workspace.Rdata')) || exist(strcat(handles.refDir,'/assign_workspace.Rdata')) & exist(strcat(handles.refDir,'/sorted_syllables/')) || exist(strcat(handles.refDir,'/sorted_syllables_assigned/'))
+	if exist(strcat(handles.refDir,'voice_results/workspace.Rdata')) || exist(strcat(handles.refDir,'voice_results/assign_workspace.Rdata')) & exist(strcat(handles.refDir,'voice_results/sorted_syllables/')) || exist(strcat(handles.refDir,'voice_results/sorted_syllables_assigned/'))
 	    handles.validRD = 1;
 	else
 	    handles.validRD = 0;
@@ -329,13 +329,11 @@ elseif ispc
 	    if handles.validFB + handles.validRD == 2
 	        set(handles.text33,'String','Valid assignment feature batch and valid reference directory selected. Similarity batch can now be run.')
 	        set(handles.runBatch,'Enable','on');
-	        if exist(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat')) ~=0
-	            load(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat'))
+	        if exist(strcat(handles.assignPath,'voice_results/assignment_similarity_batch_completed.mat')) ~=0
+	            load(strcat(handles.assignPath,'voice_results/assignment_similarity_batch_completed.mat'))
 	            if strmatch(folder1,handles.refDir) == 1 & strmatch(Filedir2,handles.assignPath) == 1
 	                set(handles.text33,'String','These two sessions have already been run against each other. Proceed to assignment');
 	                set(handles.runBatch,'BackgroundColor','green');
-	                %setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
-	                %setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
 	                system(['R --slave --args ' char(34) handles.refDir char(34) ' ' char(34) handles.assignPath char(34) ' ' handles.gsfloor ' < assignSyllables.r']);
 	                pattern = strcat(handles.assignPath,'voice_results/cut_syllables/','*.wav');
 	                handles.totalSyllables = length(dir(pattern));
