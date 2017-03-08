@@ -564,7 +564,7 @@ function popupmenu5_Callback(hObject, eventdata, handles)
 %        contents{get(hObject,'Value')} returns selected item from popupmenu5
 contents = cellstr(get(hObject,'String'));
 handles.toSplit = contents{get(hObject,'Value')};
-dirName = strcat(handles.path,'sorted_syllables/',handles.toSplit);
+dirName = strcat(handles.path,'voice_results/sorted_syllables/',handles.toSplit);
 pattern = fullfile(dirName,'*.wav');
 maxN = length(dir(pattern));
 if maxN > 1

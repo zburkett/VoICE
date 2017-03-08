@@ -21,42 +21,42 @@ sylls = sort(sylls, decreasing = TRUE)
 
 #inputs: folder1 (main directory), sylls (syllables to delete)
 #creates backup of 'original' workspace and similarity batch before deleting syllables
-if (file.exists(paste(folder1, "/workspace.Rdata", sep = ""))) {
+if (file.exists(paste(folder1, "voice_results/workspace.Rdata", sep = ""))) {
 	assign = 0
-	load(paste(folder1, "/workspace.Rdata", sep = ""))
-	if (!file.exists(paste(folder1, "/workspace_original.Rdata", sep = ""))) {
-		save(out.cluster.tutor, file = paste(folder1, "/workspace_original.Rdata", sep = ""))
+	load(paste(folder1, "voice_results/workspace.Rdata", sep = ""))
+	if (!file.exists(paste(folder1, "voice_results/workspace_original.Rdata", sep = ""))) {
+		save(out.cluster.tutor, file = paste(folder1, "voice_results/workspace_original.Rdata", sep = ""))
 	}
 	vectA = 1:length(out.cluster.tutor$mergedSyntax)
 
-	simbatch.csv = read.csv(paste(folder1, "similarity_batch_self.csv", sep = "/"), header = FALSE)
-	if (!file.exists(paste(folder1, "similarity_batch_self_original.csv", sep = "/"))) {
-		write.table(simbatch.csv, paste(folder1, "similarity_batch_self_original.csv", sep = "/"),row.names=F,col.names=F,sep=",")
+	simbatch.csv = read.csv(paste(folder1, "voice_results/similarity_batch_self.csv", sep = "/"), header = FALSE)
+	if (!file.exists(paste(folder1, "voice_results/similarity_batch_self_original.csv", sep = "/"))) {
+		write.table(simbatch.csv, paste(folder1, "voice_results/similarity_batch_self_original.csv", sep = "/"),row.names=F,col.names=F,sep=",")
 	}
 }
 
-if (file.exists(paste(folder1, "assign_workspace.Rdata", sep = ""))) {
+if (file.exists(paste(folder1, "voice_results/assign_workspace.Rdata", sep = ""))) {
 	assign = 1
-	load(paste(folder1, "assign_workspace.Rdata", sep = ""))
-	if (!file.exists(paste(folder1, "assign_workspace_original.Rdata", sep = ""))) {
-		save(saveList, file = paste(folder1, "assign_workspace_original.Rdata", sep = ""))
+	load(paste(folder1, "voice_results/assign_workspace.Rdata", sep = ""))
+	if (!file.exists(paste(folder1, "voice_results/assign_workspace_original.Rdata", sep = ""))) {
+		save(saveList, file = paste(folder1, "voice_results/assign_workspace_original.Rdata", sep = ""))
 	}
 	vectA = 1:length(saveList$out.assign)
 	simbatch = saveList$assignment.batch
-	if (!file.exists(paste(folder1, "similarity_batch_assign.csv", sep = "/"))) {
-		write.table(simbatch, paste(folder1, "similarity_batch_assign_original.csv", sep = "/"),row.names=F,col.names=F,sep=",")
+	if (!file.exists(paste(folder1, "voice_results/similarity_batch_assign.csv", sep = "/"))) {
+		write.table(simbatch, paste(folder1, "voice_results/similarity_batch_assign_original.csv", sep = "/"),row.names=F,col.names=F,sep=",")
 	}
 
-} else if (file.exists(paste(folder1, "assigned_complete_workspace.Rdata", sep = ""))) {
+} else if (file.exists(paste(folder1, "voice_results/assigned_complete_workspace.Rdata", sep = ""))) {
 	assign = 1
-	load(paste(folder1, "assigned_complete_workspace.Rdata", sep = ""))
-	if (!file.exists(paste(folder1, "assigned_complete_workspace_original.Rdata", sep = ""))) {
-		save(assignedSyntax, file = paste(folder1, "assigned_complete_workspace_original.Rdata", sep = ""))
+	load(paste(folder1, "voice_results/assigned_complete_workspace.Rdata", sep = ""))
+	if (!file.exists(paste(folder1, "voice_results/assigned_complete_workspace_original.Rdata", sep = ""))) {
+		save(assignedSyntax, file = paste(folder1, "voice_results/assigned_complete_workspace_original.Rdata", sep = ""))
 	}
 	vectA = 1:length(assignedSyntax)
 	simbatch = saveList$assignment.batch
-	if (!file.exists(paste(folder1, "similarity_batch_assign.csv", sep = "/"))) {
-		write.table(simbatch, paste(folder1, "similarity_batch_assign_original.csv", sep = "/"),row.names=F,col.names=F,sep=",")
+	if (!file.exists(paste(folder1, "voice_results/similarity_batch_assign.csv", sep = "/"))) {
+		write.table(simbatch, paste(folder1, "voice_results/similarity_batch_assign_original.csv", sep = "/"),row.names=F,col.names=F,sep=",")
 	}
 }
 
@@ -150,10 +150,10 @@ write.table(acoustic.data, paste(folder1, ".acoustic_data.csv", sep = "/"),row.n
 if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(folder1, ".acoustic_data.csv", sep = "/")))}
 
 if (assign == 1) {
-	save(saveList, file = paste(folder1, "assign_workspace.Rdata", sep = "/"))
-	write.table(newsimbatch, paste(folder1, "similarity_batch_assign.csv", sep = "/"),row.names=F,col.names=F,sep=",")
+	save(saveList, file = paste(folder1, "voice_results/assign_workspace.Rdata", sep = "/"))
+	write.table(newsimbatch, paste(folder1, "voice_results/similarity_batch_assign.csv", sep = "/"),row.names=F,col.names=F,sep=",")
 }
 if (assign == 0) {
-	save(out.cluster.tutor, file = paste(folder1, "workspace.Rdata", sep = ""))
-	write.table(simbatch.csv, paste(folder1, "similarity_batch_self.csv", sep = "/"),row.names=F,col.names=F,sep=",")
+	save(out.cluster.tutor, file = paste(folder1, "voice_results/workspace.Rdata", sep = ""))
+	write.table(simbatch.csv, paste(folder1, "voice_results/similarity_batch_self.csv", sep = "/"),row.names=F,col.names=F,sep=",")
 }

@@ -14,7 +14,7 @@ if(.Platform$OS.type=="unix")
 	cluster <- comArgs[2]
 	splitN <- comArgs[3]
 
-	load(paste(Filedir,"workspace.rdata",sep=""))
+	load(paste(Filedir,"voice_results/workspace.rdata",sep=""))
 
 	#subset the similarity data for only the cluster in question
 	cluster.sub <- subset(out.cluster.tutor$mergedSyntax,out.cluster.tutor$mergedSyntax==cluster)
@@ -59,7 +59,7 @@ if(.Platform$OS.type=="unix")
 		out.cluster.tutor$usedColors <- unique(out.cluster.tutor$syntax)
 	}
 
-	save(out.cluster.tutor,file=paste(Filedir,"workspace.Rdata",sep=""))
+	save(out.cluster.tutor,file=paste(Filedir,"voice_results/workspace.Rdata",sep=""))
 }else if (.Platform$OS.type=="windows")
 {
 	comArgs <- commandArgs(T)
@@ -75,7 +75,7 @@ if(.Platform$OS.type=="unix")
 	cluster <- comArgs[2]
 	splitN <- comArgs[3]
 
-	load(paste(Filedir,"workspace.rdata",sep=""))
+	load(paste(Filedir,"voice_results/workspace.rdata",sep=""))
 
 	#subset the similarity data for only the cluster in question
 	cluster.sub <- subset(out.cluster.tutor$mergedSyntax,out.cluster.tutor$mergedSyntax==cluster)
@@ -120,5 +120,5 @@ if(.Platform$OS.type=="unix")
 		out.cluster.tutor$usedColors <- unique(out.cluster.tutor$syntax)
 	}
 
-	save(out.cluster.tutor,file=paste(Filedir,"workspace.Rdata",sep=""))
+	save(out.cluster.tutor,file=paste(Filedir,"voice_results/workspace.Rdata",sep=""))
 }

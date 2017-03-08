@@ -14,8 +14,8 @@ Filedir = strrep(Filedir,'\','');
 system(['R --slave --args', strcat(' folder1=', strrep(Filedir,' ','\ ')), strcat(' sylls=', deletedSylls), ' < ./R/deleteSyll2.r']);
 
 % rewrite joined & save syllables
-if exist(strcat(Filedir,'/assign_workspace_original.Rdata'),'file')~=0 %assigned
-    bPath=strcat(Filedir,'assignment_similarity_batch_completed.mat');
+if exist(strcat(Filedir,'voice_results/assign_workspace_original.Rdata'),'file')~=0 %assigned
+    bPath=strcat(Filedir,'voice_results/assignment_similarity_batch_completed.mat');
     load(bPath);
     
     %unix(strcat('R --slave --args', strcat(' Filedir=', Filedir), strcat(' acousticData=', filename), '< finalizeClustersAssigned.r'));
@@ -35,7 +35,7 @@ if exist(strcat(Filedir,'/assign_workspace_original.Rdata'),'file')~=0 %assigned
     
 else %self
     system(['R --slave --args ' strrep(Filedir,' ','\ ') ' < ./R/recreateClusters.r']);
-    bPath=strcat(Filedir,'similarity_batch_completed.mat');
+    bPath=strcat(Filedir,'voice_results/similarity_batch_completed.mat');
     load(bPath)
     
     if exist(strcat(bPath,'_original'),'file')==0

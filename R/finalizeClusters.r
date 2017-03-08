@@ -159,7 +159,7 @@ if(.Platform$OS.type=="unix")
 		return(out)
 	}
 
-	load(paste(comArgs[1],'/workspace.Rdata',sep=""))
+	load(paste(comArgs[1],'voice_results/workspace.Rdata',sep=""))
 
 	if("mergedSyntax" %in% names(out.cluster.tutor))
 	{
@@ -177,18 +177,18 @@ if(.Platform$OS.type=="unix")
 	out.cluster.tutor$varianceExp <- MEs$varExplained
 	names(out.cluster.tutor$varianceExp) <- names(MEs$eigengenes)
 
-	save(out.cluster.tutor,file=paste(comArgs[1],"workspace.Rdata",sep=""))
+	save(out.cluster.tutor,file=paste(comArgs[1],"voice_results/workspace.Rdata",sep=""))
 
 	tps <- syntaxEntropy(x[[1]])
 	rownames(tps[[1]]) <- names(x$key)
 	colnames(tps[[1]]) <- names(x$key)
 
-	if(file.exists(paste(comArgs[1],"syntax_summary.csv",sep="")))
+	if(file.exists(paste(comArgs[1],"voice_results/syntax_summary.csv",sep="")))
 	{
-		unlink(paste(comArgs[1],"syntax_summary.csv",sep=""))
+		unlink(paste(comArgs[1],"voice_results/syntax_summary.csv",sep=""))
 	}
 
-	out_file <- file(paste(comArgs[1],"syntax_summary.csv",sep=""), open="a")
+	out_file <- file(paste(comArgs[1],"voice_results/syntax_summary.csv",sep=""), open="a")
 	write.table("Transition Probability Matrix",file=out_file,row.names=FALSE,col.names=FALSE)
 	write.table(t(c(" ",names(x$key))),file=out_file,row.names=FALSE,col.names=FALSE,sep=",")
 	write.table(tps[[1]],file=out_file,sep=",",row.names=names(x$key),col.names=FALSE)
@@ -198,6 +198,8 @@ if(.Platform$OS.type=="unix")
 	write.table(tps[[4]],file=out_file,sep=",",row.names="Weighted Entropy",col.names=FALSE)
 	write.table(tps[[5]],file=out_file,sep=",",row.names="Weighted Stereotypy",col.names=FALSE)
 	close(out_file)
+	
+	if(file.exists(paste0(comArgs[1],"voice_results/joined_clusters/tempout.wav"))){unlink(paste0(comArgs[1],"voice_results/joined_clusters/tempout.wav"))}
 }else if (.Platform$OS.type=="windows")
 {
 	comArgs <- commandArgs(T)
@@ -359,7 +361,7 @@ if(.Platform$OS.type=="unix")
 		return(out)
 	}
 
-	load(paste(comArgs[1],'workspace.Rdata',sep=""))
+	load(paste(comArgs[1],'voice_results/workspace.Rdata',sep=""))
 
 	if("mergedSyntax" %in% names(out.cluster.tutor))
 	{
@@ -377,18 +379,18 @@ if(.Platform$OS.type=="unix")
 	out.cluster.tutor$varianceExp <- MEs$varExplained
 	names(out.cluster.tutor$varianceExp) <- names(MEs$eigengenes)
 
-	save(out.cluster.tutor,file=paste(comArgs[1],"workspace.Rdata",sep=""))
+	save(out.cluster.tutor,file=paste(comArgs[1],"voice_results/workspace.Rdata",sep=""))
 
 	tps <- syntaxEntropy(x[[1]])
 	rownames(tps[[1]]) <- names(x$key)
 	colnames(tps[[1]]) <- names(x$key)
 
-	if(file.exists(paste(comArgs[1],"syntax_summary.csv",sep="")))
+	if(file.exists(paste(comArgs[1],"voice_results/syntax_summary.csv",sep="")))
 	{
-		unlink(paste(comArgs[1],"syntax_summary.csv",sep=""))
+		unlink(paste(comArgs[1],"voice_results/syntax_summary.csv",sep=""))
 	}
 
-	out_file <- file(paste(comArgs[1],"syntax_summary.csv",sep=""), open="a")
+	out_file <- file(paste(comArgs[1],"voice_results/syntax_summary.csv",sep=""), open="a")
 	write.table("Transition Probability Matrix",file=out_file,row.names=FALSE,col.names=FALSE)
 	write.table(t(c(" ",names(x$key))),file=out_file,row.names=FALSE,col.names=FALSE,sep=",")
 	write.table(tps[[1]],file=out_file,sep=",",row.names=names(x$key),col.names=FALSE)
@@ -398,4 +400,6 @@ if(.Platform$OS.type=="unix")
 	write.table(tps[[4]],file=out_file,sep=",",row.names="Weighted Entropy",col.names=FALSE)
 	write.table(tps[[5]],file=out_file,sep=",",row.names="Weighted Stereotypy",col.names=FALSE)
 	close(out_file)
+	
+	if(file.exists(paste0(comArgs[1],"voice_results/joined_clusters/tempout.wav"))){unlink(paste0(comArgs[1],"voice_results/joined_clusters/tempout.wav"))}
 }
