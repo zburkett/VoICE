@@ -59,11 +59,11 @@ if isunix
 	handles.refDiru = strrep(handles.refDir,' ','\ ');
 
 	%find .png images for tiebreaking
-	pattern = strcat(handles.assignPath,'final_spectro/','*.png');
+	pattern = strcat(handles.assignPath,'voice_results/final_spectro/','*.png');
 	handles.imgs = dir(pattern);
 
 	%set first .png to axes; update counter
-	[I,map] = imread(strcat(handles.assignPath,'final_spectro/',handles.imgs(1).name));
+	[I,map] = imread(strcat(handles.assignPath,'voice_results/final_spectro/',handles.imgs(1).name));
 	axes(handles.axes1);
 	imshow(I,map);
 	handles.count = 1;
@@ -72,18 +72,31 @@ if isunix
 
 	%populate dropdown menu with possible cluster assignments
 	system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']);
+% 
+% 	fid = fopen(strcat(handles.refDir,'/voice_results/.usedClusters2.txt'));
+% 	s = textscan(fid,'%s','Delimiter','\n');
+% 	s = strrep(s{1}(:,1),'"','');
+% 	csv = csvread(strcat(handles.refDir,'/voice_results/.spectrograms/',csvs(handles.count).name));
+% 	j = {'novel',s{:}};
 
-	fid = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
-	s = textscan(fid,'%s','Delimiter','\n');
-	s = strrep(s{1}(:,1),'"','');
-	pat = fullfile(strcat(handles.refDir,'/.spectrograms/'),'*.csv');
-	csvs = dir(pat);
-	csv = csvread(strcat(handles.refDir,'/.spectrograms/',csvs(handles.count).name));
-	j = {'novel',s{:}};
-
-	for u = 1:length(j)-1
-	    j{u+1} = strcat(j{u+1},' = ', num2str(csv(u)));
-	end
+    pat = fullfile(strcat(handles.refDir,'/voice_results/.spectrograms/'),'*.csv');
+    csvs = dir(pat);
+    
+    fid = fopen(strcat(handles.refDir,'/voice_results/.spectrograms/',csvs(handles.count).name));
+    C = textscan(fid,'%s %f','Delimiter',',');
+    fclose(fid);
+    C{1} = strrep(C{1}(:,1),'"','');
+    s = C{1};
+    j = {'novel',s{:}};
+    c = C{2};
+    
+    for u = 1:length(j)-1
+        j{u+1} = strcat(j{u+1}, ' = ', num2str(c(u)));
+    end
+    
+% 	for u = 1:length(j)-1
+% 	    j{u+1} = strcat(j{u+1},' = ', num2str(csv(u)));
+% 	end
 
 	%set(handles.popupmenu1,'String',{'novel',s{:}});
 	set(handles.popupmenu1,'String',j);
@@ -108,11 +121,11 @@ elseif ispc
 	%handles.refDiru = strrep(handles.refDir,' ','\ ');
 
 	%find .png images for tiebreaking
-	pattern = strcat(handles.assignPath,'final_spectro/','*.png');
+	pattern = strcat(handles.assignPath,'voice_results/final_spectro/','*.png');
 	handles.imgs = dir(pattern);
 
 	%set first .png to axes; update counter
-	[I,map] = imread(strcat(handles.assignPath,'final_spectro/',handles.imgs(1).name));
+	[I,map] = imread(strcat(handles.assignPath,'voice_results/final_spectro/',handles.imgs(1).name));
 	axes(handles.axes1);
 	imshow(I,map);
 	handles.count = 1;
@@ -122,17 +135,32 @@ elseif ispc
 	%populate dropdown menu with possible cluster assignments
 	system(['R --slave --args ' char(34) handles.refDir char(34) ' < ./R/getClusterIDs.r']);
 
-	fid = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
-	s = textscan(fid,'%s','Delimiter','\n');
-	s = strrep(s{1}(:,1),'"','');
-	pat = fullfile(strcat(handles.refDir,'/.spectrograms/'),'*.csv');
-	csvs = dir(pat);
-	csv = csvread(strcat(handles.refDir,'/.spectrograms/',csvs(handles.count).name));
-	j = {'novel',s{:}};
+% 	fid = fopen(strcat(handles.refDir,'/voice_results/.usedClusters2.txt'));
+% 	s = textscan(fid,'%s','Delimiter','\n');
+% 	s = strrep(s{1}(:,1),'"','');
+% 	pat = fullfile(strcat(handles.refDir,'/voice_results/.spectrograms/'),'*.csv');
+% 	csvs = dir(pat);
+% 	csv = csvread(strcat(handles.refDir,'/voice_results/.spectrograms/',csvs(handles.count).name));
+% 	j = {'novel',s{:}};
+% 
+% 	for u = 1:length(j)-1
+% 	    j{u+1} = strcat(j{u+1},' = ', num2str(csv(u)));
+%   end
 
-	for u = 1:length(j)-1
-	    j{u+1} = strcat(j{u+1},' = ', num2str(csv(u)));
-	end
+    pat = fullfile(strcat(handles.refDir,'/voice_results/.spectrograms/'),'*.csv');
+    csvs = dir(pat);
+
+    fid = fopen(strcat(handles.refDir,'/voice_results/.spectrograms/',csvs(handles.count).name));
+    C = textscan(fid,'%s %f','Delimiter',',');
+    fclose(fid);
+    C{1} = strrep(C{1}(:,1),'"','');
+    s = C{1};
+    j = {'novel',s{:}};
+    c = C{2};
+    
+    for u = 1:length(j)-1
+        j{u+1} = strcat(j{u+1}, ' = ', num2str(c(u)));
+    end
 
 	%set(handles.popupmenu1,'String',{'novel',s{:}});
 	set(handles.popupmenu1,'String',j);
@@ -182,7 +210,7 @@ assignments = {handles.imgs.assignment};
 
 if isunix
 	%apply assignments to R workspace
-	filename = strcat(handles.assignPath,'assignmentsOut.txt');
+	filename = strcat(handles.assignPath,'voice_results/assignmentsOut.txt');
 	fid = fopen(filename,'w');
 	for col = 1:length(assignments)
 	    fprintf(fid,'%s\n',char(assignments{col}));
@@ -193,7 +221,7 @@ if isunix
 	%NAs.csv is updated if NAs were dictated in reassignment
 
 	%Delete NDs.csv since all syllables are now novel or assigned
-	delete(strcat(handles.assignPath,'NDs.csv'));
+	delete(strcat(handles.assignPath,'voice_results/.NDs.csv'));
 
 	novelSyls = 0;
 	for i = 1:length(assignments)
@@ -209,7 +237,7 @@ if isunix
 	else
 	    handles.NAs = 0;
 	    warning off
-	    delete(strcat(handles.assignPath,'NAs.csv'));
+	    delete(strcat(handles.assignPath,'voice_results/.NAs.csv'));
 	    warning on
 	end
 
@@ -224,7 +252,7 @@ if isunix
 	end
 elseif ispc
 	%apply assignments to R workspace
-	filename = strcat(handles.assignPath,'assignmentsOut.txt');
+	filename = strcat(handles.assignPath,'voice_results/assignmentsOut.txt');
 	fid = fopen(filename,'w');
 	for col = 1:length(assignments)
 	    fprintf(fid,'%s\n',char(assignments{col}));
@@ -234,7 +262,7 @@ elseif ispc
 	%NAs.csv is updated if NAs were dictated in reassignment
 
 	%Delete NDs.csv since all syllables are now novel or assigned
-	delete(strcat(handles.assignPath,'NDs.csv'));
+	delete(strcat(handles.assignPath,'voice_results/.NDs.csv'));
 
 	if sum(strcmp('novel',assignments)) > 0
 	    handles.NAs = 1;
@@ -243,7 +271,7 @@ elseif ispc
 	else
 	    handles.NAs = 0;
 	    warning off
-	    delete(strcat(handles.assignPath,'NAs.csv'));
+	    delete(strcat(handles.assignPath,'voice_results/.NAs.csv'));
 	    warning on
 	end
 
@@ -273,17 +301,17 @@ if handles.count == 1
     set(handles.back,'Enable','Off');
 end
 
-[I,map] = imread(strcat(handles.assignPath,'final_spectro/',handles.imgs(handles.count).name));
+[I,map] = imread(strcat(handles.assignPath,'voice_results/final_spectro/',handles.imgs(handles.count).name));
 axes(handles.axes1);
 imshow(I,map);
 set(handles.currentsyl,'String',handles.count);
 
-fid = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
+fid = fopen(strcat(handles.refDir,'/voice_results/.usedClusters2.txt'));
 s = textscan(fid,'%s','Delimiter','\n');
 s = strrep(s{1}(:,1),'"','');
-pat = fullfile(strcat(handles.refDir,'/.spectrograms/'),'*.csv');
+pat = fullfile(strcat(handles.refDir,'/voice_results/.spectrograms/'),'*.csv');
 csvs = dir(pat);
-csv = csvread(strcat(handles.refDir,'/.spectrograms/',csvs(handles.count).name));
+csv = csvread(strcat(handles.refDir,'/voice_results/.spectrograms/',csvs(handles.count).name));
 j = {'novel',s{:}};
 
 for u = 1:length(j)-1
@@ -341,17 +369,17 @@ if isunix
 	    set(handles.confirm,'Enable','Off');
 	else
 	    handles.count = handles.count+1;
-	    [I,map] = imread(strcat(handles.assignPath,'final_spectro/',handles.imgs(handles.count).name));
+	    [I,map] = imread(strcat(handles.assignPath,'voice_results/final_spectro/',handles.imgs(handles.count).name));
 	    axes(handles.axes1);
 	    imshow(I,map);
 	    set(handles.currentsyl,'String',handles.count);
     
-	    fid = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
+	    fid = fopen(strcat(handles.refDir,'/voice_results/.usedClusters2.txt'));
 	    s = textscan(fid,'%s','Delimiter','\n');
 	    s = strrep(s{1}(:,1),'"','');
-	    pat = fullfile(strcat(handles.refDir,'/.spectrograms/'),'*.csv');
+	    pat = fullfile(strcat(handles.refDir,'/voice_results/.spectrograms/'),'*.csv');
 	    csvs = dir(pat);
-	    csv = csvread(strcat(handles.refDir,'/.spectrograms/',csvs(handles.count).name));
+	    csv = csvread(strcat(handles.refDir,'/voice_results/.spectrograms/',csvs(handles.count).name));
 	    j = {'novel',s{:}};
 
 	    for u = 1:length(j)-1
@@ -372,17 +400,17 @@ elseif ispc
 	    set(handles.confirm,'Enable','Off');
 	else
 	    handles.count = handles.count+1;
-	    [I,map] = imread(strcat(handles.assignPath,'final_spectro/',handles.imgs(handles.count).name));
+	    [I,map] = imread(strcat(handles.assignPath,'voice_results/final_spectro/',handles.imgs(handles.count).name));
 	    axes(handles.axes1);
 	    imshow(I,map);
 	    set(handles.currentsyl,'String',handles.count);
 
-	    fid = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
+	    fid = fopen(strcat(handles.refDir,'/voice_results/.usedClusters2.txt'));
 	    s = textscan(fid,'%s','Delimiter','\n');
 	    s = strrep(s{1}(:,1),'"','');
-	    pat = fullfile(strcat(handles.refDir,'/.spectrograms/'),'*.csv');
+	    pat = fullfile(strcat(handles.refDir,'/voice_results/.spectrograms/'),'*.csv');
 	    csvs = dir(pat);
-	    csv = csvread(strcat(handles.refDir,'/.spectrograms/',csvs(handles.count).name));
+	    csv = csvread(strcat(handles.refDir,'/voice_results/.spectrograms/',csvs(handles.count).name));
 	    j = {'novel',s{:}};
 
 	    for u = 1:length(j)-1

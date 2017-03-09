@@ -70,24 +70,24 @@ if isunix
 	handles.refDir = varargin{2}{1};
 	handles.refDiru = strrep(handles.refDir,' ','\ ');
 
-	if exist(strcat(handles.path,'sorted_syllables_assigned/'))
+	if exist(strcat(handles.path,'voice_results/sorted_syllables_assigned/'))
 	    set(handles.uipanel7,'Visible','Off');
-	elseif exist(strcat(handles.path,'/sorted_syllables_assigned'))
+	elseif exist(strcat(handles.path,'/voice_results/sorted_syllables_assigned'))
 	    set(handles.uipanel7,'Visible','Off');
 	end
 
 	if handles.assignRun == 1
 	    system(['R --slave --args ' handles.pathu ' < ./R/getClusterIDs.r']);
-	    fidPupil = fopen(strcat(handles.path,'.usedClusters.txt'));
+	    fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters.txt'));
 	    if(fidPupil == -1)
-	        fidPupil = fopen(strcat(handles.path,'/.usedClusters.txt'));
+	        fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters.txt'));
 	    end
 	    s = textscan(fidPupil,'%s','Delimiter','\n');
 	    sPupil = strrep(s{1}(:,1),'"','');
 	    system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']);
-	    fidTutor = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
+	    fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters.txt'));
 	    if(fidTutor == -1)
-	        fidTutor = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
+	        fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters.txt'));
 	    end
 	    s = textscan(fidTutor,'%s','Delimiter','\n');
 	    sTutor = strrep(s{1}(:,1),'"','');
@@ -104,7 +104,7 @@ if isunix
 	    system(['R --slave --args ' handles.pathu ' < ./R/recreateClusters2.r']);
 	end
 
-	fid = fopen(strcat(handles.path,'/.unusedColors.txt'));
+	fid = fopen(strcat(handles.path,'/voice_results/.unusedColors.txt'));
 	s = textscan(fid,'%s','Delimiter','\n');
 	s = strrep(s{1}(:,1),'"','');
 	set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});
@@ -126,24 +126,24 @@ elseif ispc
 	handles.refDir = varargin{2}{1};
 	handles.refDiru = strrep(handles.refDir,'\','/');
 
-	if exist(strcat(handles.path,'sorted_syllables_assigned/'))
+	if exist(strcat(handles.path,'voice_results/sorted_syllables_assigned/'))
 	    set(handles.uipanel7,'Visible','Off');
-	elseif exist(strcat(handles.path,'/sorted_syllables_assigned'))
+	elseif exist(strcat(handles.path,'/voice_results/sorted_syllables_assigned'))
 	    set(handles.uipanel7,'Visible','Off');
 	end
 
 	if handles.assignRun == 1
 	    system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/getClusterIDs.r']);
-	    fidPupil = fopen(strcat(handles.path,'.usedClusters.txt'));
+	    fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters.txt'));
 	    if(fidPupil == -1)
-	        fidPupil = fopen(strcat(handles.path,'.usedClusters.txt'));
+	        fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters.txt'));
 	    end
 	    s = textscan(fidPupil,'%s','Delimiter','\n');
 	    sPupil = strrep(s{1}(:,1),'"','');
 	    system(['R --slave --args ' char(34) handles.refDir char(34) ' < ./R/getClusterIDs.r']);
-	    fidTutor = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
+	    fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters.txt'));
 	    if(fidTutor == -1)
-	        fidTutor = fopen(strcat(handles.refDir,'/.usedClusters.txt'));
+	        fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters.txt'));
 	    end
 	    s = textscan(fidTutor,'%s','Delimiter','\n');
 	    sTutor = strrep(s{1}(:,1),'"','');
@@ -160,7 +160,7 @@ elseif ispc
 	    system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/recreateClusters2.r']);
 	end
 
-	fid = fopen(strcat(handles.path,'.unusedColors.txt'));
+	fid = fopen(strcat(handles.path,'voice_results/.unusedColors.txt'));
 	s = textscan(fid,'%s','Delimiter','\n');
 	s = strrep(s{1}(:,1),'"','');
 	set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});
