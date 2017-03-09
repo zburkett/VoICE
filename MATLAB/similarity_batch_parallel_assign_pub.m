@@ -40,7 +40,7 @@ fs=44100;
 ticID=tic;
 
 % read in sound a
-sounds1d=strcat(folder1, '/sorted_syllables_for_batch/');
+sounds1d=strcat(folder1, '/voice_results/sorted_syllables_for_batch/');
 sounds2d=strcat(Filedir2, 'voice_results/cut_syllables/');
 same = 1;
 
@@ -311,8 +311,8 @@ outmatrix = [transpose(fns(:)') transpose(fns2(:)') transpose(similarity(:)') tr
 %outmatrix(:,4) = outmatrix(:,4).*100;
 %outmatrix(:,5) = outmatrix(:,5).*100;
 %save ('inprogress.mat','-append','outmatrix')
-save(strcat(Filedir2,'assignment_similarity_batch_completed.mat'))
-savenameSB=strcat(Filedir2,'similarity_batch_assign.csv');
+save(strcat(Filedir2,'voice_results/assignment_similarity_batch_completed.mat'))
+savenameSB=strcat(Filedir2,'voice_results/similarity_batch_assign.csv');
 dlmwrite(savenameSB,outmatrix)
 
 

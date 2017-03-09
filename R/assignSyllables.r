@@ -6,19 +6,19 @@ pupil.dir <- comArgs[2]
 tutor.dir <- comArgs[1]
 thresh <- comArgs[3]
 
-clusterColors <- list.files(paste(tutor.dir,"/sorted_syllables_for_batch",sep=""))
+clusterColors <- list.files(paste(tutor.dir,"/voice_results/sorted_syllables_for_batch",sep=""))
 out.colors <- vector()
 	
-query <- strsplit(paste(tutor.dir,"/sorted_syllables_for_batch",sep=""),"/")
+query <- strsplit(paste(tutor.dir,"/voice_results/sorted_syllables_for_batch",sep=""),"/")
 if(sum(query[[1]]=="sorted_syllables_for_batch")==1)
 {
 	for(color in clusterColors)
 	{
-		out.colors <- c(out.colors,rep(color,length(list.files(path=paste(tutor.dir,"sorted_syllables_for_batch/",color,sep="/")))))
+		out.colors <- c(out.colors,rep(color,length(list.files(path=paste(tutor.dir,"voice_results/sorted_syllables_for_batch/",color,sep="/")))))
 	}
 }
 	
-assignment.batch <- read.csv(paste(pupil.dir,"similarity_batch_assign.csv",sep=""),header=FALSE)
+assignment.batch <- read.csv(paste(pupil.dir,"voice_results/similarity_batch_assign.csv",sep=""),header=FALSE)
 assignment.batch[,3] <- 100*assignment.batch[,3]
 assignment.batch[,4] <- 100*assignment.batch[,4]
 assignment.batch[,5] <- 100*assignment.batch[,5]
@@ -163,16 +163,18 @@ names(out.assign) <- unique(assignment.batch[,2])
 if(sum(out.assign=="ND",na.rm=TRUE)>0)
 {
 	ndout <- subset(names(out.assign),out.assign=="ND")
-	write.table(as.numeric(ndout),file=(paste(pupil.dir,"NDs.csv",sep="")),row.names=FALSE,col.names=FALSE)
+	write.table(as.numeric(ndout),file=(paste(pupil.dir,"voice_results/.NDs.csv",sep="")),row.names=FALSE,col.names=FALSE)
+	if(.Platform$OS.type=="windows"){system(paste(pupil.dir,"voice_results/.NDs.csv",sep=""))}
 }
 
 if(sum(is.na(out.assign))>0)
 {
 	naout <- subset(names(out.assign),is.na(out.assign))
-	write.table(as.numeric(naout),file=(paste(pupil.dir,"NAs.csv",sep="")),row.names=FALSE,col.names=FALSE)
+	write.table(as.numeric(naout),file=(paste(pupil.dir,"voice_results/.NAs.csv",sep="")),row.names=FALSE,col.names=FALSE)
+	if(.Platform$OS.type=="windows"){system(paste(pupil.dir,"voice_results/.NAs.csv",sep=""))}
 	
-	if(file.exists(paste(pupil.dir,"unassigned_for_cluster",sep=""))){unlink(paste(pupil.dir,"unassigned_for_cluster",sep=""),recursive=TRUE)}
-	dir.create(paste(pupil.dir,"unassigned_for_cluster",sep=""))
+	if(file.exists(paste(pupil.dir,"voice_results/unassigned_for_cluster",sep=""))){unlink(paste(pupil.dir,"voice_results/unassigned_for_cluster",sep=""),recursive=TRUE)}
+	dir.create(paste(pupil.dir,"voice_results/unassigned_for_cluster",sep=""))
 	
 	data <- read.csv(paste(pupil.dir,".acoustic_data.csv",sep=""),header=TRUE)
 	
@@ -190,9 +192,9 @@ if(sum(is.na(out.assign))>0)
 		}else{
 			stop(paste('Unable to determine OS.'))
 		}
-		file.copy(from=paste(pupil.dir,"voice_results/cut_syllables/",name.out,".wav",sep=""),to=paste(pupil.dir,"unassigned_for_cluster/",name.out,".wav",sep=""))
+		file.copy(from=paste(pupil.dir,"voice_results/cut_syllables/",name.out,".wav",sep=""),to=paste(pupil.dir,"voice_results/unassigned_for_cluster/",name.out,".wav",sep=""))
 	}
 }
 
 saveList = list(assignment.batch=assignment.batch,out.assign=out.assign,out.colors=out.colors)
-save(saveList,file=paste(pupil.dir,"assign_workspace.Rdata",sep=""))
+save(saveList,file=paste(pupil.dir,"voice_results/assign_workspace.Rdata",sep=""))

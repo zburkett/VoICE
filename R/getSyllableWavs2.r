@@ -57,12 +57,12 @@ if(.Platform$OS.type=="unix")
 			}
 
 			
-			if (!file.exists(paste(comArgs[2],"/cut_syllables",sep="")))
+			if (!file.exists(paste(comArgs[2],"voice_results/cut_syllables",sep="")))
 			{
-				dir.create(paste(comArgs[2],"/cut_syllables",sep=""))
+				dir.create(paste(comArgs[2],"voice_results/cut_syllables",sep=""))
 			}
 				
-			if (file.exists(paste(comArgs[2],"cut_syllables",sep="")))
+			if (file.exists(paste(comArgs[2],"voice_results/cut_syllables",sep="")))
 			{
 				count = count+1 #Counting which syllable this is
 								
@@ -73,7 +73,7 @@ if(.Platform$OS.type=="unix")
 			
 				filename.out <- paste(gsub("voice_results/","",comArgs[2]),filename,sep="")
 				filename.out <- gsub(" ","\\\\ ",filename.out)
-				output = paste(comArgs[2],"cut_syllables/",paste(name.out,".wav",sep=''),sep="")
+				output = paste(comArgs[2],"voice_results/cut_syllables/",paste(name.out,".wav",sep=''),sep="")
 				output = gsub(" ","\\\\ ",output)
 
 				#system(paste("/Applications/sox-14.4.1/sox",filename.out,output,"trim",from,to2)) #modified to remove absolute reference to application, should work for Homebrew install of SoX.
@@ -149,12 +149,12 @@ if(.Platform$OS.type=="unix")
 			}
 
 			
-			if (!file.exists(paste(comArgs[2],"/cut_syllables",sep="")))
+			if (!file.exists(paste(comArgs[2],"voice_results/cut_syllables",sep="")))
 			{
-				dir.create(paste(comArgs[2],"/cut_syllables",sep=""))
+				dir.create(paste(comArgs[2],"voice_results/cut_syllables",sep=""))
 			}
 				
-			if (file.exists(paste(comArgs[2],"cut_syllables",sep="")))
+			if (file.exists(paste(comArgs[2],"voice_results/cut_syllables",sep="")))
 			{
 				count = count+1 #Counting which syllable this is
 								
@@ -165,7 +165,7 @@ if(.Platform$OS.type=="unix")
 			
 				filename.out <- paste(gsub("voice_results/","",comArgs[2]),filename,sep="")
 				#filename.out <- gsub(" ","\\\\ ",filename.out)
-				output = paste(comArgs[2],"cut_syllables/",paste(name.out,".wav",sep=''),sep="")
+				output = paste(comArgs[2],"voice_results/cut_syllables/",paste(name.out,".wav",sep=''),sep="")
 				#output = gsub(" ","\\\\ ",output)
 
 				#system(paste("/Applications/sox-14.4.1/sox",filename.out,output,"trim",from,to2)) #modified to remove absolute reference to application, should work for Homebrew install of SoX.

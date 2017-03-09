@@ -128,7 +128,7 @@ function runBatch_Callback(hObject, eventdata, handles)
 	handles.refDiru = strrep(handles.refDir, ' ', '\ ');
 	system(['R --slave --args ' strcat(handles.refDiru,'/') ' ' handles.pct, ' < ./R/sortClusterReps2.r']);
 	pause(.0000001)
-	if exist(strcat(handles.assignPath,'assignment_similarity_batch_completed.mat'),'file')
+	if exist(strcat(handles.assignPath,'voice_results/assignment_similarity_batch_completed.mat'),'file')
 	    determineRun(handles.assignPath)
 	end
 	similarity_batch_parallel_assign_pub(handles.refDir,handles.assignPath,str2num(handles.mindur),str2num(handles.winsize));
@@ -139,18 +139,18 @@ function runBatch_Callback(hObject, eventdata, handles)
 	system(['R --slave --args ' handles.refDiru ' ' handles.assignPathu ' ' handles.gsfloor ' < ./R/assignSyllables.r']);
 	pattern = strcat(handles.assignPath,'voice_results/cut_syllables/','*.wav');
 	handles.totalSyllables = length(dir(pattern));
-	if exist(strcat(handles.assignPath,'NDs.csv'))==2;
-	    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
+	if exist(strcat(handles.assignPath,'voice_results/.NDs.csv'))==2;
+	    NDs = csvread(strcat(handles.assignPath,'voice_results/.NDs.csv'));
 	    set(handles.n_tied,'String',length(NDs));
-	    delete(strcat(handles.assignPath,'NDs.csv'));
+	    delete(strcat(handles.assignPath,'voice_results/.NDs.csv'));
 	else
 	    set(handles.n_tied,'String','0');
 	end
 
-	if exist(strcat(handles.assignPath,'NAs.csv'))==2
-	    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
+	if exist(strcat(handles.assignPath,'voice_results/.NAs.csv'))==2
+	    NAs = csvread(strcat(handles.assignPath,'voice_results/.NAs.csv'));
 	    set(handles.n_novel,'String',length(NAs));
-	    delete(strcat(handles.assignPath,'NAs.csv'));
+	    delete(strcat(handles.assignPath,'voice_results/.NAs.csv'));
 	else
 	    set(handles.n_novel,'String','0');
 	end
@@ -186,18 +186,18 @@ elseif ispc
 	system(['R --slave --args ' char(34) handles.refDir char(34) ' ' char(34) handles.assignPath char(34) ' ' char(34) handles.gsfloor char(34) ' < assignSyllables.r']);
 	pattern = strcat(handles.assignPath,'voice_results/cut_syllables/','*.wav');
 	handles.totalSyllables = length(dir(pattern));
-	if exist(strcat(handles.assignPath,'NDs.csv'))==2;
-	    NDs = csvread(strcat(handles.assignPath,'NDs.csv'));
+	if exist(strcat(handles.assignPath,'voice_results/.NDs.csv'))==2;
+	    NDs = csvread(strcat(handles.assignPath,'voice_results/.NDs.csv'));
 	    set(handles.n_tied,'String',length(NDs));
-	    delete(strcat(handles.assignPath,'NDs.csv'));
+	    delete(strcat(handles.assignPath,'voice_results/.NDs.csv'));
 	else
 	    set(handles.n_tied,'String','0');
 	end
 
-	if exist(strcat(handles.assignPath,'NAs.csv'))==2
-	    NAs = csvread(strcat(handles.assignPath,'NAs.csv'));
+	if exist(strcat(handles.assignPath,'voice_results/.NAs.csv'))==2
+	    NAs = csvread(strcat(handles.assignPath,'voice_results/.NAs.csv'));
 	    set(handles.n_novel,'String',length(NAs));
-	    delete(strcat(handles.assignPath,'NAs.csv'));
+	    delete(strcat(handles.assignPath,'voice_results/.NAs.csv'));
 	else
 	    set(handles.n_novel,'String','0');
 	end
