@@ -105,9 +105,14 @@ if isunix
 	    %update unusedColors.txt
 	    system(['R --slave --args ' handles.refDiru ' ' handles.pathu ' < ./R/updateColors.r']);
 	    system(['R --slave --args ' handles.pathu ' < ./R/recreateClusters2.r']);
-	end
+    end
 
-	fid = fopen(strcat(handles.path,'/voice_results/.unusedColors.txt'));
+    if exist(strcat(handles.path,'voice_results/.unusedColors.txt'))
+        fid = fopen(strcat(handles.path,'voice_results/.unusedColors.txt'));
+    elseif exist(strcat(handles.path,'.unusedColors.txt'))
+         fid = fopen(strcat(handles.path,'.unusedColors.txt'));
+    end
+    
 	s = textscan(fid,'%s','Delimiter','\n');
 	s = strrep(s{1}(:,1),'"','');
 	set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});

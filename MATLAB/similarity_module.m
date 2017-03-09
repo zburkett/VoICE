@@ -108,7 +108,7 @@ if isunix
 	setenv('DYLD_LIBRARY_PATH', '/usr/local/bin/');
 	system(['R --slave --args' ' ' handles.pathu ' ' handles.fileu ' ' ' < ./R/importFeatureBatch.r']);
 	setenv('PATH', [getenv('PATH') ':/usr/local/bin']);
-	system(['R --slave --args' ' ' strcat(handles.pathu,'.acoustic_data.csv') ' ' [handles.pathu 'voice_results/'] ' ' ' < ./R/getSyllableWavs2.r']);
+	system(['R --slave --args' ' ' strcat(handles.pathu,'.acoustic_data.csv') ' ' handles.pathu ' ' ' < ./R/getSyllableWavs2.r']);
 	pause(.0000001)
 	set(handles.pushbutton2,'BackgroundColor','green');
 	set(handles.text6,'String','WAV files cut. Similarity batch ready to run.');

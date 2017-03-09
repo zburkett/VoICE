@@ -300,8 +300,7 @@ if(.Platform$OS.type=="unix")
 	    }else{
 	        assignedSyntax <- syntax
 	    }
-	
-		assignedSyntax <- out.cluster$mergedSyntax
+
 		save(assignedSyntax,file=paste(Filedir,"voice_results/assigned_complete_workspace.Rdata",sep=""))
 		load(paste(Filedir,"voice_results/assign_workspace.Rdata",sep=""))
 		saveList$out.assign <- assignedSyntax
