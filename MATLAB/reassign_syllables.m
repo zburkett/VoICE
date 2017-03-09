@@ -77,17 +77,20 @@ if isunix
 	end
 
 	if handles.assignRun == 1
+        if ~exist(strcat(handles.path,'.cluster_tables_mat/'))
+            system(['R --slave --args ' handles.pathu ' ' handles.refDiru ' < ./R/finalizeClustersAssignedNDs.r']); %prep for reassignment
+        end
 	    system(['R --slave --args ' handles.pathu ' < ./R/getClusterIDs.r']);
 	    fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters.txt'));
 	    if(fidPupil == -1)
-	        fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters.txt'));
+	        fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters2.txt'));
 	    end
 	    s = textscan(fidPupil,'%s','Delimiter','\n');
 	    sPupil = strrep(s{1}(:,1),'"','');
 	    system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']);
-	    fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters.txt'));
+	    fidTutor = fopen(strcat(handles.refDir,'/voice_results/.usedClusters.txt'));
 	    if(fidTutor == -1)
-	        fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters.txt'));
+	        fidTutor = fopen(strcat(handles.refDir,'/voice_results/.usedClusters2.txt'));
 	    end
 	    s = textscan(fidTutor,'%s','Delimiter','\n');
 	    sTutor = strrep(s{1}(:,1),'"','');
@@ -136,14 +139,14 @@ elseif ispc
 	    system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/getClusterIDs.r']);
 	    fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters.txt'));
 	    if(fidPupil == -1)
-	        fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters.txt'));
+	        fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters2.txt'));
 	    end
 	    s = textscan(fidPupil,'%s','Delimiter','\n');
 	    sPupil = strrep(s{1}(:,1),'"','');
 	    system(['R --slave --args ' char(34) handles.refDir char(34) ' < ./R/getClusterIDs.r']);
 	    fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters.txt'));
 	    if(fidTutor == -1)
-	        fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters.txt'));
+	        fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters2.txt'));
 	    end
 	    s = textscan(fidTutor,'%s','Delimiter','\n');
 	    sTutor = strrep(s{1}(:,1),'"','');
@@ -529,6 +532,7 @@ elseif ispc
 	    close
 	end
 end
+%add files here for hiding or deletion upon completion...
 
 % --- Executes on selection change in popupmenu3.
 function popupmenu3_Callback(hObject, eventdata, handles)
@@ -649,10 +653,10 @@ function popupmenu8_Callback(hObject, eventdata, handles)
 contents = cellstr(get(hObject,'String'));
 missing = contents{get(hObject,'Value')};
 handles.missing = missing;
-if exist(strcat(handles.refDir,'/joined_clusters/',handles.missing,'.wav'),'file')==2
-    [wav, Fs] = wavread(strcat(handles.refDir,'/joined_clusters/',handles.missing,'.wav'));
+if exist(strcat(handles.refDir,'/voice_results/joined_clusters/',handles.missing,'.wav'),'file')==2
+    [wav, Fs] = wavread(strcat(handles.refDir,'/voice_results/joined_clusters/',handles.missing,'.wav'));
 else
-    [wav, Fs] = wavread(strcat(handles.refDir,'/joined_clusters_assigned/',handles.missing,'.wav'));
+    [wav, Fs] = wavread(strcat(handles.refDir,'/voice_results/joined_clusters_assigned/',handles.missing,'.wav'));
 end
 h2=figure();
 PlotSpectrogram(wav,Fs);
@@ -691,7 +695,9 @@ for i = 1:length(fieldnames(reassign(1)))
     fn = fns(i);
     if i == 1
         mkdir(strcat(handles.path,'.reassign/'));
-		system(['attrib +h ' strcat(handles.path,'.reassign/')])
+        if ispc
+            system(['attrib +h ' strcat(handles.path,'.reassign/')])
+        end
     end
     
     dlmwrite(strcat(handles.path,'.reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');

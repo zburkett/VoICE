@@ -15,9 +15,9 @@ if(.Platform$OS.type=="unix")
 	Filedir <- comArgs[1]
 	if(!strsplit(Filedir,"")[[1]][length(strsplit(Filedir,"")[[1]])]=="/"){comArgs[1] <- paste(comArgs[1],"/",sep="")}
 	Filedir <- comArgs[1]
-	if(file.exists(paste(comArgs[1],"workspace.Rdata",sep="")))
+	if(file.exists(paste(comArgs[1],"voice_results/workspace.Rdata",sep="")))
 	{
-		load(paste(comArgs[1],"workspace.Rdata",sep=""))
+		load(paste(comArgs[1],"voice_results/workspace.Rdata",sep=""))
 		if("mergedSyntax" %in% names(out.cluster.tutor))
 		{
 			syntax <- out.cluster.tutor$mergedSyntax
@@ -25,9 +25,9 @@ if(.Platform$OS.type=="unix")
 		{
 			syntax <- out.cluster.tutor$syntax
 		}
-	}else if(file.exists(paste(comArgs[1],"assign_workspace.Rdata",sep="")))
+	}else if(file.exists(paste(comArgs[1],"voice_results/assign_workspace.Rdata",sep="")))
 	{
-		load(paste(comArgs[1],"assign_workspace.Rdata",sep=""))
+		load(paste(comArgs[1],"voice_results/assign_workspace.Rdata",sep=""))
 		syntax <- saveList$out.assign
 	}
 
@@ -44,16 +44,16 @@ if(.Platform$OS.type=="unix")
 	}
 
 	#getClusterWavs
-	if(file.exists(paste(Filedir,"joined_clusters/",sep="")))
+	if(file.exists(paste(Filedir,"voice_results/joined_clusters/",sep="")))
 	{
-		unlink(paste(Filedir,"joined_clusters/",sep=""),recursive=TRUE)
-		dir.create(paste(Filedir,"joined_clusters/",sep=""))
-	}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned/",sep="")))
+		unlink(paste(Filedir,"voice_results/joined_clusters/",sep=""),recursive=TRUE)
+		dir.create(paste(Filedir,"voice_results/joined_clusters/",sep=""))
+	}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep="")))
 	{
-		unlink(paste(comArgs[1],"joined_clusters_assigned/",sep=""),recursive=TRUE)
-		dir.create(paste(comArgs[1],"joined_clusters_assigned/",sep=""))
+		unlink(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep=""),recursive=TRUE)
+		dir.create(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep=""))
 	}else{
-		dir.create(paste(comArgs[1],"joined_clusters_assigned/",sep=""))
+		dir.create(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep=""))
 	}
 
 	Filedir <- gsub(" ","\\\\ ",Filedir)
@@ -61,14 +61,14 @@ if(.Platform$OS.type=="unix")
 	for(group in names(clusterTable))
 	{
 		#print(paste("Joining syllables for cluster: ",group))
-		if(file.exists(paste(comArgs[1],"joined_clusters/",sep="")))
+		if(file.exists(paste(comArgs[1],"voice_results/joined_clusters/",sep="")))
 		{
-			filename <- paste(Filedir,"joined_clusters/",group,".wav",sep="")
-		}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned/",sep="")))
+			filename <- paste(Filedir,"voice_results/joined_clusters/",group,".wav",sep="")
+		}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep="")))
 		{
-			filename <- paste(Filedir,"joined_clusters_assigned/",group,".wav",sep="")
+			filename <- paste(Filedir,"voice_results/joined_clusters_assigned/",group,".wav",sep="")
 		}else{
-			dir.create(paste(comArgs[1],"joined_clusters_assigned/",sep=""))
+			dir.create(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep=""))
 		}
 	
 		namesIn <- rownames(clusterTable[[group]])
@@ -92,12 +92,12 @@ if(.Platform$OS.type=="unix")
 		names <- paste(Filedir,"voice_results/cut_syllables/",names,".wav",sep="")
 	
 		outwav <- paste(filename)
-		if(file.exists(paste(comArgs[1],"joined_clusters/",sep="")))
+		if(file.exists(paste(comArgs[1],"voice_results/joined_clusters/",sep="")))
 		{
-			tempoutwav <- paste(Filedir,"joined_clusters/tempout.wav",sep="")
-		}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned/",sep="")))
+			tempoutwav <- paste(Filedir,"voice_results/joined_clusters/tempout.wav",sep="")
+		}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep="")))
 		{
-			tempoutwav <- paste(Filedir,"joined_clusters_assigned/tempout.wav",sep="")
+			tempoutwav <- paste(Filedir,"voice_results/joined_clusters_assigned/tempout.wav",sep="")
 		}
 	
 		loop <- 0
@@ -107,12 +107,12 @@ if(.Platform$OS.type=="unix")
 		{
 			f1 <- gsub("\\\\ "," ",Filedir)
 			n1 <- gsub("\\\\ "," ",names)
-			if(file.exists(paste(comArgs[1],"joined_clusters/",sep="")))
+			if(file.exists(paste(comArgs[1],"voice_results/joined_clusters/",sep="")))
 			{
-				file.copy(n1,paste(f1,"joined_clusters/",group,".wav",sep=""))
-			}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned/",sep="")))
+				file.copy(n1,paste(f1,"voice_results/joined_clusters/",group,".wav",sep=""))
+			}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep="")))
 			{
-				file.copy(n1,paste(f1,"joined_clusters_assigned/",group,".wav",sep=""))
+				file.copy(n1,paste(f1,"voice_results/joined_clusters_assigned/",group,".wav",sep=""))
 			}
 		}
 	
@@ -132,37 +132,37 @@ if(.Platform$OS.type=="unix")
 					loop <- loop+1
 				}
 			
-				if(file.exists(paste(comArgs[1],"joined_clusters/",sep="")))
+				if(file.exists(paste(comArgs[1],"voice_results/joined_clusters/",sep="")))
 				{
-					file.copy(gsub("\\\\ "," ",filename),paste(gsub("\\\\ "," ",Filedir),"joined_clusters/tempout.wav",sep=""),overwrite=TRUE)
-				}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned/",sep="")))
+					file.copy(gsub("\\\\ "," ",filename),paste(gsub("\\\\ "," ",Filedir),"voice_results/joined_clusters/tempout.wav",sep=""),overwrite=TRUE)
+				}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep="")))
 				{
-					file.copy(gsub("\\\\ "," ",filename),paste(gsub("\\\\ "," ",Filedir),"joined_clusters_assigned/tempout.wav",sep=""),overwrite=TRUE)
+					file.copy(gsub("\\\\ "," ",filename),paste(gsub("\\\\ "," ",Filedir),"voice_results/joined_clusters_assigned/tempout.wav",sep=""),overwrite=TRUE)
 				}
 			
 			}
-			if(file.exists(paste(Filedir,"joined_clusters/",sep="")))
+			if(file.exists(paste(Filedir,"voice_results/joined_clusters/",sep="")))
 			{
-				unlink(paste(Filedir,"joined_clusters/tempout.wav",sep=""))
-			}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned/",sep="")))
+				unlink(paste(Filedir,"voice_results/joined_clusters/tempout.wav",sep=""))
+			}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep="")))
 			{
-				unlink(paste(Filedir,"joined_clusters_assigned/tempout.wav",sep=""))
+				unlink(paste(Filedir,"voice_results/joined_clusters_assigned/tempout.wav",sep=""))
 			}
 		}
 	}
 	
 	Filedir <- gsub("\\\\ "," ",Filedir)
 	#sortSyllableWavs
-	if(file.exists(paste(comArgs[1],"sorted_syllables/",sep="")))
+	if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables/",sep="")))
 	{
-		unlink(paste(comArgs[1],"sorted_syllables/",sep=""),recursive=TRUE)
-		dir.create(paste(comArgs[1],"sorted_syllables/",sep=""))
-	}else if(file.exists(paste(comArgs[1],"sorted_syllables_assigned/",sep="")))
+		unlink(paste(comArgs[1],"voice_results/sorted_syllables/",sep=""),recursive=TRUE)
+		dir.create(paste(comArgs[1],"voice_results/sorted_syllables/",sep=""))
+	}else if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables_assigned/",sep="")))
 	{
-		unlink(paste(comArgs[1],"sorted_syllables_assigned/",sep=""),recursive=TRUE)
-		dir.create(paste(comArgs[1],"sorted_syllables_assigned/",sep=""))
+		unlink(paste(comArgs[1],"voice_results/sorted_syllables_assigned/",sep=""),recursive=TRUE)
+		dir.create(paste(comArgs[1],"voice_results/sorted_syllables_assigned/",sep=""))
 	}else{
-		dir.create(paste(comArgs[1],"sorted_syllables_assigned/",sep=""))
+		dir.create(paste(comArgs[1],"voice_results/sorted_syllables_assigned/",sep=""))
 	}
 
 	names(syntax) <- grep(".",names(syntax))
@@ -190,43 +190,43 @@ if(.Platform$OS.type=="unix")
 
 		for (wav in file2)
 		{
-			if(file.exists(paste(comArgs[1],"sorted_syllables/",sep="")))
+			if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables/",sep="")))
 			{
-				if (!file.exists((paste(comArgs[1],"sorted_syllables/",name,sep=''))))
+				if (!file.exists((paste(comArgs[1],"voice_results/sorted_syllables/",name,sep=''))))
 				{
-					dir.create(paste(comArgs[1],"sorted_syllables/",name,sep=''))
+					dir.create(paste(comArgs[1],"voice_results/sorted_syllables/",name,sep=''))
 				}
-			}else if(file.exists(paste(comArgs[1],"sorted_syllables_assigned/",sep='')))
+			}else if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables_assigned/",sep='')))
 			{
-				if (!file.exists((paste(comArgs[1],"sorted_syllables_assigned/",name,sep=''))))
+				if (!file.exists((paste(comArgs[1],"voice_results/sorted_syllables_assigned/",name,sep=''))))
 				{
-					dir.create(paste(comArgs[1],"sorted_syllables_assigned/",name,sep=''))
+					dir.create(paste(comArgs[1],"voice_results/sorted_syllables_assigned/",name,sep=''))
 				}
 			}
-			if(file.exists(paste(comArgs[1],"sorted_syllables/",sep="")))
+			if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables/",sep="")))
 			{
-				file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables/",name,sep=''))
-			}else if(file.exists(paste(comArgs[1],"sorted_syllables_assigned/",sep="")))
+				file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"voice_results/sorted_syllables/",name,sep=''))
+			}else if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables_assigned/",sep="")))
 			{
-				file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables_assigned/",name,sep=''))
+				file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"voice_results/sorted_syllables_assigned/",name,sep=''))
 			}
 		}		
 	}
 
 	#clusterAcousticsOut
 
-	if(file.exists(paste(comArgs[1],'cluster_tables/',sep="")))
+	if(file.exists(paste(comArgs[1],'voice_results/cluster_tables/',sep="")))
 	{
-		unlink(paste(comArgs[1],'cluster_tables/',sep=""),recursive=TRUE)
+		unlink(paste(comArgs[1],'voice_results/cluster_tables/',sep=""),recursive=TRUE)
 		unlink(paste(comArgs[1],'.cluster_tables_mat',sep=""),recursive=TRUE)
-		dir.create(paste(comArgs[1],"cluster_tables/",sep=''))
+		dir.create(paste(comArgs[1],"voice_results/cluster_tables/",sep=''))
     	dir.create(paste(comArgs[1],".cluster_tables_mat/",sep=''))
 		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".cluster_tables_mat/",sep='')))}
 			
     	for (cluster in names(clusterTable))
 		{
 			filename = paste(cluster,sep='',".csv")
-			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(comArgs[1],'cluster_tables/',filename,sep=""))
+			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(comArgs[1],'voice_results/cluster_tables/',filename,sep=""))
    		    write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(comArgs[1],'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
 	
@@ -234,7 +234,7 @@ if(.Platform$OS.type=="unix")
 		distM=dist(input,method='euclidean')
 		out = flashClust(as.dist(distM),method='average')
 
-		pdf(file=paste(comArgs[1],"cluster_dendrogram.pdf",sep=""))
+		pdf(file=paste(comArgs[1],"voice_results/cluster_dendrogram.pdf",sep=""))
 		if("mergedSyntax" %in% names(out.cluster.tutor))
 		{
 			plotDendroAndColors(dendro=out,colors=cbind(out.cluster.tutor$syntax,out.cluster.tutor$mergedSyntax),dendroLabels=FALSE,groupLabels=c("unmerged","merged"))
@@ -245,15 +245,15 @@ if(.Platform$OS.type=="unix")
 			plotDendroAndColors(dendro=out,colors=cbind(out.cluster.tutor$syntax),dendroLabels=FALSE,groupLabels="unmerged")
 			out.cluster.tutor$usedColors <- unique(out.cluster.tutor$syntax)
 		}
-		save(out.cluster.tutor,file=paste(comArgs[1],"workspace.Rdata",sep=""))
-		write.table(t(colors()[!colors()%in%out.cluster.tutor$usedColors]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+		save(out.cluster.tutor,file=paste(comArgs[1],"voice_results/workspace.Rdata",sep=""))
+		write.table(t(colors()[!colors()%in%out.cluster.tutor$usedColors]),paste(comArgs[1],'voice_results/.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
 		z=dev.off()
-	}else if(file.exists(paste(comArgs[1],'cluster_tables_assigned',sep="")))
+	}else if(file.exists(paste(comArgs[1],'voice_results/cluster_tables_assigned',sep="")))
 	{
 		options(warn=-1)
-		unlink(paste(comArgs[1],'cluster_tables_assigned/',sep=""),recursive=TRUE)
+		unlink(paste(comArgs[1],'voice_results/cluster_tables_assigned/',sep=""),recursive=TRUE)
 		unlink(paste(comArgs[1],'.cluster_tables_mat',sep=""),recursive=TRUE)
-		dir.create(paste(comArgs[1],"cluster_tables_assigned/",sep=''))
+		dir.create(paste(comArgs[1],"voice_results/cluster_tables_assigned/",sep=''))
     	dir.create(paste(comArgs[1],".cluster_tables_mat/",sep=''))
 		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".cluster_tables_mat/",sep='')))}
 			
@@ -264,8 +264,8 @@ if(.Platform$OS.type=="unix")
    		    write.table(as.data.frame(clusterTable[[cluster]][,2]), file=paste(comArgs[1],'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
         assignedSyntax <- syntax
-		save(assignedSyntax,file=paste(comArgs[1],"assigned_complete_workspace.Rdata",sep=""))
-		write.table(t(colors()[!colors()%in%assignedSyntax]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+		save(assignedSyntax,file=paste(comArgs[1],"voice_results/assigned_complete_workspace.Rdata",sep=""))
+		write.table(t(colors()[!colors()%in%assignedSyntax]),paste(comArgs[1],'voice_results/.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
 	}
 }else if (.Platform$OS.type=="windows")
 {
@@ -282,9 +282,9 @@ if(.Platform$OS.type=="unix")
 	Filedir <- comArgs[1]
 	if(!strsplit(Filedir,"")[[1]][length(strsplit(Filedir,"")[[1]])]=="/"){comArgs[1] <- paste(comArgs[1],"/",sep="")}
 	Filedir <- comArgs[1]
-	if(file.exists(paste(comArgs[1],"workspace.Rdata",sep="")))
+	if(file.exists(paste(comArgs[1],"voice_results/workspace.Rdata",sep="")))
 	{
-		load(paste(comArgs[1],"workspace.Rdata",sep=""))
+		load(paste(comArgs[1],"voice_results/workspace.Rdata",sep=""))
 		if("mergedSyntax" %in% names(out.cluster.tutor))
 		{
 			syntax <- out.cluster.tutor$mergedSyntax
@@ -292,9 +292,9 @@ if(.Platform$OS.type=="unix")
 		{
 			syntax <- out.cluster.tutor$syntax
 		}
-	}else if(file.exists(paste(comArgs[1],"assign_workspace.Rdata",sep="")))
+	}else if(file.exists(paste(comArgs[1],"voice_results/assign_workspace.Rdata",sep="")))
 	{
-		load(paste(comArgs[1],"assign_workspace.Rdata",sep=""))
+		load(paste(comArgs[1],"voice_results/assign_workspace.Rdata",sep=""))
 		syntax <- saveList$out.assign
 	}
 
@@ -311,16 +311,16 @@ if(.Platform$OS.type=="unix")
 	}
 
 	#getClusterWavs
-	if(file.exists(paste(Filedir,"joined_clusters/",sep="")))
+	if(file.exists(paste(Filedir,"voice_results/joined_clusters/",sep="")))
 	{
-		unlink(paste(Filedir,"joined_clusters/",sep=""),recursive=TRUE)
-		dir.create(paste(Filedir,"joined_clusters/",sep=""))
-	}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned/",sep="")))
+		unlink(paste(Filedir,"voice_results/joined_clusters/",sep=""),recursive=TRUE)
+		dir.create(paste(Filedir,"voice_results/joined_clusters/",sep=""))
+	}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep="")))
 	{
-		unlink(paste(comArgs[1],"joined_clusters_assigned/",sep=""),recursive=TRUE)
-		dir.create(paste(comArgs[1],"joined_clusters_assigned/",sep=""))
+		unlink(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep=""),recursive=TRUE)
+		dir.create(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep=""))
 	}else{
-		dir.create(paste(comArgs[1],"joined_clusters_assigned/",sep=""))
+		dir.create(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep=""))
 	}
 
 	#Filedir <- gsub(" ","\\\\ ",Filedir)
@@ -328,14 +328,14 @@ if(.Platform$OS.type=="unix")
 	for(group in names(clusterTable))
 	{
 		#print(paste("Joining syllables for cluster: ",group))
-		if(file.exists(paste(comArgs[1],"joined_clusters",sep="")))
+		if(file.exists(paste(comArgs[1],"voice_results/joined_clusters",sep="")))
 		{
-			filename <- paste(Filedir,"joined_clusters/",group,".wav",sep="")
-		}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned",sep="")))
+			filename <- paste(Filedir,"voice_results/joined_clusters/",group,".wav",sep="")
+		}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned",sep="")))
 		{
-			filename <- paste(Filedir,"joined_clusters_assigned/",group,".wav",sep="")
+			filename <- paste(Filedir,"voice_results/joined_clusters_assigned/",group,".wav",sep="")
 		}else{
-			dir.create(paste(comArgs[1],"joined_clusters_assigned/",sep=""))
+			dir.create(paste(comArgs[1],"voice_results/joined_clusters_assigned/",sep=""))
 		}
 	
 		namesIn <- rownames(clusterTable[[group]])
@@ -359,12 +359,12 @@ if(.Platform$OS.type=="unix")
 		names <- paste(Filedir,"voice_results/cut_syllables/",names,".wav",sep="")
 	
 		outwav <- paste(filename)
-		if(file.exists(paste(comArgs[1],"joined_clusters",sep="")))
+		if(file.exists(paste(comArgs[1],"voice_results/joined_clusters",sep="")))
 		{
-			tempoutwav <- paste(Filedir,"joined_clusters/tempout.wav",sep="")
-		}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned",sep="")))
+			tempoutwav <- paste(Filedir,"voice_results/joined_clusters/tempout.wav",sep="")
+		}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned",sep="")))
 		{
-			tempoutwav <- paste(Filedir,"joined_clusters_assigned/tempout.wav",sep="")
+			tempoutwav <- paste(Filedir,"voice_results/joined_clusters_assigned/tempout.wav",sep="")
 		}
 	
 		loop <- 0
@@ -374,12 +374,12 @@ if(.Platform$OS.type=="unix")
 		{
 			#f1 <- gsub("\\\\ "," ",Filedir)
 			#n1 <- gsub("\\\\ "," ",names)
-			if(file.exists(paste(comArgs[1],"joined_clusters",sep="")))
+			if(file.exists(paste(comArgs[1],"voice_results/joined_clusters",sep="")))
 			{
-				file.copy(names[1],paste(Filedir,"joined_clusters/",group,".wav",sep=""))
-			}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned",sep="")))
+				file.copy(names[1],paste(Filedir,"voice_results/joined_clusters/",group,".wav",sep=""))
+			}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned",sep="")))
 			{
-				file.copy(names[1],paste(Filedir,"joined_clusters_assigned/",group,".wav",sep=""))
+				file.copy(names[1],paste(Filedir,"voice_results/joined_clusters_assigned/",group,".wav",sep=""))
 			}
 		}
 	
@@ -399,37 +399,37 @@ if(.Platform$OS.type=="unix")
 					loop <- loop+1
 				}
 			
-				if(file.exists(paste(comArgs[1],"joined_clusters",sep="")))
+				if(file.exists(paste(comArgs[1],"voice_results/joined_clusters",sep="")))
 				{
-					file.copy(filename,paste(Filedir,"joined_clusters/tempout.wav",sep=""),overwrite=TRUE)
-				}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned",sep="")))
+					file.copy(filename,paste(Filedir,"voice_results/joined_clusters/tempout.wav",sep=""),overwrite=TRUE)
+				}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned",sep="")))
 				{
-					file.copy(filename,paste(Filedir,"joined_clusters_assigned/tempout.wav",sep=""),overwrite=TRUE)
+					file.copy(filename,paste(Filedir,"voice_results/joined_clusters_assigned/tempout.wav",sep=""),overwrite=TRUE)
 				}
 			
 			}
-			if(file.exists(paste(Filedir,"joined_clusters",sep="")))
+			if(file.exists(paste(Filedir,"voice_results/joined_clusters",sep="")))
 			{
-				unlink(paste(Filedir,"joined_clusters/tempout.wav",sep=""))
-			}else if(file.exists(paste(comArgs[1],"joined_clusters_assigned",sep="")))
+				unlink(paste(Filedir,"voice_results/joined_clusters/tempout.wav",sep=""))
+			}else if(file.exists(paste(comArgs[1],"voice_results/joined_clusters_assigned",sep="")))
 			{
-				unlink(paste(Filedir,"joined_clusters_assigned/tempout.wav",sep=""))
+				unlink(paste(Filedir,"voice_results/joined_clusters_assigned/tempout.wav",sep=""))
 			}
 		}
 	}
 	
 	#Filedir <- gsub("\\\\ "," ",Filedir)
 	#sortSyllableWavs
-	if(file.exists(paste(comArgs[1],"sorted_syllables",sep="")))
+	if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables",sep="")))
 	{
-		unlink(paste(comArgs[1],"sorted_syllables",sep=""),recursive=TRUE)
-		dir.create(paste(comArgs[1],"sorted_syllables/",sep=""))
-	}else if(file.exists(paste(comArgs[1],"sorted_syllables_assigned",sep="")))
+		unlink(paste(comArgs[1],"voice_results/sorted_syllables",sep=""),recursive=TRUE)
+		dir.create(paste(comArgs[1],"voice_results/sorted_syllables/",sep=""))
+	}else if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables_assigned",sep="")))
 	{
-		unlink(paste(comArgs[1],"sorted_syllables_assigned",sep=""),recursive=TRUE)
-		dir.create(paste(comArgs[1],"sorted_syllables_assigned/",sep=""))
+		unlink(paste(comArgs[1],"voice_results/sorted_syllables_assigned",sep=""),recursive=TRUE)
+		dir.create(paste(comArgs[1],"voice_results/sorted_syllables_assigned/",sep=""))
 	}else{
-		dir.create(paste(comArgs[1],"sorted_syllables_assigned/",sep=""))
+		dir.create(paste(comArgs[1],"voice_results/sorted_syllables_assigned/",sep=""))
 	}
 
 	names(syntax) <- grep(".",names(syntax))
@@ -457,42 +457,42 @@ if(.Platform$OS.type=="unix")
 
 		for (wav in file2)
 		{
-			if(file.exists(paste(comArgs[1],"sorted_syllables",sep="")))
+			if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables",sep="")))
 			{
-				if (!file.exists((paste(comArgs[1],"sorted_syllables/",name,sep=''))))
+				if (!file.exists((paste(comArgs[1],"voice_results/sorted_syllables/",name,sep=''))))
 				{
-					dir.create(paste(comArgs[1],"sorted_syllables/",name,sep=''))
+					dir.create(paste(comArgs[1],"voice_results/sorted_syllables/",name,sep=''))
 				}
-			}else if(file.exists(paste(comArgs[1],"sorted_syllables_assigned",sep='')))
+			}else if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables_assigned",sep='')))
 			{
-				if (!file.exists((paste(comArgs[1],"sorted_syllables_assigned/",name,sep=''))))
+				if (!file.exists((paste(comArgs[1],"voice_results/sorted_syllables_assigned/",name,sep=''))))
 				{
-					dir.create(paste(comArgs[1],"sorted_syllables_assigned/",name,sep=''))
+					dir.create(paste(comArgs[1],"voice_results/sorted_syllables_assigned/",name,sep=''))
 				}
 			}
-			if(file.exists(paste(comArgs[1],"sorted_syllables",sep="")))
+			if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables",sep="")))
 			{
-				file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables/",name,sep=''))
-			}else if(file.exists(paste(comArgs[1],"sorted_syllables_assigned",sep="")))
+				file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"voice_results/sorted_syllables/",name,sep=''))
+			}else if(file.exists(paste(comArgs[1],"voice_results/sorted_syllables_assigned",sep="")))
 			{
-				file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"sorted_syllables_assigned/",name,sep=''))
+				file.copy(from=paste(comArgs[1],"voice_results/cut_syllables/",wav,sep=''),to=paste(comArgs[1],"voice_results/sorted_syllables_assigned/",name,sep=''))
 			}
 		}		
 	}
 	
 	#clusterAcousticsOut
-	if(file.exists(paste(comArgs[1],'cluster_tables',sep="")))
+	if(file.exists(paste(comArgs[1],'voice_results/cluster_tables',sep="")))
 	{
-		unlink(paste(comArgs[1],'cluster_tables',sep=""),recursive=TRUE)
+		unlink(paste(comArgs[1],'voice_results/cluster_tables',sep=""),recursive=TRUE)
 		unlink(paste(comArgs[1],'.cluster_tables_mat',sep=""),recursive=TRUE)
-		dir.create(paste(comArgs[1],"cluster_tables/",sep=''))
+		dir.create(paste(comArgs[1],"voice_results/cluster_tables/",sep=''))
     	dir.create(paste(comArgs[1],".cluster_tables_mat/",sep=''))
 		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".cluster_tables_mat/",sep='')))}
 			
     	for (cluster in names(clusterTable))
 		{
 			filename = paste(cluster,sep='',".csv")
-			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(comArgs[1],'cluster_tables/',filename,sep=""))
+			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(comArgs[1],'voice_results/cluster_tables/',filename,sep=""))
    		    write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(comArgs[1],'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
 	
@@ -500,7 +500,7 @@ if(.Platform$OS.type=="unix")
 		distM=dist(input,method='euclidean')
 		out = hclust(as.dist(distM),method='average')
 
-		pdf(file=paste(comArgs[1],"cluster_dendrogram.pdf",sep=""))
+		pdf(file=paste(comArgs[1],"voice_results/cluster_dendrogram.pdf",sep=""))
 		if("mergedSyntax" %in% names(out.cluster.tutor))
 		{
 			plotDendroAndColors(dendro=out,colors=cbind(out.cluster.tutor$syntax,out.cluster.tutor$mergedSyntax),dendroLabels=FALSE,groupLabels=c("unmerged","merged"))
@@ -511,27 +511,27 @@ if(.Platform$OS.type=="unix")
 			plotDendroAndColors(dendro=out,colors=cbind(out.cluster.tutor$syntax),dendroLabels=FALSE,groupLabels="unmerged")
 			out.cluster.tutor$usedColors <- unique(out.cluster.tutor$syntax)
 		}
-		save(out.cluster.tutor,file=paste(comArgs[1],"workspace.Rdata",sep=""))
-		write.table(t(colors()[!colors()%in%out.cluster.tutor$usedColors]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
-		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.unusedColors.txt',sep="")))}
+		save(out.cluster.tutor,file=paste(comArgs[1],"voice_results/workspace.Rdata",sep=""))
+		write.table(t(colors()[!colors()%in%out.cluster.tutor$usedColors]),paste(comArgs[1],'voice_results/.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'voice_results/.unusedColors.txt',sep="")))}
 		z=dev.off()
-	}else if(file.exists(paste(comArgs[1],'cluster_tables_assigned',sep="")))
+	}else if(file.exists(paste(comArgs[1],'voice_results/cluster_tables_assigned',sep="")))
 	{
-		unlink(paste(comArgs[1],'cluster_tables_assigned',sep=""),recursive=TRUE)
+		unlink(paste(comArgs[1],'voice_results/cluster_tables_assigned',sep=""),recursive=TRUE)
 		unlink(paste(comArgs[1],'.cluster_tables_mat',sep=""),recursive=TRUE)
-		dir.create(paste(comArgs[1],"cluster_tables_assigned/",sep=''))
+		dir.create(paste(comArgs[1],"voice_results/cluster_tables_assigned/",sep=''))
     	dir.create(paste(comArgs[1],".cluster_tables_mat/",sep=''))
 		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".cluster_tables_mat/",sep='')))}
 			
     	for (cluster in names(clusterTable))
 		{
 			filename = paste(cluster,sep='',".csv")
-			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(comArgs[1],'cluster_tables_assigned/',filename,sep=""))
+			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(comArgs[1],'voice_results/cluster_tables_assigned/',filename,sep=""))
    		    write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(comArgs[1],'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
         assignedSyntax <- syntax
-		save(assignedSyntax,file=paste(comArgs[1],"assigned_complete_workspace.Rdata",sep=""))
-		write.table(t(colors()[!colors()%in%assignedSyntax]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
-		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.unusedColors.txt',sep="")))}
+		save(assignedSyntax,file=paste(comArgs[1],"voice_results/assigned_complete_workspace.Rdata",sep=""))
+		write.table(t(colors()[!colors()%in%assignedSyntax]),paste(comArgs[1],'voice_results/.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'voice_results/.unusedColors.txt',sep="")))}
 	}
 }

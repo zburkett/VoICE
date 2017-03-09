@@ -32,7 +32,7 @@ by <- comArgs[5]
  
 #import and clean up data
 Filedir.in <- Filedir
-Filedir <- paste(Filedir,"unassigned_for_cluster/similarity_batch_self.csv",sep="")
+Filedir <- paste(Filedir,"voice_results/unassigned_for_cluster/similarity_batch_self.csv",sep="")
 input <- read.csv(Filedir,header=FALSE)
 input <- input[,1:6]
 colnames(input) <- c("Sound 1", "Sound 2","Similarity","Accuracy","Seq. Match","globalsim")
@@ -45,8 +45,8 @@ loop=0
 for(val in unique(input[,2]))
 {
 	loop=loop+1
-	input[,2][input[,2]==val]=list.files(paste(Filedir.in,"unassigned_for_cluster",sep=""))[loop]
-	input[,1][input[,1]==val]=list.files(paste(Filedir.in,"unassigned_for_cluster",sep=""))[loop]
+	input[,2][input[,2]==val]=list.files(paste(Filedir.in,"voice_results/unassigned_for_cluster",sep=""))[loop]
+	input[,1][input[,1]==val]=list.files(paste(Filedir.in,"voice_results/unassigned_for_cluster",sep=""))[loop]
 }
  
 #Create global similarity matrix
@@ -176,8 +176,8 @@ for(thresh in merge.range)
 }
 close(pb)
 outlist = list(IGS.out=IGS.out,gsMatrix=input)
-save(outlist,file=paste(Filedir.in,".igs_assigned.Rdata",sep=""))
-if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir.in,".igs_assigned.Rdata",sep="")))}
+save(outlist,file=paste(Filedir.in,"voice_results/.igs_assigned.Rdata",sep=""))
+if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir.in,"voice_results/.igs_assigned.Rdata",sep="")))}
 
 
  

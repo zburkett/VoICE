@@ -5,7 +5,7 @@ if(file.exists(paste(comArgs[1],"/voice_results/workspace.Rdata",sep="")))
 {
 	load(paste(comArgs[1],"/voice_results/workspace.Rdata",sep=""))
 	clusterIDs <- gsub("ME","",names(out.cluster.tutor$eigensyls))
-	write.table(clusterIDs,file=paste(comArgs[1],"/voice_results/.usedClusters2.txt",sep=""),row.names=FALSE,col.names=FALSE)
+	write.table(clusterIDs,file=paste(comArgs[1],"/voice_results/.usedClusters.txt",sep=""),row.names=FALSE,col.names=FALSE)
 }else if(file.exists(paste(comArgs[1],"voice_results/assign_workspace.Rdata",sep="")))
 {
 	load(paste(comArgs[1],"/voice_results/assign_workspace.Rdata",sep=""))

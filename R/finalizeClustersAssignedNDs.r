@@ -11,7 +11,7 @@ if(.Platform$OS.type=="unix")
 	suppressMessages(library(gdata))
 	options(warn=-1)
 
-	load(paste(Filedir,"assign_workspace.Rdata",sep=""))
+	load(paste(Filedir,"voice_results/assign_workspace.Rdata",sep=""))
 
 	originalData <- read.csv(paste(Filedir,".acoustic_data.csv",sep=""),header=TRUE)
 	originalData <- originalData[,-1]
@@ -46,19 +46,19 @@ if(.Platform$OS.type=="unix")
 		}
 	
 		#getClusterWavs
-		if(file.exists(paste(Filedir,"joined_clusters_assigned/",sep="")))
+		if(file.exists(paste(Filedir,"voice_results/joined_clusters_assigned/",sep="")))
 		{
-			unlink(paste(Filedir,"joined_clusters_assigned/",sep=""),recursive=TRUE)
+			unlink(paste(Filedir,"voice_results/joined_clusters_assigned/",sep=""),recursive=TRUE)
 		}
 	
-		dir.create(paste(Filedir,"joined_clusters_assigned/",sep=""))
+		dir.create(paste(Filedir,"voice_results/joined_clusters_assigned/",sep=""))
 	
 		Filedir <- gsub(" ","\\\\ ",Filedir)
 	
 		for(group in names(clusterTable))
 		{
 			#print(paste("Joining syllables for cluster: ",group))
-			filename <- paste(Filedir,"joined_clusters_assigned/",group,".wav",sep="")
+			filename <- paste(Filedir,"voice_results/joined_clusters_assigned/",group,".wav",sep="")
 			namesIn <- rownames(clusterTable[[group]])
 			names <- vector()
 			
@@ -79,7 +79,7 @@ if(.Platform$OS.type=="unix")
 			names <- paste(Filedir,"voice_results/cut_syllables/",names,".wav",sep="")
 		
 			outwav <- paste(filename)
-			tempoutwav <- paste(Filedir,"joined_clusters_assigned/tempout.wav",sep="")
+			tempoutwav <- paste(Filedir,"voice_results/joined_clusters_assigned/tempout.wav",sep="")
 			loop <- 0
 			tot <- length(names)-1
 		
@@ -87,7 +87,7 @@ if(.Platform$OS.type=="unix")
 			{
 				names <- gsub("\\\\ "," ",names)
 				Fdir2 <- gsub("\\\\ "," ",Filedir)
-				file.copy(names,paste(Fdir2,"joined_clusters_assigned/",group,".wav",sep=""))
+				file.copy(names,paste(Fdir2,"voice_results/joined_clusters_assigned/",group,".wav",sep=""))
 			}
 		
 			if(length(names)>1)
@@ -105,19 +105,19 @@ if(.Platform$OS.type=="unix")
 						system(paste("sox",names[1],names[2],filename))
 						loop <- loop+1
 					}
-					file.copy(gsub("\\\\ "," ",filename),paste(gsub("\\\\ "," ",Filedir),"joined_clusters_assigned/tempout.wav",sep=""),overwrite=TRUE)
+					file.copy(gsub("\\\\ "," ",filename),paste(gsub("\\\\ "," ",Filedir),"voice_results/joined_clusters_assigned/tempout.wav",sep=""),overwrite=TRUE)
 				}
-				unlink(paste(Filedir,"joined_clusters_assigned/tempout.wav",sep=""))
+				unlink(paste(Filedir,"voice_results/joined_clusters_assigned/tempout.wav",sep=""))
 			}
 		}
 	
 		Filedir <- gsub("\\\\ "," ",Filedir)
 		#sortSyllableWavs
-		if(file.exists(paste(Filedir,"sorted_syllables_assigned/",sep="")))
+		if(file.exists(paste(Filedir,"voice_results/sorted_syllables_assigned/",sep="")))
 		{
-			unlink(paste(Filedir,"sorted_syllables_assigned/",sep=""),recursive=TRUE)
+			unlink(paste(Filedir,"voice_results/sorted_syllables_assigned/",sep=""),recursive=TRUE)
 		}
-		dir.create(paste(Filedir,"sorted_syllables_assigned/",sep=""))
+		dir.create(paste(Filedir,"voice_results/sorted_syllables_assigned/",sep=""))
 	
 		names(syntax) <- grep(".",names(syntax))
 		syntax[is.na(syntax)] <- "none"
@@ -141,20 +141,20 @@ if(.Platform$OS.type=="unix")
 	
 			for (wav in file2)
 			{
-				if (!file.exists((paste(Filedir,"sorted_syllables_assigned/",name,sep=''))))
+				if (!file.exists((paste(Filedir,"voice_results/sorted_syllables_assigned/",name,sep=''))))
 				{
-					dir.create(paste(Filedir,"sorted_syllables_assigned/",name,sep=''))
+					dir.create(paste(Filedir,"voice_results/sorted_syllables_assigned/",name,sep=''))
 				}
 			
-				file.copy(from=paste(Filedir,"voice_results/cut_syllables/",wav,sep=''),to=paste(Filedir,"sorted_syllables_assigned/",name,sep=''))
+				file.copy(from=paste(Filedir,"voice_results/cut_syllables/",wav,sep=''),to=paste(Filedir,"voice_results/sorted_syllables_assigned/",name,sep=''))
 			}		
 		}
 	
 		#clusterAcousticsOut
 	
-		if(file.exists(paste(Filedir,'cluster_tables_assigned/',sep="")))
+		if(file.exists(paste(Filedir,'voice_results/cluster_tables_assigned/',sep="")))
 		{
-			unlink(paste(Filedir,'cluster_tables_assigned/',sep=""),recursive=TRUE)
+			unlink(paste(Filedir,'voice_results/cluster_tables_assigned/',sep=""),recursive=TRUE)
 		}
 	
 		if(file.exists(paste(Filedir,'.cluster_tables_mat/',sep="")))
@@ -163,24 +163,24 @@ if(.Platform$OS.type=="unix")
 		}
 	
 		dir.create(paste(Filedir,".cluster_tables_mat/",sep=''))	
-		dir.create(paste(Filedir,"cluster_tables_assigned/",sep=''))
+		dir.create(paste(Filedir,"voice_results/cluster_tables_assigned/",sep=''))
 		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir,".cluster_tables_mat/",sep='')))}
 	
 		for (cluster in names(clusterTable))
 		{
 			filename = paste(cluster,sep='',".csv")
-			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(Filedir,'cluster_tables_assigned/',filename,sep=""))
+			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(Filedir,'voice_results/cluster_tables_assigned/',filename,sep=""))
 			write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
 	
-		load(paste(refDir,"/workspace.Rdata",sep=""))
+		load(paste(refDir,"/voice_results/workspace.Rdata",sep=""))
 		usedColors <- unique(c(out.cluster.tutor$usedColors,saveList$out.assign))
 		write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
 	
 		assignedSyntax <- saveList$out.assign
 	
-		save(saveList,file=paste(Filedir,"assign_workspace.Rdata",sep=""))
-		save(assignedSyntax,file=paste(Filedir,"assigned_complete_workspace.Rdata",sep=""))
+		save(saveList,file=paste(Filedir,"voice_results/assign_workspace.Rdata",sep=""))
+		save(assignedSyntax,file=paste(Filedir,"voice_results/assigned_complete_workspace.Rdata",sep=""))
 }else if (.Platform$OS.type=="windows")
 {
 	comArgs <- commandArgs(T)
@@ -192,7 +192,7 @@ if(.Platform$OS.type=="unix")
 	suppressMessages(library(gdata))
 	options(warn=-1)
 
-	load(paste(Filedir,"assign_workspace.Rdata",sep=""))
+	load(paste(Filedir,"voice_results/assign_workspace.Rdata",sep=""))
 
 	originalData <- read.csv(paste(Filedir,".acoustic_data.csv",sep=""),header=TRUE)
 	originalData <- originalData[,-1]
@@ -227,19 +227,19 @@ if(.Platform$OS.type=="unix")
 		}
 	
 		#getClusterWavs
-		if(file.exists(paste(Filedir,"joined_clusters_assigned/",sep="")))
+		if(file.exists(paste(Filedir,"voice_results/joined_clusters_assigned/",sep="")))
 		{
-			unlink(paste(Filedir,"joined_clusters_assigned/",sep=""),recursive=TRUE)
+			unlink(paste(Filedir,"voice_results/joined_clusters_assigned/",sep=""),recursive=TRUE)
 		}
 	
-		dir.create(paste(Filedir,"joined_clusters_assigned/",sep=""))
+		dir.create(paste(Filedir,"voice_results/joined_clusters_assigned/",sep=""))
 	
 		#Filedir <- gsub(" ","\\\\ ",Filedir)
 	
 		for(group in names(clusterTable))
 		{
 			#print(paste("Joining syllables for cluster: ",group))
-			filename <- paste(Filedir,"joined_clusters_assigned/",group,".wav",sep="")
+			filename <- paste(Filedir,"voice_results/joined_clusters_assigned/",group,".wav",sep="")
 			namesIn <- rownames(clusterTable[[group]])
 			names <- vector()
 			
@@ -260,7 +260,7 @@ if(.Platform$OS.type=="unix")
 			names <- paste(Filedir,"voice_results/cut_syllables/",names,".wav",sep="")
 		
 			outwav <- paste(filename)
-			tempoutwav <- paste(Filedir,"joined_clusters_assigned/tempout.wav",sep="")
+			tempoutwav <- paste(Filedir,"voice_results/joined_clusters_assigned/tempout.wav",sep="")
 			loop <- 0
 			tot <- length(names)-1
 		
@@ -268,7 +268,7 @@ if(.Platform$OS.type=="unix")
 			{
 				#names <- gsub("\\\\ "," ",names)
 				#Fdir2 <- gsub("\\\\ "," ",Filedir)
-				file.copy(names,paste(Filedir,"joined_clusters_assigned/",group,".wav",sep=""))
+				file.copy(names,paste(Filedir,"voice_results/joined_clusters_assigned/",group,".wav",sep=""))
 			}
 		
 			if(length(names)>1)
@@ -286,19 +286,19 @@ if(.Platform$OS.type=="unix")
 						system(paste("sox",dQuote(names[1]),dQuote(names[2]),dQuote(filename)))
 						loop <- loop+1
 					}
-					file.copy(filename,paste(Filedir,"joined_clusters_assigned/tempout.wav",sep=""),overwrite=TRUE)
+					file.copy(filename,paste(Filedir,"voice_results/joined_clusters_assigned/tempout.wav",sep=""),overwrite=TRUE)
 				}
-				unlink(paste(Filedir,"joined_clusters_assigned/tempout.wav",sep=""))
+				unlink(paste(Filedir,"voice_results/joined_clusters_assigned/tempout.wav",sep=""))
 			}
 		}
 	
 		#Filedir <- gsub("\\\\ "," ",Filedir)
 		#sortSyllableWavs
-		if(file.exists(paste(Filedir,"sorted_syllables_assigned",sep="")))
+		if(file.exists(paste(Filedir,"voice_results/sorted_syllables_assigned",sep="")))
 		{
-			unlink(paste(Filedir,"sorted_syllables_assigned/",sep=""),recursive=TRUE)
+			unlink(paste(Filedir,"voice_results/sorted_syllables_assigned/",sep=""),recursive=TRUE)
 		}
-		dir.create(paste(Filedir,"sorted_syllables_assigned/",sep=""))
+		dir.create(paste(Filedir,"voice_results/sorted_syllables_assigned/",sep=""))
 	
 		names(syntax) <- grep(".",names(syntax))
 		syntax[is.na(syntax)] <- "none"
@@ -322,20 +322,20 @@ if(.Platform$OS.type=="unix")
 	
 			for (wav in file2)
 			{
-				if (!file.exists((paste(Filedir,"sorted_syllables_assigned",name,sep=''))))
+				if (!file.exists((paste(Filedir,"voice_results/sorted_syllables_assigned",name,sep=''))))
 				{
-					dir.create(paste(Filedir,"sorted_syllables_assigned/",name,sep=''))
+					dir.create(paste(Filedir,"voice_results/sorted_syllables_assigned/",name,sep=''))
 				}
 			
-				file.copy(from=paste(Filedir,"voice_results/cut_syllables/",wav,sep=''),to=paste(Filedir,"sorted_syllables_assigned/",name,sep=''))
+				file.copy(from=paste(Filedir,"voice_results/cut_syllables/",wav,sep=''),to=paste(Filedir,"voice_results/sorted_syllables_assigned/",name,sep=''))
 			}		
 		}
 	
 		#clusterAcousticsOut
 	
-		if(file.exists(paste(Filedir,'cluster_tables_assigned',sep="")))
+		if(file.exists(paste(Filedir,'voice_results/cluster_tables_assigned',sep="")))
 		{
-			unlink(paste(Filedir,'cluster_tables_assigned/',sep=""),recursive=TRUE)
+			unlink(paste(Filedir,'voice_results/cluster_tables_assigned/',sep=""),recursive=TRUE)
 		}
 	
 		if(file.exists(paste(Filedir,'.cluster_tables_mat',sep="")))
@@ -344,23 +344,23 @@ if(.Platform$OS.type=="unix")
 		}
 	
 		dir.create(paste(Filedir,".cluster_tables_mat/",sep=''))	
-		dir.create(paste(Filedir,"cluster_tables_assigned/",sep=''))
+		dir.create(paste(Filedir,"voice_results/cluster_tables_assigned/",sep=''))
 		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir,".cluster_tables_mat/",sep='')))}
 	
 		for (cluster in names(clusterTable))
 		{
 			filename = paste(cluster,sep='',".csv")
-			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(Filedir,'cluster_tables_assigned/',filename,sep=""))
+			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(Filedir,'voice_results/cluster_tables_assigned/',filename,sep=""))
 			write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
 	
-		load(paste(refDir,"/workspace.Rdata",sep=""))
+		load(paste(refDir,"/voice_results/workspace.Rdata",sep=""))
 		usedColors <- unique(c(out.cluster.tutor$usedColors,saveList$out.assign))
 		write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
 		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.unusedColors.txt',sep="")))}
 	
 		assignedSyntax <- saveList$out.assign
 	
-		save(saveList,file=paste(Filedir,"assign_workspace.Rdata",sep=""))
-		save(assignedSyntax,file=paste(Filedir,"assigned_complete_workspace.Rdata",sep=""))
+		save(saveList,file=paste(Filedir,"voice_results/assign_workspace.Rdata",sep=""))
+		save(assignedSyntax,file=paste(Filedir,"voice_results/assigned_complete_workspace.Rdata",sep=""))
 }

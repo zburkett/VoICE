@@ -193,7 +193,7 @@ function derive_go_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-x = dir(strcat(handles.assignPath,'unassigned_for_cluster/*.wav'));
+x = dir(strcat(handles.assignPath,'voice_results/unassigned_for_cluster/*.wav'));
 
 if length(x)==1
     
@@ -212,7 +212,7 @@ elseif length(x)>1 %if more than one novel syllable, cluster them
     set(handles.derive_go,'BackgroundColor','yellow');
 
     %run similarity batch between novel syllables
-    similarity_batch_parallel_headless_unassigned_pub(strcat(handles.assignPath,'unassigned_for_cluster'));
+    similarity_batch_parallel_headless_unassigned_pub(strcat(handles.assignPath,'voice_results/unassigned_for_cluster'));
 
     %iterate through tree trimming
     system(['R --slave --args ' handles.assignPathu ' ' '4 0 1 0.01 ' '< ./R/clusterSyllablesAssign_pub.r']);

@@ -5,7 +5,7 @@ options(warn=-1)
 
 Filedir <- comArgs[1]
 
-load(paste(Filedir,".igs_assigned.Rdata",sep=""))
+load(paste(Filedir,"voice_results/.igs_assigned.Rdata",sep=""))
 input <- outlist$gsMatrix
 IGS.out <- outlist$IGS.out
 

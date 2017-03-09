@@ -154,13 +154,13 @@ syntaxRename=function(syntaxIn)
 
 if(!comArgs[1]==comArgs[2])
 {
-if(file.exists(paste(comArgs[1],"assign_workspace.rdata",sep="")))
+if(file.exists(paste(comArgs[1],"voice_results/assign_workspace.rdata",sep="")))
 {
-	load(paste(comArgs[1],"assign_workspace.rdata",sep=""))
+	load(paste(comArgs[1],"voice_results/assign_workspace.rdata",sep=""))
 	s1 <- saveList$out.assign
-}else if(file.exists(paste(comArgs[1],"workspace.rdata",sep="")))
+}else if(file.exists(paste(comArgs[1],"voice_results/workspace.rdata",sep="")))
 {
-	load(paste(comArgs[1],"workspace.rdata",sep=""))
+	load(paste(comArgs[1],"voice_results/workspace.rdata",sep=""))
 	if("mergedSyntax" %in% names(out.cluster.tutor))
 	{
 		s1 <- out.cluster.tutor$mergedSyntax
@@ -170,18 +170,18 @@ if(file.exists(paste(comArgs[1],"assign_workspace.rdata",sep="")))
 }
 }
 
-if(file.exists(paste(comArgs[2],"/workspace.rdata",sep="")))
+if(file.exists(paste(comArgs[2],"/voice_results/workspace.rdata",sep="")))
 {
-	load(paste(paste(comArgs[2],"/workspace.rdata",sep="")))
+	load(paste(paste(comArgs[2],"/voice_results/workspace.rdata",sep="")))
 	if("mergedSyntax" %in% names(out.cluster.tutor))
 	{
 		s2 <- out.cluster.tutor$mergedSyntax
 	}else{
 		s2 <- out.cluster.tutor$syntax
 	}
-}else if(file.exists(paste(comArgs[2],"/assign_workspace.rdata",sep="")))
+}else if(file.exists(paste(comArgs[2],"/voice_results/assign_workspace.rdata",sep="")))
 {
-	load(paste(comArgs[2],"/assign_workspace.rdata",sep=""))
+	load(paste(comArgs[2],"/voice_results/assign_workspace.rdata",sep=""))
 	s2 <- saveList$out.assign
 }
 
@@ -314,11 +314,11 @@ for(name in rownames(syntax.sim.weighted))
 	rownames(s2.expand) <- names(all.syllables)
 	colnames(s2.expand) <- names(all.syllables)
 
-if(file.exists(paste(comArgs[1],"syntax_summary","_assign_",strsplit(comArgs[1],"/")[[1]][length(strsplit(comArgs[1],"/")[[1]])],"_ref_",strsplit(comArgs[2],"/")[[1]][length(strsplit(comArgs[2],"/")[[1]])],".csv",sep="")))
+if(file.exists(paste(comArgs[1],"voice_results/syntax_summary","_assign_",strsplit(comArgs[1],"/")[[1]][length(strsplit(comArgs[1],"/")[[1]])],"_ref_",strsplit(comArgs[2],"/")[[1]][length(strsplit(comArgs[2],"/")[[1]])],".csv",sep="")))
 {
-	unlink(paste(comArgs[1],"syntax_summary","_assign_",strsplit(comArgs[1],"/")[[1]][length(strsplit(comArgs[1],"/")[[1]])],"_ref_",strsplit(comArgs[2],"/")[[1]][length(strsplit(comArgs[2],"/")[[1]])],".csv",sep=""))
+	unlink(paste(comArgs[1],"voice_results/syntax_summary","_assign_",strsplit(comArgs[1],"/")[[1]][length(strsplit(comArgs[1],"/")[[1]])],"_ref_",strsplit(comArgs[2],"/")[[1]][length(strsplit(comArgs[2],"/")[[1]])],".csv",sep=""))
 }
-out_file <- file(paste(comArgs[1],"syntax_summary","_assign_",strsplit(comArgs[1],"/")[[1]][length(strsplit(comArgs[1],"/")[[1]])],"_ref_",strsplit(comArgs[2],"/")[[1]][length(strsplit(comArgs[2],"/")[[1]])],".csv",sep=""), open="a")
+out_file <- file(paste(comArgs[1],"voice_results/syntax_summary","_assign_",strsplit(comArgs[1],"/")[[1]][length(strsplit(comArgs[1],"/")[[1]])],"_ref_",strsplit(comArgs[2],"/")[[1]][length(strsplit(comArgs[2],"/")[[1]])],".csv",sep=""), open="a")
 write.table("Transition Probability Matrix - Assignment Session",file=out_file,row.names=FALSE,col.names=FALSE)
 write.table(t(c(" ",colnames(s1.expand))),file=out_file,row.names=FALSE,col.names=FALSE,sep=",")
 write.table(s1.expand,file=out_file,sep=",",row.names=rownames(s1.expand),col.names=FALSE)
