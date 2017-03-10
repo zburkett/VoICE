@@ -514,8 +514,10 @@ if isunix
 	    end
 	    if handles.refDiru(end)~='/'
 	        handles.refDiru = strcat(handles.refDiru,'/');
-	    end
-	    system(['R --slave --args ' handles.pathu ' ' handles.refDiru ' < ./R/calculateSyntaxSimilarity.r']);
+        end
+        if ~strcmp(handles.pathu,handles.refDiru)
+            system(['R --slave --args ' handles.pathu ' ' handles.refDiru ' < ./R/calculateSyntaxSimilarity.r']);
+        end
 	    close
 	elseif handles.assignRun == 0
 	    system(['R --slave --args ' handles.pathu ' < ./R/finalizeClusters.r']);
@@ -529,9 +531,11 @@ elseif ispc
 	    end
 	    if handles.refDir(end)~='/'
 	        handles.refDir = strcat(handles.refDir,'/');
+        end
+        if ~strcmp(handles.pathu,handles.refDiru)
+            system(['R --slave --args ' char(34) handles.path char(34) ' ' char(34) handles.refDir char(34) ' < ./R/calculateSyntaxSimilarity.r']);
 	    end
-	    system(['R --slave --args ' char(34) handles.path char(34) ' ' char(34) handles.refDir char(34) ' < ./R/calculateSyntaxSimilarity.r']);
-	    close
+        close
 	elseif handles.assignRun == 0
 	    system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/finalizeClusters.r']);
 	    close

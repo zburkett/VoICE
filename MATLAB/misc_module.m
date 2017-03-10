@@ -106,6 +106,10 @@ if exist(strcat(handles.path,'/workspace.Rdata'))
     set(handles.pushbutton2,'Enable','on')
 elseif exist(strcat(handles.path,'/assign_workspace.Rdata'))
     set(handles.pushbutton2,'Enable','on')
+elseif exist(strcat(handles.path,'/voice_results/workspace.Rdata'))
+    set(handles.pushbutton2,'Enable','on')
+elseif exist(strcat(handles.path,'/voice_results/assign_workspace.Rdata'))
+    set(handles.pushbutton2,'Enable','on')
 else
     h = errordlg('No clustering or assignment workspace found in the selected directory.');
 end
@@ -117,12 +121,25 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+s = regexp(handles.path, '/', 'split');
+if strcmp(s{end},'voice_results')
+    parent = cd;
+    cd(handles.path);
+    cd('..');
+    handles.path = cd;
+    cd(parent);
+end
+
 handles.pathu = strrep(handles.path,' ','\ ');
 handles.pathu = strcat(handles.pathu,'/');
 set(handles.text24,'String','Reassignment module will launch momentarily...please wait.');
 if(exist(strcat(handles.path,'/assign_workspace.Rdata')))
     reassign_syllables({handles.path},{handles.path},{1});
-else
+elseif exist(strcat(handles.path,'/voice_results/assign_workspace.Rdata'))
+    reassign_syllables({handles.path},{handles.path},{1});
+elseif exist(strcat(handles.path,'/workspace.Rdata'))
+    reassign_syllables({handles.path},{handles.path},{0});
+elseif exist(strcat(handles.path,'/voice_results/workspace.Rdata'))
     reassign_syllables({handles.path},{handles.path},{0});
 end
 
@@ -135,11 +152,22 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 if ~isfield(handles,'comp1')
     h = errordlg('No Session 1 directory selected.')
 else
+    
+    s = regexp(handles.comp1, '/', 'split');
+    if strcmp(s{end},'voice_results')
+        parent = cd;
+        cd(handles.comp1);
+        cd('..');
+        handles.comp1 = cd;
+        cd(parent);
+    end
+    
     handles.comp1u = strrep(handles.comp1,' ','\ ');
     if handles.comp1u(end) ~= '/'
         handles.comp1u = strcat(handles.comp1u,'/');
     end
-    if ~exist(strcat(handles.comp1,'/workspace.Rdata')) & ~exist(strcat(handles.comp1,'/assign_workspace.Rdata'))
+    
+    if ~exist(strcat(handles.comp1,'/workspace.Rdata')) & ~exist(strcat(handles.comp1,'/assign_workspace.Rdata')) & ~exist(strcat(handles.comp1,'/voice_results/workspace.Rdata')) & ~exist(strcat(handles.comp1,'/voice_results/assign_workspace.Rdata'))
         h = errordlg('No valid cluster or assignment workspace found in selected Session 1 directory.')
     end
 end
@@ -147,11 +175,21 @@ end
 if ~isfield(handles,'comp2')
     h = errordlg('No Session 2 directory selected.')
 else
+    
+    s = regexp(handles.comp2, '/', 'split');
+    if strcmp(s{end},'voice_results')
+        parent = cd;
+        cd(handles.comp2);
+        cd('..');
+        handles.comp2 = cd;
+        cd(parent);
+    end
+    
     handles.comp2u = strrep(handles.comp2,' ','\ ');
     if handles.comp2u(end) ~= '/'
        handles.comp2u = strcat(handles.comp2u,'/');
     end
-     if ~exist(strcat(handles.comp2,'/workspace.Rdata')) & ~exist(strcat(handles.comp2,'/assign_workspace.Rdata'))
+    if ~exist(strcat(handles.comp2,'/workspace.Rdata')) & ~exist(strcat(handles.comp2,'/assign_workspace.Rdata')) & ~exist(strcat(handles.comp2,'/voice_results/workspace.Rdata')) & ~exist(strcat(handles.comp2,'/voice_results/assign_workspace.Rdata'))
         h = errordlg('No valid cluster or assignment workspace found in selected Session 2 directory.')
     end
 end
