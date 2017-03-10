@@ -11,7 +11,7 @@ Filedir = strrep(Filedir,'\','');
 
 % delete syllable and relevent info
 
-system(['R --slave --args', strcat(' folder1=', strrep(Filedir,' ','\ ')), strcat(' sylls=', deletedSylls), ' < ./R/deleteSyll2.r']);
+system(['R --slave --args ', strrep(Filedir,' ','\ '),' ', deletedSylls, ' < ./R/deleteSyll2.r']);
 
 % rewrite joined & save syllables
 if exist(strcat(Filedir,'voice_results/assign_workspace_original.Rdata'),'file')~=0 %assigned

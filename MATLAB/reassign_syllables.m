@@ -86,6 +86,7 @@ if isunix
 	        fidPupil = fopen(strcat(handles.path,'voice_results/.usedClusters2.txt'));
 	    end
 	    s = textscan(fidPupil,'%s','Delimiter','\n');
+        fclose(fidPupil);
 	    sPupil = strrep(s{1}(:,1),'"','');
 	    system(['R --slave --args ' handles.refDiru ' < ./R/getClusterIDs.r']);
 	    fidTutor = fopen(strcat(handles.refDir,'/voice_results/.usedClusters.txt'));
@@ -93,6 +94,7 @@ if isunix
 	        fidTutor = fopen(strcat(handles.refDir,'/voice_results/.usedClusters2.txt'));
 	    end
 	    s = textscan(fidTutor,'%s','Delimiter','\n');
+        fclose(fidTutor);
 	    sTutor = strrep(s{1}(:,1),'"','');
 	    [I, J] = setdiff(sTutor,sPupil);
     
@@ -110,12 +112,13 @@ if isunix
     if exist(strcat(handles.path,'voice_results/.unusedColors.txt'))
         fid = fopen(strcat(handles.path,'voice_results/.unusedColors.txt'));
     elseif exist(strcat(handles.path,'.unusedColors.txt'))
-         fid = fopen(strcat(handles.path,'.unusedColors.txt'));
+        fid = fopen(strcat(handles.path,'.unusedColors.txt'));
     end
     
 	s = textscan(fid,'%s','Delimiter','\n');
 	s = strrep(s{1}(:,1),'"','');
 	set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});
+    fclose(fid);
 elseif ispc
 	set(handles.uipanel8,'Visible','off');
 
@@ -148,12 +151,14 @@ elseif ispc
 	    end
 	    s = textscan(fidPupil,'%s','Delimiter','\n');
 	    sPupil = strrep(s{1}(:,1),'"','');
+        fclose(fidPupil);
 	    system(['R --slave --args ' char(34) handles.refDir char(34) ' < ./R/getClusterIDs.r']);
 	    fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters.txt'));
 	    if(fidTutor == -1)
 	        fidTutor = fopen(strcat(handles.refDir,'voice_results/.usedClusters2.txt'));
 	    end
 	    s = textscan(fidTutor,'%s','Delimiter','\n');
+        fcluse(fidTutor);
 	    sTutor = strrep(s{1}(:,1),'"','');
 	    [I, J] = setdiff(sTutor,sPupil);
     
@@ -168,10 +173,15 @@ elseif ispc
 	    system(['R --slave --args ' char(34) handles.path char(34) ' < ./R/recreateClusters2.r']);
 	end
 
-	fid = fopen(strcat(handles.path,'voice_results/.unusedColors.txt'));
+	if exist(strcat(handles.path,'voice_results/.unusedColors.txt'))
+        fid = fopen(strcat(handles.path,'voice_results/.unusedColors.txt'));
+    elseif exist(strcat(handles.path,'.unusedColors.txt'))
+        fid = fopen(strcat(handles.path,'.unusedColors.txt'));
+    end
 	s = textscan(fid,'%s','Delimiter','\n');
 	s = strrep(s{1}(:,1),'"','');
 	set(handles.popupmenu3,'String',{'Create a cluster...',s{:}});
+    fclose(fid);
 end
 
 %read in duration information for syllables, calculate start/stop for each
@@ -344,7 +354,7 @@ elseif ispc
 	    fn = fns(i);
 	    if i == 1
 	        mkdir(strcat(handles.path,'.reassign/'));
-			system(['attrib +h ' strcat(handles.path,'.reassign/')])
+			system(['attrib +h ' strcat(handles.path,'.reassign')]);
 	    end
     
 	    dlmwrite(strcat(handles.path,'.reassign/',fn{1},'.csv'),reassign(1).(fn{1}),',');

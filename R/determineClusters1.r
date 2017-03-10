@@ -69,6 +69,7 @@ out.mat <- as.data.frame(out.mat)
 out.mat <- data.matrix(out.mat)
 out.mat[is.na(out.mat)]=0
 
+if(file.exists(paste(comArgs[1],'.igsdata.csv',sep=""))){unlink(paste(comArgs[1],'.igsdata.csv',sep=""))}
 write.table(out.mat,paste(comArgs[1],'.igsdata.csv',sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.igsdata.csv',sep="")))}
 
@@ -79,9 +80,12 @@ for(name in colnames(icilist[[1]][[1]]))
 }
 outnames <- c("Threshold", outnames)
 
+if(file.exists(paste(comArgs[1],'.colnames.txt',sep=""))){unlink(paste(comArgs[1],'.colnames.txt',sep=""),force=T)}
 write.table(t(outnames),paste(comArgs[1],'.colnames.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
 if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.colnames.txt',sep="")))}
 
+if(file.exists(paste(comArgs[1],".tree_trim_curve.pdf",sep=""))){unlink(paste(comArgs[1],".tree_trim_curve.pdf",sep=""))}
+if(file.exists(paste(comArgs[1],".tree_trim_curve.png",sep=""))){unlink(paste(comArgs[1],".tree_trim_curve.png",sep=""))}
 pdf(file=paste(comArgs[1],".tree_trim_curve.pdf",sep=""))
 png(file=paste(comArgs[1],".tree_trim_curve.png",sep=""))
 if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".tree_trim_curve.pdf",sep="")))}

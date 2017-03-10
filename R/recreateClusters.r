@@ -468,8 +468,9 @@ if(.Platform$OS.type=="unix")
 			unlink(paste(comArgs[1],'voice_results/cluster_tables',sep=""),recursive=TRUE)
 			unlink(paste(comArgs[1],'.cluster_tables_mat',sep=""),recursive=TRUE)
 			dir.create(paste(comArgs[1],"voice_results/cluster_tables/",sep=''))
-	    	dir.create(paste(comArgs[1],".cluster_tables_mat/",sep=''))
-			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".cluster_tables_mat/",sep='')))}
+	    	dir.create(paste(comArgs[1],"cluster_tables_mat/",sep=''))
+			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],"cluster_tables_mat",sep='')))}
+            file.rename(paste(comArgs[1],"cluster_tables_mat/",sep=''),paste(comArgs[1],".cluster_tables_mat/",sep=''))
 				
 	    	for (cluster in names(clusterTable))
 			{
@@ -494,17 +495,20 @@ if(.Platform$OS.type=="unix")
 				out.cluster.tutor$usedColors <- unique(out.cluster.tutor$syntax)
 			}
 			save(out.cluster.tutor,file=paste(comArgs[1],"voice_results/workspace.Rdata",sep=""))
-			write.table(t(colors()[!colors()%in%out.cluster.tutor$usedColors]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
-			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.unusedColors.txt',sep="")))}
+            if(file.exists(paste(comArgs[1],'.unusedColors.txt',sep=""))){unlink(paste(comArgs[1],'.unusedColors.txt',sep=""))}
+			write.table(t(colors()[!colors()%in%out.cluster.tutor$usedColors]),paste(comArgs[1],'unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'unusedColors.txt',sep="")))}
+            file.rename(paste(comArgs[1],'unusedColors.txt',sep=""),paste(comArgs[1],'.unusedColors.txt',sep=""))
 			z=dev.off()
 		}else if(file.exists(paste(comArgs[1],'voice_results/cluster_tables_assigned',sep="")))
 		{
 			unlink(paste(comArgs[1],'voice_results/cluster_tables_assigned',sep=""),recursive=TRUE)
 			unlink(paste(comArgs[1],'.cluster_tables_mat',sep=""),recursive=TRUE)
-			dir.create(paste(comArgs[1],"voice_results/cluster_tables_assigned/",sep=''))
-	    	dir.create(paste(comArgs[1],".cluster_tables_mat/",sep=''))
-			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],".cluster_tables_mat/",sep='')))}
-				
+			dir.create(paste(comArgs[1],"voice_results/cluster_tables_assigned/",sep=''))	
+            dir.create(paste(comArgs[1],"cluster_tables_mat/",sep=''))
+			if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],"cluster_tables_mat",sep='')))}
+            file.rename(paste(comArgs[1],"cluster_tables_mat/",sep=''),paste(comArgs[1],".cluster_tables_mat/",sep=''))
+	
 	    	for (cluster in names(clusterTable))
 			{
 				filename = paste(cluster,sep='',".csv")

@@ -135,6 +135,7 @@ for(thresh in merge.range)
 }
 close(pb)
 outlist = list(IGS.out=IGS.out,gsMatrix=input)
+if(file.exists(paste(Filedir.in,".igs.Rdata",sep=""))){unlink(paste(Filedir.in,".igs.Rdata",sep=""))}
 save(outlist,file=paste(Filedir.in,".igs.Rdata",sep=""))
 if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir.in,".igs.Rdata",sep="")))}
 

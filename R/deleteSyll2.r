@@ -1,23 +1,28 @@
 if(.Platform$OS.type=="windows" & file.exists("./.libraries")){.libPaths("./.libraries")}
 comArgs <- commandArgs(T)
-arg.mat <- do.call("rbind", strsplit(comArgs, "="))
-options(warn = -1)
-arg.char <- which(is.na(as.numeric(arg.mat[, 2])))
-options(warn = 0)
-if (length(arg.char > 0)) 
-	arg.mat[arg.char, 2] <- paste("'", arg.mat[arg.char, 2], "'", sep = "")
-eval(parse(text = apply(arg.mat, 1, paste, collapse = "=")))
-sylls <- unlist(strsplit(arg.mat[2, 2], ","))
 options(stringsAsFactors = FALSE)
 options(warn = -1)
-sink("/dev/null")
-suppressMessages(library(WGCNA))
-sink()
 
-sylls[1] = gsub("'", "", sylls[1])
-sylls[length(sylls)] = gsub("'", "", sylls[length(sylls)])
+if(.Platform$OS.type=="unix")
+{
+    sink("/dev/null")
+    suppressMessages(library(WGCNA))
+    sink()
+}else if (.Platform$OS.type=="windows"){
+    sink(file=paste(comArgs[1],"sink.txt",sep=""))
+    suppressMessages(library(WGCNA,warn.conflicts=FALSE,verbose=0))
+    sink()
+}
+
+folder1 = comArgs[1]
+sylls = comArgs[2]
 sylls = as.numeric(sylls)
-sylls = sort(sylls, decreasing = TRUE)
+sylls = sort(sylls,decreasing=T)
+
+#sylls[1] = gsub("'", "", sylls[1])
+#sylls[length(sylls)] = gsub("'", "", sylls[length(sylls)])
+#sylls = as.numeric(sylls)
+#sylls = sort(sylls, decreasing = TRUE)
 
 #inputs: folder1 (main directory), sylls (syllables to delete)
 #creates backup of 'original' workspace and similarity batch before deleting syllables
@@ -146,6 +151,7 @@ for (number in 1:totFiles) {
 
 rownames(acoustic.data) <- 1:nrow(acoustic.data)
 acoustic.data[, 1] = rownames(acoustic.data)
+if(file.exists(paste(folder1, ".acoustic_data.csv", sep = "/"))){unlink(paste(folder1, ".acoustic_data.csv", sep = "/"))}
 write.table(acoustic.data, paste(folder1, ".acoustic_data.csv", sep = "/"),row.names=T,col.names=T,sep=",")
 if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(folder1, ".acoustic_data.csv", sep = "/")))}
 

@@ -479,20 +479,20 @@ if(.Platform$OS.type=="unix")
 			unlink(paste(Filedir,'voice_results/cluster_tables/',sep=""),recursive=TRUE)
 		}
 		
-		if(file.exists(paste(Filedir,'.cluster_tables_mat/',sep="")))
+		if(file.exists(paste(Filedir,'.cluster_tables_mat',sep="")))
 		{
-			unlink(paste(Filedir,'.cluster_tables_mat/',sep=""),recursive=TRUE)
+			unlink(paste(Filedir,'.cluster_tables_mat',sep=""),recursive=TRUE)
 		}
 		
 		dir.create(paste(Filedir,"voice_results/cluster_tables/",sep=''))
-	    dir.create(paste(Filedir,".cluster_tables_mat/",sep=''))
-		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir,".cluster_tables_mat/",sep='')))}
+	   	dir.create(paste(Filedir,".cluster_tables_mat/",sep=''))
+		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(Filedir,".cluster_tables_mat",sep='')))}
 		
 		for (cluster in names(clusterTable))
 		{
 			filename = paste(cluster,sep='',".csv")
 			write.csv(as.data.frame(clusterTable[[cluster]]),file=paste(Filedir,'voice_results/cluster_tables/',filename,sep=""))
-	        write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
+	        	write.table(as.data.frame(clusterTable[[cluster]][,2]),file=paste(Filedir,'.cluster_tables_mat/',filename,sep=""),row.names=FALSE,col.names=FALSE,sep=",")
 		}
 	
 	    if ("mergedSyntax" %in% names(out.cluster) & "syntax" %in% names(out.cluster))
@@ -510,7 +510,8 @@ if(.Platform$OS.type=="unix")
 	        usedColors <- unique(out.cluster$syntax)
 	    }
 	
-	    write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[1],'.unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+	    write.table(t(colors()[!colors()%in%usedColors]),paste(comArgs[1],'unusedColors.txt',sep=""),row.names=FALSE,col.names=FALSE,sep="\n")
+        file.rename(paste(comArgs[1],'unusedColors.txt',sep=""),paste(comArgs[1],'.unusedColors.txt',sep=""))
 		if(.Platform$OS.type=="windows"){system(paste('attrib +h',paste(comArgs[1],'.unusedColors.txt',sep="")))}
 	
 	    out.cluster$usedColors <- usedColors
