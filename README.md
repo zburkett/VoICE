@@ -36,9 +36,15 @@ Installation
 
 5. The intial launch of VoICE will check your system for installed dependencies and the necessary R packages. This will only need to happen once.
 
+MATLAB
+======
+VoICE was developed for MATLAB R2013a. Newer versions break compatibility with some of VoICE's functionality. If you are using a version newer than R2013a, your license will allow you to download an older version.
+
+Visit [Mathworks Downloads](https://www.mathworks.com/downloads/web_downloads/select_release) and install a copy of R2013a.
+
 Mac OS X
 --------
-VoICE relies on free external software (Perl R, SoX, and ImageMagick) that must be installed prior to running VoICE. VoICE will check for these programs on launch and halt if they are not found. If they are installed but not in the system path, VoICE will attempt to add them.
+VoICE relies on free external software (R, SoX, and ImageMagick) that must be installed prior to running VoICE. VoICE will check for these programs on launch and halt if they are not found. If they are installed but not in the system path, VoICE will attempt to add them.
 
 The instructions below will install SoX and ImageMagic, then add them to your system path.
 
@@ -54,7 +60,7 @@ brew install sox
 brew install imagemagick
 ```
 
-VoICE also relies on R and Perl, which are already included with Mac OS X. If either or both are missing, please download and install R from https://cloud.r-project.org and Perl from https://www.perl.org/get.html or by:
+VoICE also relies on R, which is already included with Mac OS X. If you run into errors and need to reinstall R, please download and install R from https://cloud.r-project.org and or by Homebrew:
 ```bash
 # Install Homebrew if not already done for SoX:
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -63,16 +69,11 @@ VoICE also relies on R and Perl, which are already included with Mac OS X. If ei
 brew tap homebrew/science
 brew install Caskroom/cask/xquartz
 brew install r
-
-# Install Perl
-brew install perl
 ```
 
 Windows
 -------
-VoICE relies on external software (Perl, R, SoX and ImageMagick) that must be installed prior to running VoICE. VoICE will check for these programs on launch and halt if they are not found. If they are installed but not in the system path, VoICE will attempt to add them. Unfortunately, there is no convenient command line tool for installing this software. Please visit each website, download the software appropriate for your version of Windows, then perform a standard install.
-
-Strawberry Perl is available here: http://strawberryperl.com
+VoICE relies on external software (R, SoX and ImageMagick) that must be installed prior to running VoICE. VoICE will check for these programs on launch and halt if they are not found. If they are installed but not in the system path, VoICE will attempt to add them. Unfortunately, there is no convenient command line tool for installing this software. Please visit each website, download the software appropriate for your version of Windows, then perform a standard install.
 
 R is available here: https://cloud.r-project.org
 
@@ -82,17 +83,16 @@ ImageMagick is available here: https://www.imagemagick.org/script/download.php#w
 
 Software Requirements
 =====================
-  * MATLAB (Tested up through R2015a; unsure of support for more recent versions)
+  * MATLAB (Tested up through R2013a; unsure of support for more recent versions)
   * MATLAB Parallel Processing Toolbox (Not required by VERY STRONGLY recommended)
   * MATLAB Signal Processing Toolbox
   * R (See installation, above)
   * SoX (See installation, above)
   * ImageMagick (See installation, above)
-  * Perl (See installation, above)
   
 Limitations
 ===========
-VoICE operates on a directory containing an SAP (http://soundanalysispro.com) feature batch (as a .xls file) and the .WAV files from which the feature batch was constructed. VoICE will clip the individual syllables from their parent .WAV files. The construction of the feature batch is at the user's discretion. Best results come from the manual annotation of syllable start/stop boundaries, though this is considerably more time consuming than thresholding.
+VoICE operates on a directory containing an SAP (http://soundanalysispro.com) feature batch (as a .xls file; .xlsx files *will not* work!) and the .WAV files from which the feature batch was constructed. VoICE will clip the individual syllables from their parent .WAV files. The construction of the feature batch is at the user's discretion. Best results come from the manual annotation of syllable start/stop boundaries, though this is considerably more time consuming than thresholding.
 
 Developers
 ==========
