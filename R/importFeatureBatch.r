@@ -12,7 +12,15 @@ if(.Platform$OS.type=="unix")
 }else if (.Platform$OS.type=="windows")
 {
 	sink(paste(comArgs[1],"sink.txt",sep=""))
-	data.path <- paste(comArgs[1],comArgs[2],sep="")
+    dataSpl = strsplit(comArgs[1],"")[[1]]
+
+    if(!dataSpl[length(dataSpl)]=="\\")
+    {  
+        comArgs[1] = paste0(comArgs[1],"\\")
+    }
+
+    data.path <- paste(comArgs[1],comArgs[2],sep="")
+
 	sink()
     unlink(paste(comArgs[1],"sink.txt",sep=""))
 }
