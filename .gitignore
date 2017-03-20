@@ -30,6 +30,7 @@ walkthrough.docx
 .unusedColors.txt
 voice_results/
 .acoustic_data_original.csv
+*.asv
 
 .Rapp.history
 .dropbox

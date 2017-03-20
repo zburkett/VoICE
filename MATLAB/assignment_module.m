@@ -216,7 +216,11 @@ function selectAssignmentDir_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 [handles.assignFile, handles.assignPath] = uigetfile(strcat('cd/*.xls'),'Select feature batch.');
-str = strsplit(handles.assignPath,'/');
+if isunix
+    str = strsplit(handles.assignPath,'/');
+elseif ispc
+    str = strsplit(handles.assignPath,'\');
+end
 %set(handles.assignDirString,'String',strcat(handles.assignPath,handles.assignFile));
 set(handles.assignDirString,'String',str(length(str)-1));
 handles.assignFileu = strrep(handles.assignFile,' ','\ ');
@@ -319,7 +323,7 @@ elseif ispc
 	handles.refDir = strrep(handles.refDir,'\','/');
 	set(handles.refDirString,'String',handles.refDir);
 
-	if exist(strcat(handles.refDir,'voice_results/workspace.Rdata')) || exist(strcat(handles.refDir,'voice_results/assign_workspace.Rdata')) & exist(strcat(handles.refDir,'voice_results/sorted_syllables/')) || exist(strcat(handles.refDir,'voice_results/sorted_syllables_assigned/'))
+	if exist(strcat(handles.refDir,'/voice_results/workspace.Rdata')) || exist(strcat(handles.refDir,'/voice_results/assign_workspace.Rdata')) & exist(strcat(handles.refDir,'/voice_results/sorted_syllables/')) || exist(strcat(handles.refDir,'/voice_results/sorted_syllables_assigned/'))
 	    handles.validRD = 1;
 	else
 	    handles.validRD = 0;
