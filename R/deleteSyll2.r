@@ -75,6 +75,7 @@ if (!file.exists(paste(folder1, ".acoustic_data_original.csv", sep = "/"))) {
 for (syll in sylls) { #delete single syllable
 	name.assign <- paste("%0", nchar(max(vectA)), "s", sep = "")
 	name.out <- sprintf(name.assign, vectA[syll])
+    if(.Platform$OS.type=="windows"){name.out=gsub(" ","0",name.out)}
 	unlink(paste(folder1, "/voice_results/cut_syllables/", name.out, ".wav", sep = "")) #deletes syllable .wav file
 
 	#vect = as.numeric(names(subset(saveList$out.assign, names(saveList$out.assign) != syll))) #create variable name for syllable number
@@ -141,6 +142,7 @@ name.assign <- paste("%0", nchar(max(vect)), "s", sep = "")
 for (number in 1:totFiles) {
 
 	name.out <- sprintf(name.assign, vect[number])
+    if(.Platform$OS.type=="windows"){name.out=gsub(" ","0",name.out)}
 
 	from = paste(folder1, "voice_results/cut_syllables/", allWavs[number], sep = "")
 	to = paste(folder1, "voice_results/cut_syllables/", paste(as.character(name.out), ".wav", sep = ""), sep = "")
