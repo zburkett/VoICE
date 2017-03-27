@@ -14,7 +14,9 @@ Zachary Burkett, zburkett@ucla.edu
 
 Software Tutorial/Walkthrough
 =============================
-A brief overview of VoICE's functionality and step-by-step instructions for using VoICE on the sample_data directory are available in the [walkthrough](https://github.com/zburkett/VoICE/blob/master/walkthrough.pdf).
+Software tutorial videos will be posted soon!
+
+Step by step nstructions for using VoICE on the sample_data directory are available in the [walkthrough](https://github.com/zburkett/VoICE/blob/master/walkthrough.pdf).
 
 Directory Contents
 ==================
