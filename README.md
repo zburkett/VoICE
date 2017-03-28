@@ -16,7 +16,7 @@ Software Tutorial/Walkthrough
 =============================
 Video Tutorials:
   * [Installation](https://youtu.be/6yVNSFihYKs)
-  * Clustering a single recording session (Coming soon!)
+  * [Clustering a single recording session] (https://youtu.be/Lr29XMDq1s4)
   * Comparing two recording sessions (Coming soon!)
 
 Please see the video tutorials for an example analysis using VoICE. We also have the  [walkthrough](https://github.com/zburkett/VoICE/blob/master/walkthrough.pdf) for the previous version of VoICE available, though it does not reflect changes made between that which launched with the software and the current version.
