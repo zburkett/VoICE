@@ -35,7 +35,7 @@ Installation
 
 2. Download this directory and unzip to a location in which you would like to store the software.
 
-3. Add the unzipped directory with subfolders to your MATLAB path. Optionally, you may remove the .git/ subfolders.
+3. Add the unzipped directory with subfolders to your MATLAB path.
 
 4. Typing 'voice' at the MATLAB command prompt will launch the software.
 
