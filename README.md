@@ -31,6 +31,8 @@ Directory Contents
 
 Installation
 ============
+**Windows Users**: This version of VoICE does not yet support Windows. Please use the previous version, available at the [White Lab Website](https://www.ibp.ucla.edu/research/white/CODE.html).
+
 1. Complete the steps below specific to your operating system.
 
 2. Download this directory and unzip to a location in which you would like to store the software.
